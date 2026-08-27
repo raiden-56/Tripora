@@ -1,6 +1,7 @@
 """Application-wide exception types and FastAPI exception handlers."""
 
 from fastapi import Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 
@@ -56,4 +57,13 @@ async def unhandled_error_handler(request: Request, exc: Exception) -> JSONRespo
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"error": {"code": "INTERNAL_ERROR", "message": "An unexpected error occurred."}},
+    )
+
+
+async def validation_error_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    errors = exc.errors()
+    message = errors[0]["msg"] if errors else "Invalid request."
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        content={"error": {"code": "VALIDATION_ERROR", "message": message}},
     )

@@ -80,6 +80,23 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full system design and [API.md](A
 
 ## Getting started
 
+**Fastest local dev** (Postgres + Redis + API + worker in Docker, frontend natively for hot-reload — no local Python needed):
+```
+.\scripts\dev-up.ps1
+```
+
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\dev-up.ps1
+```
+
+This brings up the backend stack with `docker compose --env-file .env.development`
+(migrations and demo-data seeding run automatically), waits for the API to report
+healthy, installs frontend dependencies on first run, and starts `npm run dev`. Stop
+the frontend with `Ctrl+C`; stop the backend afterwards with `docker compose down`.
+The frontend reads its API URL from `web/.env.development` (`VITE_API_BASE_URL`,
+loaded automatically by Vite in dev mode).
+
 **Backend** (no Docker required — defaults to SQLite and gracefully runs without Redis):
 
 ```bash

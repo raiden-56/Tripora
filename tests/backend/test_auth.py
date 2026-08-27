@@ -62,3 +62,14 @@ def test_protected_endpoint_works_with_token(client, auth_headers):
 def test_admin_endpoint_rejects_regular_user(client, auth_headers):
     response = client.get("/api/v1/admin/reports", headers=auth_headers)
     assert response.status_code == 403
+
+
+def test_signup_validation_error_uses_standard_error_shape(client):
+    response = client.post(
+        "/api/v1/auth/signup",
+        json={"first_name": "Jane", "last_name": "Doe", "email": "shortpw@example.com", "password": "abc"},
+    )
+    assert response.status_code == 422
+    body = response.json()
+    assert body["error"]["code"] == "VALIDATION_ERROR"
+    assert body["error"]["message"]

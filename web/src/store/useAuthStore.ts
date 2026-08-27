@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AuthUser } from "../types";
 import * as authApi from "../api/auth.api";
-import { setAccessToken } from "../api/client";
+import { registerAuthHandlers, setAccessToken } from "../api/client";
 import { useAppStore } from "./useAppStore";
 
 const DEMO_EMAIL = "demo@traveldiaries.com";
@@ -64,8 +64,10 @@ export const useAuthStore = create<AuthState>()(
             refreshToken: response.refresh_token,
           });
           return { success: true };
-        } catch {
-          return { success: false, error: "Invalid email or password." };
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : "Invalid email or password.";
+          return { success: false, error: message };
         }
       },
 
@@ -131,3 +133,14 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+registerAuthHandlers({
+  getRefreshToken: () => useAuthStore.getState().refreshToken,
+  onTokenRefreshed: (tokens) =>
+    useAuthStore.setState({
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+      currentUser: toAuthUser(tokens.user),
+    }),
+  onAuthExpired: () => useAuthStore.getState().logout(),
+});
