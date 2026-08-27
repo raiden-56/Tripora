@@ -1,0 +1,728 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "TravelCanvas home" [ref=e6] [cursor=pointer]:
+        - /url: "#top"
+        - generic [ref=e7]: TravelCanvas
+      - navigation [ref=e13]:
+        - link "Product" [ref=e14] [cursor=pointer]:
+          - /url: "#product"
+        - link "Features" [ref=e15] [cursor=pointer]:
+          - /url: "#features"
+        - link "How It Works" [ref=e16] [cursor=pointer]:
+          - /url: "#how-it-works"
+        - link "Discover" [ref=e17] [cursor=pointer]:
+          - /url: "#discover"
+        - link "Stories" [ref=e18] [cursor=pointer]:
+          - /url: "#stories"
+        - link "Pricing" [ref=e19] [cursor=pointer]:
+          - /url: "#pricing"
+      - generic [ref=e20]:
+        - button "Login" [ref=e21]
+        - button "Start Your Journey" [ref=e22]
+  - generic [ref=e24]:
+    - generic [ref=e25]:
+      - generic [ref=e26]: Your personal travel memory map
+      - heading "Your journey, beautifully mapped." [level=1] [ref=e30]: Your journey,beautifully mapped.
+      - paragraph [ref=e31]: Every destination you've visited. Every memory you've captured. Every adventure still waiting for you.
+      - generic [ref=e32]:
+        - button "Start Your Journey" [ref=e33]
+        - link "Explore the Journey" [ref=e34] [cursor=pointer]:
+          - /url: "#product"
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - text: "4"
+          - paragraph [ref=e40]: Countries
+        - generic [ref=e41]:
+          - text: "37"
+          - paragraph [ref=e42]: Destinations
+        - generic [ref=e43]:
+          - text: 1,284
+          - paragraph [ref=e44]: Memories
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - generic:
+          - generic:
+            - button [ref=e47] [cursor=pointer]
+            - button [ref=e52] [cursor=pointer]
+            - button [ref=e57] [cursor=pointer]
+            - button [ref=e62] [cursor=pointer]
+            - button [ref=e67] [cursor=pointer]
+            - button [ref=e72] [cursor=pointer]
+            - button [ref=e77] [cursor=pointer]
+        - generic [ref=e82]:
+          - link "Leaflet" [ref=e83] [cursor=pointer]:
+            - /url: https://leafletjs.com
+          - text: "| © OpenStreetMap contributors"
+      - generic: 37 destinations
+      - generic: 12 states explored
+      - generic: 1,284 memories
+      - generic: "Next trip: Goa"
+  - generic [ref=e88]:
+    - heading "Your memories are everywhere. Your journey isn't." [level=2] [ref=e91]: Your memories are everywhere.Your journey isn't.
+    - generic [ref=e92]:
+      - generic [ref=e93]: Google Photos
+      - generic [ref=e94]: WhatsApp
+      - generic [ref=e95]: Google Drive
+      - generic [ref=e96]: Notes
+      - generic [ref=e97]: Instagram
+      - generic [ref=e98]: Phone Gallery
+      - generic [ref=e99]: Maps
+      - generic [ref=e100]: Tickets
+      - generic [ref=e101]:
+        - generic [ref=e102]: TravelCanvas
+        - paragraph [ref=e108]: One place for your entire journey.
+  - generic [ref=e113]:
+    - generic [ref=e116]:
+      - generic [ref=e117]: Coorg
+      - generic [ref=e120]: Hampi
+      - generic [ref=e123]: Gokarna
+      - generic [ref=e126]: Mysore
+      - generic [ref=e129]: Bangalore
+      - generic [ref=e132]: Munnar
+    - generic [ref=e135]:
+      - generic [ref=e137]:
+        - paragraph [ref=e142]: Step 01
+        - heading "Where you've been" [level=3] [ref=e143]
+        - paragraph [ref=e144]: Every visited destination drops onto your map, building a living record of everywhere you've explored.
+      - generic [ref=e146]:
+        - paragraph [ref=e151]: Step 02
+        - heading "What you remember" [level=3] [ref=e152]
+        - paragraph [ref=e153]: Photos and memories attach directly to each place — so a destination is never just a pin.
+      - generic [ref=e155]:
+        - paragraph [ref=e160]: Step 03
+        - heading "Where you're going" [level=3] [ref=e161]
+        - paragraph [ref=e162]: Planned trips and your wishlist live on the same map, right alongside where you've already been.
+      - generic [ref=e164]:
+        - paragraph [ref=e169]: Step 04
+        - heading "What's next" [level=3] [ref=e170]
+        - paragraph [ref=e171]: Canvas AI studies your journey and surfaces destinations you'll actually love next.
+  - generic [ref=e172]:
+    - generic [ref=e173]:
+      - generic [ref=e174]: Live product demo
+      - heading "See your journey come alive." [level=2] [ref=e177]
+    - generic [ref=e178]:
+      - button "All" [ref=e179]
+      - button "Visited" [ref=e180]
+      - button "Planned" [ref=e181]
+      - button "Wishlist" [ref=e182]
+    - generic [ref=e184]:
+      - generic:
+        - generic:
+          - button [ref=e185] [cursor=pointer]
+          - button [ref=e190] [cursor=pointer]
+          - button [ref=e195] [cursor=pointer]
+          - button [ref=e200] [cursor=pointer]
+          - button [ref=e205] [cursor=pointer]
+          - button [ref=e210] [cursor=pointer]
+          - button [ref=e215] [cursor=pointer]
+          - button [ref=e220] [cursor=pointer]
+          - button [ref=e225] [cursor=pointer]
+          - button [ref=e230] [cursor=pointer]
+          - button [ref=e235] [cursor=pointer]
+          - button [ref=e240] [cursor=pointer]
+          - button [ref=e245] [cursor=pointer]
+          - button [ref=e250] [cursor=pointer]
+          - button [ref=e255] [cursor=pointer]
+          - button [ref=e260] [cursor=pointer]
+          - button [ref=e265] [cursor=pointer]
+          - button [ref=e270] [cursor=pointer]
+          - button [ref=e275] [cursor=pointer]
+          - button [ref=e280] [cursor=pointer]
+          - button [ref=e285] [cursor=pointer]
+          - button [ref=e290] [cursor=pointer]
+          - button [ref=e295] [cursor=pointer]
+          - button [ref=e300] [cursor=pointer]
+          - button [ref=e305] [cursor=pointer]
+          - button [ref=e310] [cursor=pointer]
+          - button [ref=e315] [cursor=pointer]
+          - button [ref=e320] [cursor=pointer]
+          - button [ref=e325] [cursor=pointer]
+      - generic [ref=e330]:
+        - link "Leaflet" [ref=e331] [cursor=pointer]:
+          - /url: https://leafletjs.com
+        - text: "| © OpenStreetMap contributors"
+  - generic [ref=e336]:
+    - heading "Your journey keeps growing." [level=2] [ref=e339]
+    - generic [ref=e342]:
+      - generic [ref=e343]:
+        - paragraph [ref=e345]: "2019"
+        - paragraph [ref=e346]: First Journey
+      - generic [ref=e347]:
+        - paragraph [ref=e349]: "2022"
+        - paragraph [ref=e350]: New Places
+      - generic [ref=e351]:
+        - paragraph [ref=e353]: "2024"
+        - paragraph [ref=e354]: More Adventures
+      - generic [ref=e355]:
+        - paragraph [ref=e357]: "2025"
+        - paragraph [ref=e358]: International
+      - generic [ref=e359]:
+        - paragraph [ref=e361]: "2026"
+        - paragraph [ref=e362]: Your Next Chapter
+  - generic [ref=e363]:
+    - generic [ref=e364]:
+      - generic [ref=e365]: Everything in one place
+      - heading "Everything your journey needs." [level=2] [ref=e368]
+    - generic [ref=e369]:
+      - generic [ref=e370]:
+        - heading "Personal Travel Map" [level=3] [ref=e374]
+        - paragraph [ref=e375]: Pin every place you've visited and see your journey grow.
+      - generic [ref=e376]:
+        - heading "Memory Vault" [level=3] [ref=e381]
+        - paragraph [ref=e382]: Keep photos, notes and memories connected to the places where they happened.
+      - generic [ref=e383]:
+        - heading "Trip Planner" [level=3] [ref=e388]
+        - paragraph [ref=e389]: Plan your next adventure without losing track of the bigger journey.
+      - generic [ref=e390]:
+        - heading "Google Drive" [level=3] [ref=e394]
+        - paragraph [ref=e395]: Keep your travel files organized by destination.
+      - generic [ref=e396]:
+        - heading "Travel Statistics" [level=3] [ref=e400]
+        - paragraph [ref=e401]: See how far you've travelled and how much of the world you've explored.
+      - generic [ref=e402]:
+        - heading "Wishlist" [level=3] [ref=e407]
+        - paragraph [ref=e408]: Keep the places you're dreaming about within reach.
+      - generic [ref=e409]:
+        - heading "AI Travel Assistant" [level=3] [ref=e414]
+        - paragraph [ref=e415]: Discover destinations and build personalized itineraries based on your journey.
+      - generic [ref=e416]:
+        - heading "Travel Stories" [level=3] [ref=e421]
+        - paragraph [ref=e422]: Turn your trips into beautiful stories you can revisit and share.
+  - generic [ref=e423]:
+    - generic [ref=e424]:
+      - generic [ref=e425]: Memory vault
+      - heading "Memories belong to places." [level=2] [ref=e428]
+      - paragraph [ref=e430]: Every photo stays connected to the trip and destination it came from.
+    - generic [ref=e431]:
+      - generic [ref=e432]:
+        - img "Sunset at Raja's Seat" [ref=e433]
+        - generic [ref=e434]:
+          - paragraph [ref=e435]: Sunset at Raja's Seat
+          - paragraph [ref=e436]: Coorg · September 2026
+      - generic [ref=e437]:
+        - img "Coffee estate walk" [ref=e438]
+        - generic [ref=e439]:
+          - paragraph [ref=e440]: Coffee estate walk
+          - paragraph [ref=e441]: Coorg · September 2026
+      - generic [ref=e442]:
+        - img "Abbey Falls mist" [ref=e443]
+        - generic [ref=e444]:
+          - paragraph [ref=e445]: Abbey Falls mist
+          - paragraph [ref=e446]: Coorg · September 2026
+      - generic [ref=e447]:
+        - img "Sunrise over the boulders" [ref=e448]
+        - generic [ref=e449]:
+          - paragraph [ref=e450]: Sunrise over the boulders
+          - paragraph [ref=e451]: Hampi · August 2026
+      - generic [ref=e452]:
+        - img "Stone chariot" [ref=e453]
+        - generic [ref=e454]:
+          - paragraph [ref=e455]: Stone chariot
+          - paragraph [ref=e456]: Hampi · August 2026
+      - generic [ref=e457]:
+        - img "Tea garden trail" [ref=e458]
+        - generic [ref=e459]:
+          - paragraph [ref=e460]: Tea garden trail
+          - paragraph [ref=e461]: Munnar · April 2025
+      - generic [ref=e462]:
+        - img "Misty mornings" [ref=e463]
+        - generic [ref=e464]:
+          - paragraph [ref=e465]: Misty mornings
+          - paragraph [ref=e466]: Munnar · April 2025
+      - generic [ref=e467]:
+        - img "Houseboat evening" [ref=e468]
+        - generic [ref=e469]:
+          - paragraph [ref=e470]: Houseboat evening
+          - paragraph [ref=e471]: Alleppey · April 2025
+      - generic [ref=e472]:
+        - img "Om Beach cliff walk" [ref=e473]
+        - generic [ref=e474]:
+          - paragraph [ref=e475]: Om Beach cliff walk
+          - paragraph [ref=e476]: Gokarna · December 2025
+      - generic [ref=e477]:
+        - img "Palace lights" [ref=e478]
+        - generic [ref=e479]:
+          - paragraph [ref=e480]: Palace lights
+          - paragraph [ref=e481]: Mysore · November 2025
+  - generic [ref=e482]:
+    - generic [ref=e483]:
+      - generic [ref=e484]:
+        - generic [ref=e485]: Google Drive
+        - heading "Your photos. Your files. Your memories." [level=2] [ref=e488]
+        - paragraph [ref=e490]: Connect the folders you already use and keep your travel memories organized by destination.
+      - button "Connect Your Memories" [ref=e491]
+      - paragraph [ref=e492]: Integration-ready — no Google account required to preview.
+    - generic [ref=e493]:
+      - generic [ref=e494]: TravelCanvas
+      - generic [ref=e502]: Coorg
+      - generic [ref=e505]: Google Drive
+      - generic [ref=e508]:
+        - generic [ref=e509]: Photos
+        - generic [ref=e515]: Videos
+        - generic [ref=e520]: Documents
+        - generic [ref=e525]: Tickets
+  - generic [ref=e529]:
+    - generic [ref=e530]:
+      - heading "How much of India have you explored?" [level=2] [ref=e533]
+      - generic [ref=e534]:
+        - button "India Explorer" [ref=e535]
+        - button "World Explorer" [ref=e536]
+    - generic [ref=e537]:
+      - generic [ref=e538]:
+        - paragraph [ref=e539]: 12 / 36
+        - paragraph [ref=e540]: States & UTs explored — 33% of India
+      - generic [ref=e542]:
+        - generic [ref=e543]: Andhra Pradesh
+        - generic [ref=e544]: Arunachal Pradesh
+        - generic [ref=e545]: Assam
+        - generic [ref=e546]: Bihar
+        - generic [ref=e547]: Chhattisgarh
+        - generic [ref=e548]: Goa
+        - generic [ref=e549]: Gujarat
+        - generic [ref=e550]: Haryana
+        - generic [ref=e551]: Himachal Pradesh
+        - generic [ref=e552]: Jharkhand
+        - generic [ref=e553]: Karnataka
+        - generic [ref=e554]: Kerala
+        - generic [ref=e555]: Madhya Pradesh
+        - generic [ref=e556]: Maharashtra
+        - generic [ref=e557]: Manipur
+        - generic [ref=e558]: Meghalaya
+        - generic [ref=e559]: Mizoram
+        - generic [ref=e560]: Nagaland
+      - button "Start Exploring India" [ref=e562]
+  - generic [ref=e563]:
+    - generic [ref=e564]:
+      - generic [ref=e565]: Canvas AI
+      - heading "Your next adventure is closer than you think." [level=2] [ref=e568]
+    - generic [ref=e569]:
+      - generic [ref=e570]: I loved Coorg and Hampi. Where should I go next?
+      - generic [ref=e576]: Based on your journey, you might love Chikmagalur, Wayanad and Gokarna.
+    - generic [ref=e582]:
+      - generic [ref=e583]:
+        - img "Chikmagalur" [ref=e584]
+        - generic [ref=e585]:
+          - paragraph [ref=e586]: Chikmagalur
+          - paragraph [ref=e587]: Coffee-scented hills right next to Coorg — a natural next stop.
+          - generic [ref=e588]:
+            - generic [ref=e589]: Oct – Feb
+            - generic [ref=e590]: 2–3 days
+            - generic [ref=e591]: Nature & Coffee
+          - button "Explore Destination" [ref=e592]
+      - generic [ref=e593]:
+        - img "Wayanad" [ref=e594]
+        - generic [ref=e595]:
+          - paragraph [ref=e596]: Wayanad
+          - paragraph [ref=e597]: Misty Western Ghats forests, similar to what you loved in Coorg.
+          - generic [ref=e598]:
+            - generic [ref=e599]: Oct – May
+            - generic [ref=e600]: 3 days
+            - generic [ref=e601]: Wildlife & Nature
+          - button "Explore Destination" [ref=e602]
+      - generic [ref=e603]:
+        - img "Gokarna" [ref=e604]
+        - generic [ref=e605]:
+          - paragraph [ref=e606]: Gokarna
+          - paragraph [ref=e607]: Laid-back coastal cliffs — a different pace from Hampi's ruins.
+          - generic [ref=e608]:
+            - generic [ref=e609]: Nov – Mar
+            - generic [ref=e610]: 2–3 days
+            - generic [ref=e611]: Beaches
+          - button "Explore Destination" [ref=e612]
+    - heading "Tell us where. We'll help you plan." [level=2] [ref=e616]: Tell us where.We'll help you plan.
+    - generic [ref=e617]:
+      - generic [ref=e618]:
+        - generic [ref=e619]:
+          - paragraph [ref=e620]: Starting point
+          - paragraph [ref=e621]: Bangalore
+        - generic [ref=e622]:
+          - paragraph [ref=e623]: Destination
+          - paragraph [ref=e624]: Coorg
+        - generic [ref=e625]:
+          - paragraph [ref=e626]: Duration
+          - paragraph [ref=e627]: 3 days
+        - generic [ref=e628]:
+          - paragraph [ref=e629]: Budget
+          - paragraph [ref=e630]: ₹15,000
+        - generic [ref=e631]:
+          - paragraph [ref=e632]: Travel style
+          - paragraph [ref=e633]: Adventure
+        - button "Generate Trip" [ref=e634]
+      - paragraph [ref=e643]: Click "Generate Trip" to see a live AI itinerary.
+  - generic [ref=e644]:
+    - generic [ref=e645]:
+      - generic [ref=e646]: Travel statistics
+      - heading "Your travels, measured beautifully." [level=2] [ref=e649]
+    - generic [ref=e650]:
+      - generic [ref=e651]:
+        - text: "0"
+        - paragraph [ref=e652]: Destinations
+      - generic [ref=e653]:
+        - text: "0"
+        - paragraph [ref=e654]: States
+      - generic [ref=e655]:
+        - text: "0"
+        - paragraph [ref=e656]: Countries
+      - generic [ref=e657]:
+        - text: "0"
+        - paragraph [ref=e658]: Trips
+      - generic [ref=e659]:
+        - text: "0"
+        - paragraph [ref=e660]: Memories
+      - generic [ref=e661]:
+        - generic [ref=e662]: 0 km
+        - paragraph [ref=e663]: km Travelled
+  - generic [ref=e664]:
+    - heading "Your year in travel." [level=2] [ref=e667]
+    - generic [ref=e668]:
+      - paragraph [ref=e672]: Travel Recap
+      - heading "MY 2026" [level=3] [ref=e673]
+      - generic [ref=e674]:
+        - generic [ref=e675]:
+          - paragraph [ref=e676]: "12"
+          - paragraph [ref=e677]: States
+        - generic [ref=e678]:
+          - paragraph [ref=e679]: "37"
+          - paragraph [ref=e680]: Destinations
+        - generic [ref=e681]:
+          - paragraph [ref=e682]: "18"
+          - paragraph [ref=e683]: Trips
+        - generic [ref=e684]:
+          - paragraph [ref=e685]: 1,284
+          - paragraph [ref=e686]: Memories
+      - button "Create Your Travel Story" [ref=e687]
+  - generic [ref=e688]:
+    - generic [ref=e689]:
+      - generic [ref=e690]: Travel stories
+      - heading "Every trip has a story." [level=2] [ref=e693]
+    - generic [ref=e694]:
+      - button [ref=e695]:
+        - img "The Coorg Escape" [ref=e696]
+        - generic [ref=e698]:
+          - heading "The Coorg Escape" [level=3] [ref=e699]
+          - generic [ref=e700]:
+            - generic [ref=e701]: 3 days
+            - generic [ref=e704]: 7 places
+            - generic [ref=e708]: 126 memories
+      - button [ref=e716]:
+        - img "Lost in Hampi" [ref=e717]
+        - generic [ref=e719]:
+          - heading "Lost in Hampi" [level=3] [ref=e720]
+          - generic [ref=e721]:
+            - generic [ref=e722]: 2 days
+            - generic [ref=e725]: 5 places
+            - generic [ref=e729]: 84 memories
+      - button [ref=e737]:
+        - img "Goa Road Trip" [ref=e738]
+        - generic [ref=e740]:
+          - heading "Goa Road Trip" [level=3] [ref=e741]
+          - generic [ref=e742]:
+            - generic [ref=e743]: 4 days
+            - generic [ref=e746]: 11 places
+            - generic [ref=e750]: 214 memories
+  - generic [ref=e758]:
+    - heading "Because your travel history deserves more than a camera roll." [level=2] [ref=e761]
+    - generic [ref=e762]:
+      - generic [ref=e763]:
+        - generic [ref=e764]:
+          - paragraph [ref=e769]: Phone Gallery
+          - paragraph [ref=e770]: Photos without context.
+        - generic [ref=e771]:
+          - paragraph [ref=e774]: Google Drive
+          - paragraph [ref=e775]: Files without stories.
+        - generic [ref=e776]:
+          - paragraph [ref=e780]: Maps
+          - paragraph [ref=e781]: Places without memories.
+        - generic [ref=e782]:
+          - paragraph [ref=e786]: Notes
+          - paragraph [ref=e787]: Stories without locations.
+      - generic [ref=e791]:
+        - generic [ref=e792]: TravelCanvas
+        - heading "Places + Memories + Stories + Plans" [level=3] [ref=e798]
+        - paragraph [ref=e799]: Everything connected.
+  - generic [ref=e800]:
+    - heading "How It Works" [level=2] [ref=e803]
+    - generic [ref=e804]:
+      - generic [ref=e806]:
+        - paragraph [ref=e811]: "01"
+        - heading "Map it" [level=3] [ref=e812]
+        - paragraph [ref=e813]: Add the places you've visited.
+      - generic [ref=e814]:
+        - paragraph [ref=e819]: "02"
+        - heading "Remember it" [level=3] [ref=e820]
+        - paragraph [ref=e821]: Attach photos, notes and memories.
+      - generic [ref=e822]:
+        - paragraph [ref=e828]: "03"
+        - heading "Plan it" [level=3] [ref=e829]
+        - paragraph [ref=e830]: Add future destinations and trips.
+      - generic [ref=e831]:
+        - paragraph [ref=e836]: "04"
+        - heading "Live it" [level=3] [ref=e837]
+        - paragraph [ref=e838]: Travel, capture and grow your map.
+  - generic [ref=e839]:
+    - generic [ref=e841]:
+      - generic [ref=e842]: Made for every kind of traveler
+      - heading "Wherever you travel, however you travel." [level=2] [ref=e845]
+    - generic [ref=e846]:
+      - generic [ref=e847]:
+        - img "Solo Travelers" [ref=e848]
+        - generic [ref=e850]:
+          - heading "Solo Travelers" [level=3] [ref=e851]
+          - paragraph [ref=e852]: Keep your personal journey.
+      - generic [ref=e853]:
+        - img "Couples" [ref=e854]
+        - generic [ref=e856]:
+          - heading "Couples" [level=3] [ref=e857]
+          - paragraph [ref=e858]: Capture shared adventures.
+      - generic [ref=e859]:
+        - img "Friends" [ref=e860]
+        - generic [ref=e862]:
+          - heading "Friends" [level=3] [ref=e863]
+          - paragraph [ref=e864]: Plan group trips.
+      - generic [ref=e865]:
+        - img "Families" [ref=e866]
+        - generic [ref=e868]:
+          - heading "Families" [level=3] [ref=e869]
+          - paragraph [ref=e870]: Preserve memories for years.
+      - generic [ref=e871]:
+        - img "Road Trippers" [ref=e872]
+        - generic [ref=e874]:
+          - heading "Road Trippers" [level=3] [ref=e875]
+          - paragraph [ref=e876]: Track routes and destinations.
+      - generic [ref=e877]:
+        - img "Travel Creators" [ref=e878]
+        - generic [ref=e880]:
+          - heading "Travel Creators" [level=3] [ref=e881]
+          - paragraph [ref=e882]: Build a shareable travel map.
+  - generic [ref=e883]:
+    - heading "Your route. Your story." [level=2] [ref=e886]: Your route.Your story.
+    - generic [ref=e892]:
+      - generic [ref=e893]: Bangalore
+      - generic [ref=e898]: Mysore
+      - generic [ref=e903]: Coorg
+      - generic [ref=e908]: Gokarna
+      - generic [ref=e913]: Goa
+  - generic [ref=e918]:
+    - generic [ref=e919]:
+      - generic [ref=e920]: What's ahead
+      - heading "Your next chapter is already waiting." [level=2] [ref=e923]
+    - generic [ref=e924]:
+      - generic [ref=e925]:
+        - paragraph [ref=e928]: Goa
+        - paragraph [ref=e929]: September 2026
+        - generic [ref=e930]: Planned
+      - generic [ref=e932]:
+        - paragraph [ref=e935]: Manali
+        - paragraph [ref=e936]: December 2026
+        - generic [ref=e937]: Planned
+      - generic [ref=e939]:
+        - paragraph [ref=e942]: Ladakh
+        - paragraph [ref=e943]: May 2027
+        - generic [ref=e944]: Wishlist
+      - generic [ref=e946]:
+        - paragraph [ref=e949]: Meghalaya
+        - paragraph [ref=e950]: Wishlist
+        - generic [ref=e951]: Wishlist
+    - button "Plan Your Next Trip" [ref=e954]
+    - generic [ref=e955]:
+      - generic [ref=e956]: Travel bucket list
+      - heading "Places you're dreaming about." [level=2] [ref=e959]
+    - generic [ref=e960]:
+      - generic [ref=e961]:
+        - img "Ladakh" [ref=e962]
+        - generic [ref=e963]:
+          - paragraph [ref=e964]: Ladakh
+          - paragraph [ref=e965]: "Best season: May – Sep"
+          - button "Add to Wishlist" [ref=e966]
+      - generic [ref=e969]:
+        - img "Meghalaya" [ref=e970]
+        - generic [ref=e971]:
+          - paragraph [ref=e972]: Meghalaya
+          - paragraph [ref=e973]: "Best season: Sep – Apr"
+          - button "Add to Wishlist" [ref=e974]
+      - generic [ref=e977]:
+        - img "Rajasthan" [ref=e978]
+        - generic [ref=e979]:
+          - paragraph [ref=e980]: Rajasthan
+          - paragraph [ref=e981]: "Best season: Oct – Mar"
+          - button "Add to Wishlist" [ref=e982]
+      - generic [ref=e985]:
+        - img "Spiti Valley" [ref=e986]
+        - generic [ref=e987]:
+          - paragraph [ref=e988]: Spiti Valley
+          - paragraph [ref=e989]: "Best season: Jun – Sep"
+          - button "Add to Wishlist" [ref=e990]
+      - generic [ref=e993]:
+        - img "Andaman" [ref=e994]
+        - generic [ref=e995]:
+          - paragraph [ref=e996]: Andaman
+          - paragraph [ref=e997]: "Best season: Nov – Apr"
+          - button "Add to Wishlist" [ref=e998]
+      - generic [ref=e1001]:
+        - img "Japan" [ref=e1002]
+        - generic [ref=e1003]:
+          - paragraph [ref=e1004]: Japan
+          - paragraph [ref=e1005]: "Best season: Mar – May"
+          - button "Add to Wishlist" [ref=e1006]
+      - generic [ref=e1009]:
+        - img "Switzerland" [ref=e1010]
+        - generic [ref=e1011]:
+          - paragraph [ref=e1012]: Switzerland
+          - paragraph [ref=e1013]: "Best season: Jun – Sep"
+          - button "Add to Wishlist" [ref=e1014]
+      - generic [ref=e1017]:
+        - img "Bali" [ref=e1018]
+        - generic [ref=e1019]:
+          - paragraph [ref=e1020]: Bali
+          - paragraph [ref=e1021]: "Best season: Apr – Oct"
+          - button "Add to Wishlist" [ref=e1022]
+  - generic [ref=e1025]:
+    - generic [ref=e1026]:
+      - generic [ref=e1027]: Simple pricing
+      - heading "Start free. Upgrade when you're ready." [level=2] [ref=e1030]
+    - generic [ref=e1031]:
+      - generic [ref=e1032]:
+        - paragraph [ref=e1033]: Free
+        - paragraph [ref=e1034]: ₹0
+        - list [ref=e1035]:
+          - listitem [ref=e1036]: Personal travel map
+          - listitem [ref=e1039]: Destinations & wishlist
+          - listitem [ref=e1042]: Memories & photos
+          - listitem [ref=e1045]: Basic travel statistics
+          - listitem [ref=e1048]: Basic trip planning
+        - button "Start Free" [ref=e1051]
+      - generic [ref=e1052]:
+        - generic [ref=e1053]: Coming soon
+        - paragraph [ref=e1057]: Pro
+        - paragraph [ref=e1058]: ₹499/mo
+        - list [ref=e1059]:
+          - listitem [ref=e1060]: AI trip planning
+          - listitem [ref=e1063]: AI travel stories
+          - listitem [ref=e1066]: Advanced statistics
+          - listitem [ref=e1069]: Advanced sharing & recap cards
+          - listitem [ref=e1072]: Unlimited Drive integrations
+        - button "Start Your Journey" [ref=e1075]
+  - generic [ref=e1076]:
+    - heading "Your journey belongs to you." [level=2] [ref=e1079]
+    - generic [ref=e1080]:
+      - generic [ref=e1086]:
+        - paragraph [ref=e1087]: Private by default
+        - paragraph [ref=e1088]: Your journey is visible only to you unless you choose to share it.
+      - generic [ref=e1094]:
+        - paragraph [ref=e1095]: Control what you share
+        - paragraph [ref=e1096]: Choose private, friends, or public visibility for your journey and memories.
+      - generic [ref=e1103]:
+        - paragraph [ref=e1104]: Connect your own storage
+        - paragraph [ref=e1105]: Your photos stay in your own Google Drive, not on a third-party server.
+      - generic [ref=e1111]:
+        - paragraph [ref=e1112]: Export your data
+        - paragraph [ref=e1113]: Download your destinations, trips, and memories any time.
+      - generic [ref=e1119]:
+        - paragraph [ref=e1120]: Delete your account
+        - paragraph [ref=e1121]: Remove your journey and account completely, whenever you want.
+  - generic [ref=e1122]:
+    - generic [ref=e1123]:
+      - generic [ref=e1124]: Demo traveler stories
+      - heading "Early concept feedback." [level=2] [ref=e1127]
+      - paragraph [ref=e1129]: TravelCanvas hasn't launched publicly yet — these reflect early demo/product-preview reactions, not verified customer reviews.
+    - generic [ref=e1130]:
+      - generic [ref=e1131]:
+        - paragraph [ref=e1135]: “I've always had photos everywhere, but TravelCanvas finally gives my trips a story.”
+        - generic [ref=e1137]:
+          - paragraph [ref=e1138]: Demo Traveler
+          - paragraph [ref=e1139]: Demo / product-preview data
+      - generic [ref=e1140]:
+        - paragraph [ref=e1144]: “Seeing every place I've visited on one map makes me want to plan the next trip.”
+        - generic [ref=e1146]:
+          - paragraph [ref=e1147]: Demo Traveler
+          - paragraph [ref=e1148]: Demo / product-preview data
+      - generic [ref=e1149]:
+        - paragraph [ref=e1153]: “The map is what got me. It feels like a visual history of my life.”
+        - generic [ref=e1155]:
+          - paragraph [ref=e1156]: Demo Traveler
+          - paragraph [ref=e1157]: Demo / product-preview data
+  - generic [ref=e1158]:
+    - heading "Frequently asked questions" [level=2] [ref=e1161]
+    - generic [ref=e1162]:
+      - generic [ref=e1163]:
+        - button "What is TravelCanvas?" [ref=e1164]
+        - paragraph [ref=e1170]: TravelCanvas is a personal travel memory and journey platform — a map-first place to track everywhere you've been, save memories, and plan where you're going next.
+      - button "Is TravelCanvas free?" [ref=e1172]
+      - button "Can I connect Google Drive?" [ref=e1178]
+      - button "Can I track international travel?" [ref=e1184]
+      - button "Can I keep my journey private?" [ref=e1190]
+      - button "Can I share my travel map?" [ref=e1196]
+      - button "Can I import my memories?" [ref=e1202]
+      - button "Does TravelCanvas work on mobile?" [ref=e1208]
+      - button "Will there be an AI travel planner?" [ref=e1214]
+      - button "Can I use TravelCanvas for group trips?" [ref=e1220]
+  - generic [ref=e1225]:
+    - heading "Have a question? Let's talk." [level=2] [ref=e1228]: Have a question?Let's talk.
+    - generic [ref=e1229]:
+      - generic [ref=e1230]:
+        - textbox "Name" [ref=e1231]
+        - textbox "Email" [ref=e1232]
+      - textbox "Subject" [ref=e1233]
+      - textbox "Message" [ref=e1234]
+      - button "Send Message" [ref=e1235]
+    - generic [ref=e1239]:
+      - link "hello@travelcanvas.com" [ref=e1240] [cursor=pointer]:
+        - /url: mailto:hello@travelcanvas.com
+      - generic [ref=e1244]:
+        - img [ref=e1245] [cursor=pointer]
+        - img [ref=e1248] [cursor=pointer]
+        - img [ref=e1251] [cursor=pointer]
+  - generic [ref=e1255]:
+    - heading "Get inspired for your next journey." [level=2] [ref=e1256]
+    - paragraph [ref=e1257]: Travel inspiration, product updates and destination ideas. No spam.
+    - generic [ref=e1258]:
+      - textbox "Enter your email" [ref=e1263]
+      - button "Subscribe" [ref=e1264]
+  - generic [ref=e1281]:
+    - heading "Your next memory is waiting." [level=2] [ref=e1282]: Your next memoryis waiting.
+    - paragraph [ref=e1283]: Start mapping the places that made you who you are.
+    - generic [ref=e1284]:
+      - button "Start Your Journey" [ref=e1285]
+      - button "Explore Demo" [ref=e1286]
+  - contentinfo [ref=e1290]:
+    - generic [ref=e1291]:
+      - generic [ref=e1292]:
+        - generic [ref=e1293]: TravelCanvas
+        - paragraph [ref=e1299]: Your journey, beautifully mapped.
+        - generic [ref=e1300]:
+          - img [ref=e1301] [cursor=pointer]
+          - img [ref=e1304] [cursor=pointer]
+          - img [ref=e1307] [cursor=pointer]
+          - img [ref=e1310] [cursor=pointer]
+      - generic [ref=e1313]:
+        - paragraph [ref=e1314]: Product
+        - list [ref=e1315]:
+          - listitem [ref=e1316]:
+            - link "Product" [ref=e1317] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1318]:
+            - link "Features" [ref=e1319] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1320]:
+            - link "Discover" [ref=e1321] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1322]:
+            - link "Stories" [ref=e1323] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1324]:
+            - link "Pricing" [ref=e1325] [cursor=pointer]:
+              - /url: "#top"
+      - generic [ref=e1326]:
+        - paragraph [ref=e1327]: Legal
+        - list [ref=e1328]:
+          - listitem [ref=e1329]:
+            - link "Privacy" [ref=e1330] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1331]:
+            - link "Terms" [ref=e1332] [cursor=pointer]:
+              - /url: "#top"
+          - listitem [ref=e1333]:
+            - link "Cookies" [ref=e1334] [cursor=pointer]:
+              - /url: "#top"
+    - paragraph [ref=e1335]: © 2026 TravelCanvas

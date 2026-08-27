@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap");
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Fraunces", serif;
+
+  --color-paper: #faf8f4;
+  --color-paper-warm: #f5efe4;
+  --color-ink: #23261f;
+  --color-ink-soft: #565b52;
+
+  --color-forest-50: #eef7f0;
+  --color-forest-100: #d7ecdc;
+  --color-forest-400: #3fa15f;
+  --color-forest-500: #2f8a4f;
+  --color-forest-600: #1f7040;
+
+  --color-sky-400: #4d8ef2;
+  --color-sky-500: #3576e0;
+  --color-sky-600: #2661c4;
+
+  --color-amber-400: #f2b23c;
+  --color-amber-500: #e39a1f;
+  --color-amber-600: #c47f13;
+
+  --color-coral-400: #f2637a;
+  --color-coral-500: #e04463;
+
+  --shadow-soft:
+    0 1px 2px rgba(35, 38, 31, 0.04), 0 8px 24px -8px rgba(35, 38, 31, 0.12);
+  --shadow-soft-lg:
+    0 4px 12px rgba(35, 38, 31, 0.06), 0 24px 48px -16px rgba(35, 38, 31, 0.18);
+
+  --animate-fade-up: fade-up 0.5s ease both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+html.dark body {
+  background: #14171a;
+  color: #eef1ee;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(35, 38, 31, 0.18);
+  border-radius: 999px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(238, 241, 238, 0.18);
+}
+
+.leaflet-container {
+  background: #eef3ee;
+  font-family: var(--font-sans);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(35, 38, 31, 0.06) 25%,
+    rgba(35, 38, 31, 0.12) 37%,
+    rgba(35, 38, 31, 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.6s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

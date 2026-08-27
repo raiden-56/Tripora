@@ -1,0 +1,43 @@
+export interface IndiaState {
+  name: string;
+  type: "state" | "ut";
+}
+
+export const INDIA_STATES: IndiaState[] = [
+  { name: "Andhra Pradesh", type: "state" },
+  { name: "Arunachal Pradesh", type: "state" },
+  { name: "Assam", type: "state" },
+  { name: "Bihar", type: "state" },
+  { name: "Chhattisgarh", type: "state" },
+  { name: "Goa", type: "state" },
+  { name: "Gujarat", type: "state" },
+  { name: "Haryana", type: "state" },
+  { name: "Himachal Pradesh", type: "state" },
+  { name: "Jharkhand", type: "state" },
+  { name: "Karnataka", type: "state" },
+  { name: "Kerala", type: "state" },
+  { name: "Madhya Pradesh", type: "state" },
+  { name: "Maharashtra", type: "state" },
+  { name: "Manipur", type: "state" },
+  { name: "Meghalaya", type: "state" },
+  { name: "Mizoram", type: "state" },
+  { name: "Nagaland", type: "state" },
+  { name: "Odisha", type: "state" },
+  { name: "Punjab", type: "state" },
+  { name: "Rajasthan", type: "state" },
+  { name: "Sikkim", type: "state" },
+  { name: "Tamil Nadu", type: "state" },
+  { name: "Telangana", type: "state" },
+  { name: "Tripura", type: "state" },
+  { name: "Uttar Pradesh", type: "state" },
+  { name: "Uttarakhand", type: "state" },
+  { name: "West Bengal", type: "state" },
+  { name: "Andaman and Nicobar Islands", type: "ut" },
+  { name: "Chandigarh", type: "ut" },
+  { name: "Dadra and Nagar Haveli and Daman and Diu", type: "ut" },
+  { name: "Delhi", type: "ut" },
+  { name: "Jammu and Kashmir", type: "ut" },
+  { name: "Ladakh", type: "ut" },
+  { name: "Lakshadweep", type: "ut" },
+  { name: "Puducherry", type: "ut" },
+];
