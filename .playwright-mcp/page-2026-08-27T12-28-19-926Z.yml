@@ -1,0 +1,91 @@
+- generic [ref=f6e3]:
+  - complementary [ref=f6e4]:
+    - generic [ref=f6e5]: Travel Diaries
+    - navigation [ref=f6e12]:
+      - link "Dashboard" [ref=f6e13] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f6e19] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f6e23] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f6e32] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f6e35] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f6e40] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Photo Hub" [ref=f6e46] [cursor=pointer]:
+        - /url: /app/photos
+      - link "Upcoming Trips" [ref=f6e52] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Hire a Guide" [ref=f6e55] [cursor=pointer]:
+        - /url: /app/guides
+      - link "Canvas AI" [ref=f6e59] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f6e63] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f6e66] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f6e70] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f6e74]: Travel Diaries © 2026
+  - generic [ref=f6e76]:
+    - banner [ref=f6e77]:
+      - generic [ref=f6e78]:
+        - heading "Settings" [level=1] [ref=f6e79]
+        - paragraph [ref=f6e80]: Manage your account, privacy, and preferences.
+      - generic [ref=f6e81]:
+        - button "Search" [ref=f6e82]
+        - button "Notifications" [ref=f6e87]
+        - button "Toggle theme" [ref=f6e91]
+    - generic [ref=f6e94]:
+      - heading "Account" [level=3] [ref=f6e95]
+      - generic [ref=f6e97]:
+        - paragraph [ref=f6e98]: Verify Tester
+        - paragraph [ref=f6e99]: verify.tester@traveldiaries.com
+      - heading "Preferences" [level=3] [ref=f6e100]
+      - generic [ref=f6e101]:
+        - generic [ref=f6e102]:
+          - generic [ref=f6e106]:
+            - paragraph [ref=f6e107]: Appearance
+            - paragraph [ref=f6e108]: Light mode is active
+          - button "Switch to Dark" [ref=f6e109]
+        - generic [ref=f6e110]:
+          - generic [ref=f6e115]:
+            - paragraph [ref=f6e116]: Notifications
+            - paragraph [ref=f6e117]: You will see trip reminders and milestones
+          - button "Disable" [ref=f6e118]
+      - heading "Privacy" [level=3] [ref=f6e119]
+      - generic [ref=f6e121]:
+        - generic [ref=f6e126]:
+          - paragraph [ref=f6e127]: Journey Privacy
+          - paragraph [ref=f6e128]: Private — only you can see your journey
+        - button "private →" [ref=f6e129]
+      - heading "Connected Accounts" [level=3] [ref=f6e130]
+      - generic [ref=f6e131]:
+        - heading "Google Drive Integration" [level=3] [ref=f6e132]
+        - paragraph [ref=f6e133]: Connect your Google account to sync Drive folders automatically. Currently running in mock mode.
+        - button "Connect Google Drive" [ref=f6e134]
+      - heading "Data & Privacy" [level=3] [ref=f6e135]
+      - generic [ref=f6e136]:
+        - generic [ref=f6e137]:
+          - generic [ref=f6e142]:
+            - paragraph [ref=f6e143]: Export Data
+            - paragraph [ref=f6e144]: Download a copy of your destinations, trips, and memories
+          - button "Export" [ref=f6e145]
+        - generic [ref=f6e146]:
+          - generic [ref=f6e152]:
+            - paragraph [ref=f6e153]: Disconnect Google Drive
+            - paragraph [ref=f6e154]: Remove access to your linked Drive folders
+          - button "Disconnect" [ref=f6e155]
+        - generic [ref=f6e156]:
+          - generic [ref=f6e161]:
+            - paragraph [ref=f6e162]: Delete Journey
+            - paragraph [ref=f6e163]: Permanently remove all destinations, trips, and memories
+          - button "Delete" [ref=f6e164]
+        - generic [ref=f6e165]:
+          - generic [ref=f6e170]:
+            - paragraph [ref=f6e171]: Delete Account
+            - paragraph [ref=f6e172]: Permanently delete your Travel Diaries account
+          - button "Delete" [ref=f6e173]
+      - button "Logout" [ref=f6e174]

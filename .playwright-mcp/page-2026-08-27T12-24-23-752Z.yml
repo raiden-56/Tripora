@@ -1,0 +1,27 @@
+- generic [ref=f1e72]:
+  - banner [ref=f1e73]:
+    - generic [ref=f1e74]: Travel Diaries
+    - generic [ref=f1e80]: Step 3 of 5
+  - generic [ref=f1e123]:
+    - heading "Where do you want to go next?" [level=1] [ref=f1e124]
+    - paragraph [ref=f1e125]: Based on your interests, here are a few ideas.
+    - generic [ref=f1e126]:
+      - button "Varkala Varkala" [ref=f1e127]:
+        - img "Varkala" [ref=f1e128]
+        - generic [ref=f1e130]: Varkala
+      - button "South Goa South Goa" [ref=f1e131]:
+        - img "South Goa" [ref=f1e132]
+        - generic [ref=f1e134]: South Goa
+      - button "Kodaikanal Kodaikanal" [ref=f1e135]:
+        - img "Kodaikanal" [ref=f1e136]
+        - generic [ref=f1e138]: Kodaikanal
+      - button "Udaipur Udaipur" [ref=f1e139]:
+        - img "Udaipur" [ref=f1e140]
+        - generic [ref=f1e142]: Udaipur
+      - button "Jaisalmer Jaisalmer" [ref=f1e143]:
+        - img "Jaisalmer" [ref=f1e144]
+        - generic [ref=f1e146]: Jaisalmer
+      - button "Ladakh Ladakh" [ref=f1e147]:
+        - img "Ladakh" [ref=f1e148]
+        - generic [ref=f1e150]: Ladakh
+    - button "Add to Wishlist & Continue" [ref=f1e151]

@@ -1,0 +1,46 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - link "Travel Diaries" [ref=e8] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e15]:
+      - heading "Your entire travel journey, beautifully mapped." [level=2] [ref=e16]
+      - paragraph [ref=e17]: Remember where you've been. Plan where you're going.
+    - generic [ref=e18]:
+      - generic [ref=e19]: 37 destinations
+      - generic [ref=e23]: 1,284 memories
+  - generic [ref=e28]:
+    - heading "Create your journey" [level=1] [ref=e29]
+    - paragraph [ref=e30]: Start mapping everywhere you've been and everywhere you're going.
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: First name
+          - textbox "First name" [ref=e39]:
+            - /placeholder: Ganesh
+            - text: Verify
+        - generic [ref=e40]:
+          - generic [ref=e41]: Last name
+          - textbox "Last name" [active] [ref=e42]:
+            - /placeholder: Kumar
+      - generic [ref=e43]:
+        - generic [ref=e44]: Email
+        - textbox "Email" [ref=e49]:
+          - /placeholder: you@example.com
+      - generic [ref=e50]:
+        - generic [ref=e51]: Password
+        - textbox "Password" [ref=e56]:
+          - /placeholder: ••••••••
+          - text: Testerverify.tester@traveldiaries.comVerify@123
+      - generic [ref=e57]:
+        - generic [ref=e58]: Confirm password
+        - textbox "Confirm password" [ref=e63]:
+          - /placeholder: ••••••••
+          - text: Verify@123
+      - button "Create Account" [ref=e64]
+      - generic [ref=e65]: OR
+      - button "Continue with Google" [ref=e68]
+      - button "Continue with Apple" [ref=e69]
+      - paragraph [ref=e70]:
+        - text: Already have an account?
+        - link "Login" [ref=e71] [cursor=pointer]:
+          - /url: /login

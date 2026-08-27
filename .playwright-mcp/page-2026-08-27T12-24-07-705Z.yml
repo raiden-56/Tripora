@@ -1,0 +1,22 @@
+- generic [ref=f1e72]:
+  - banner [ref=f1e73]:
+    - generic [ref=f1e74]: Travel Diaries
+    - generic [ref=f1e80]: Step 1 of 5
+  - generic [ref=f1e85]:
+    - heading "Let's build your travel map" [level=1] [ref=f1e86]
+    - paragraph [ref=f1e87]: Where have you already been?
+    - generic [ref=f1e88]:
+      - button "India" [ref=f1e89]
+      - button "Karnataka" [ref=f1e90]
+      - button "Kerala" [ref=f1e91]
+      - button "Goa" [ref=f1e92]
+      - button "Tamil Nadu" [ref=f1e93]
+      - button "Maharashtra" [ref=f1e94]
+      - button "Rajasthan" [ref=f1e95]
+      - button "Andhra Pradesh" [ref=f1e96]
+      - button "Arunachal Pradesh" [ref=f1e97]
+      - button "Assam" [ref=f1e98]
+      - button "Bihar" [ref=f1e99]
+      - button "Chhattisgarh" [ref=f1e100]
+      - button "Goa" [ref=f1e101]
+    - button "Continue" [ref=f1e102]

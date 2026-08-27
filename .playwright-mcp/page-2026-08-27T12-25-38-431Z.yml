@@ -1,0 +1,43 @@
+- generic [ref=f2e3]:
+  - complementary [ref=f2e4]:
+    - generic [ref=f2e5]: Travel Diaries
+    - navigation [ref=f2e12]:
+      - link "Dashboard" [ref=f2e13] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f2e19] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f2e23] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f2e32] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f2e35] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f2e40] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Photo Hub" [ref=f2e46] [cursor=pointer]:
+        - /url: /app/photos
+      - link "Upcoming Trips" [ref=f2e52] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Hire a Guide" [ref=f2e55] [cursor=pointer]:
+        - /url: /app/guides
+      - link "Canvas AI" [ref=f2e59] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f2e63] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f2e66] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f2e70] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f2e74]: Travel Diaries © 2026
+  - generic [ref=f2e76]:
+    - banner [ref=f2e77]:
+      - generic [ref=f2e78]:
+        - heading "Hire a Local Guide" [level=1] [ref=f2e79]
+        - paragraph [ref=f2e80]: Find verified travel guides for your next trip
+      - generic [ref=f2e81]:
+        - button "Search" [ref=f2e82]
+        - button "Notifications" [ref=f2e87]
+        - button "Toggle theme" [ref=f2e91]
+    - generic [ref=f2e95]:
+      - textbox "Search by destination…" [ref=f2e100]
+      - button "Become a Guide" [ref=f2e101]

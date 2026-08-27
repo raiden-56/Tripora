@@ -1,8 +1,8 @@
-# TravelCanvas User Guide
+# Travel Diaries User Guide
 
 **Your complete guide to mapping, planning and preserving your journey.**
 
-TravelCanvas is a personal travel platform that helps you keep track of the places you've visited, plan future destinations, organize memories and understand your travel journey through an interactive map.
+Travel Diaries is a personal travel platform that helps you keep track of the places you've visited, plan future destinations, organize memories and understand your travel journey through an interactive map.
 
 This guide explains, in plain language, how to use every part of the application as it exists today.
 
@@ -12,7 +12,7 @@ This guide explains, in plain language, how to use every part of the application
 
 ## Table of Contents
 
-1. [Welcome to TravelCanvas](#1-welcome-to-travelcanvas)
+1. [Welcome to Travel Diaries](#1-welcome-to-travel-diaries)
 2. [Getting Started](#2-getting-started)
 3. [Login](#3-login)
 4. [Create an Account](#4-create-an-account)
@@ -45,7 +45,7 @@ This guide explains, in plain language, how to use every part of the application
 31. [Notifications](#31-notifications)
 32. [Search](#32-search)
 33. [Filters](#33-filters)
-34. [Using TravelCanvas on Mobile](#34-using-travelcanvas-on-mobile)
+34. [Using Travel Diaries on Mobile](#34-using-travel-diaries-on-mobile)
 35. [Common Tasks](#35-common-tasks)
 36. [I Just Created My Account — What Should I Do?](#36-i-just-created-my-account--what-should-i-do)
 37. [Best Practices](#37-best-practices)
@@ -60,9 +60,9 @@ This guide explains, in plain language, how to use every part of the application
 
 ---
 
-## 1. Welcome to TravelCanvas
+## 1. Welcome to Travel Diaries
 
-With TravelCanvas you can:
+With Travel Diaries you can:
 
 - Track the places you've already visited
 - Add upcoming destinations you're planning to go to
@@ -78,7 +78,7 @@ With TravelCanvas you can:
 
 ### Who is this guide for?
 
-This guide is for anyone using TravelCanvas — whether you're setting up your account for the first time or just want to understand a specific feature.
+This guide is for anyone using Travel Diaries — whether you're setting up your account for the first time or just want to understand a specific feature.
 
 ---
 
@@ -86,7 +86,7 @@ This guide is for anyone using TravelCanvas — whether you're setting up your a
 
 The first-time experience looks like this:
 
-1. Open TravelCanvas.
+1. Open Travel Diaries.
 2. Choose **Start Your Journey** to create an account and log in, or select **Explore Demo** to try the app instantly with sample data.
 3. If you created a new account, complete the short onboarding.
 4. Land on your **Dashboard**.
@@ -95,16 +95,16 @@ The first-time experience looks like this:
 7. Plan an upcoming trip.
 
 **Figure 1 — Login screen**
-![TravelCanvas Login](screenshots/01-login.png)
+![Travel Diaries Login](screenshots/01-login.png)
 
 ---
 
 ## 3. Login
 
-The Login screen is titled **"Welcome back"** with the subtitle _"Continue your journey with TravelCanvas."_
+The Login screen is titled **"Welcome back"** with the subtitle _"Continue your journey with Travel Diaries."_
 
 **Figure 2 — Login form**
-![TravelCanvas Login](screenshots/01-login.png)
+![Travel Diaries Login](screenshots/01-login.png)
 
 Fields and actions on this screen:
 
@@ -125,7 +125,7 @@ The screen also shows a clearly labeled **"Demo credentials — temporary"** box
 1. Enter your email.
 2. Enter your password (or click **Use Demo Account** to fill in the demo login automatically).
 3. Click **Login**.
-4. On success, you'll see a "Welcome back to TravelCanvas" confirmation and be taken to the Dashboard.
+4. On success, you'll see a "Welcome back to Travel Diaries" confirmation and be taken to the Dashboard.
 5. If the email or password is incorrect, you'll see an **"Invalid email or password."** message and stay on the Login screen.
 
 ### Forgot Password
@@ -177,7 +177,7 @@ New accounts (created through Signup) go through a short 5-step setup before rea
 The Dashboard is titled **"Your Journey"** with the subtitle _"Every place you've been. Every place you're going."_
 
 **Figure 3 — Dashboard**
-![TravelCanvas Dashboard](screenshots/02-dashboard.png)
+![Travel Diaries Dashboard](screenshots/02-dashboard.png)
 
 | Dashboard item                                       | What it means                                                             |
 | ---------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -196,10 +196,10 @@ Clicking a destination card anywhere in the app opens the [Destination Details](
 
 ## 7. Navigation / Sidebar
 
-On desktop, a sidebar on the left is always visible. On mobile, a bottom navigation bar is shown instead (see [Using TravelCanvas on Mobile](#34-using-travelcanvas-on-mobile)).
+On desktop, a sidebar on the left is always visible. On mobile, a bottom navigation bar is shown instead (see [Using Travel Diaries on Mobile](#34-using-travel-diaries-on-mobile)).
 
 **Figure 4 — Sidebar navigation**
-![TravelCanvas Navigation](screenshots/03-navigation.png)
+![Travel Diaries Navigation](screenshots/03-navigation.png)
 
 The sidebar contains, in order:
 
@@ -459,7 +459,7 @@ There is currently no download option in the photo viewer, and memories cannot b
 
 ## 17. Google Drive
 
-TravelCanvas lets you attach a Google Drive folder **link** to a destination or trip so your files stay organized by place. This version does **not** connect to your actual Google account or automatically read files from Drive — it simply stores the folder link you paste in, and shows it as a card you can click to open in a new tab.
+Travel Diaries lets you attach a Google Drive folder **link** to a destination or trip so your files stay organized by place. This version does **not** connect to your actual Google account or automatically read files from Drive — it simply stores the folder link you paste in, and shows it as a card you can click to open in a new tab.
 
 **Figure 10 — Drive folder card**
 ![Google Drive folder](screenshots/07-destination-details.png)
@@ -533,7 +533,7 @@ Only trips that were created with sample checklist/budget data show items in tho
 
 ## 22. Wishlist
 
-TravelCanvas doesn't have a separate "Wishlist" page — instead, destinations with the status **Wishlist** appear:
+Travel Diaries doesn't have a separate "Wishlist" page — instead, destinations with the status **Wishlist** appear:
 
 - On the map and Destinations list, tagged with an amber "Wishlist" badge.
 - On the **Upcoming Trips** page, under **"Places I Want To Explore."**
@@ -740,9 +740,9 @@ Filters update the map or list immediately when clicked.
 
 ---
 
-## 34. Using TravelCanvas on Mobile
+## 34. Using Travel Diaries on Mobile
 
-TravelCanvas is fully responsive.
+Travel Diaries is fully responsive.
 
 - The sidebar is replaced by a **bottom navigation bar** with five items: **Home, Map, Discover, Trips, Profile**.
 - The Explore Map still supports pinch-to-zoom and touch dragging.
@@ -823,7 +823,7 @@ TravelCanvas is fully responsive.
 
 ## 38. FAQ
 
-### What is TravelCanvas?
+### What is Travel Diaries?
 
 A personal travel platform for tracking visited places, planning future trips, saving memories, and viewing your journey on an interactive map.
 
@@ -851,9 +851,9 @@ You can attach a Google Drive folder **link** to a destination or trip. This ver
 
 Open **Upcoming Trips** and click **Add Trip**.
 
-### Can I use TravelCanvas on mobile?
+### Can I use Travel Diaries on mobile?
 
-Yes — see [Using TravelCanvas on Mobile](#34-using-travelcanvas-on-mobile).
+Yes — see [Using Travel Diaries on Mobile](#34-using-travel-diaries-on-mobile).
 
 ### Can I see all my travels on one map?
 
@@ -892,7 +892,7 @@ Open **Settings** and click **Logout** at the bottom of the page.
 ### Google Drive link isn't opening
 
 - Make sure the link you pasted is a valid, complete URL.
-- Make sure you have permission to access that Drive folder — TravelCanvas only opens the link, it doesn't manage folder permissions.
+- Make sure you have permission to access that Drive folder — Travel Diaries only opens the link, it doesn't manage folder permissions.
 
 ---
 
@@ -937,7 +937,7 @@ A destination can also be marked as a **Favorite** (shown with a pink marker and
 
 - **Journey Privacy** — set to Private, Friends, or Public from Settings. This controls the intent for your public journey page's visibility in this version.
 - **Public Journey page** — available at `/u/your-handle`, linked from your Profile.
-- **Connected services** — only Google Drive folder links are supported today; no other services connect to TravelCanvas.
+- **Connected services** — only Google Drive folder links are supported today; no other services connect to Travel Diaries.
 - **Export Data / Delete Journey / Delete Account** — available in Settings under Data & Privacy. In this version these are demo actions that show a confirmation message rather than performing a real, permanent deletion or download.
 
 ---
@@ -970,8 +970,8 @@ A destination can also be marked as a **Favorite** (shown with a pink marker and
 
 ## 45. Document Information
 
-**Product:** TravelCanvas
+**Product:** Travel Diaries
 **Document:** End User Guide
 **Version:** 1.0
 **Last Updated:** 2026-08-27
-**Audience:** TravelCanvas end users
+**Audience:** Travel Diaries end users

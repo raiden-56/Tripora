@@ -1,0 +1,24 @@
+- generic [ref=f1e72]:
+  - banner [ref=f1e73]:
+    - generic [ref=f1e74]: Travel Diaries
+    - generic [ref=f1e80]: Step 2 of 5
+  - generic [ref=f1e103]:
+    - heading "What type of traveler are you?" [level=1] [ref=f1e104]
+    - paragraph [ref=f1e105]: Select as many as you like.
+    - generic [ref=f1e106]:
+      - button "Adventure" [ref=f1e107]
+      - button "Mountains" [ref=f1e108]
+      - button "Beaches" [ref=f1e109]
+      - button "Nature" [ref=f1e110]
+      - button "Culture" [ref=f1e111]
+      - button "Food" [ref=f1e112]
+      - button "Road Trips" [ref=f1e113]
+      - button "Photography" [ref=f1e114]
+      - button "Backpacking" [ref=f1e115]
+      - button "Luxury" [ref=f1e116]
+      - button "Spiritual" [ref=f1e117]
+      - button "Wildlife" [ref=f1e118]
+      - button "Weekend Trips" [ref=f1e119]
+      - button "Solo Travel" [ref=f1e120]
+      - button "Group Travel" [ref=f1e121]
+    - button "Continue" [ref=f1e122]

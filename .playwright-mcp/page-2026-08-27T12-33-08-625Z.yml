@@ -1,0 +1,130 @@
+- generic [ref=f9e70]:
+  - complementary [ref=f9e71]:
+    - generic [ref=f9e72]: Travel Diaries
+    - navigation [ref=f9e79]:
+      - link "Dashboard" [ref=f9e80] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f9e86] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f9e90] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f9e99] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f9e102] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f9e107] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Photo Hub" [ref=f9e113] [cursor=pointer]:
+        - /url: /app/photos
+      - link "Upcoming Trips" [ref=f9e119] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Hire a Guide" [ref=f9e122] [cursor=pointer]:
+        - /url: /app/guides
+      - link "Canvas AI" [ref=f9e126] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f9e130] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f9e133] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f9e137] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f9e141]: Travel Diaries © 2026
+  - generic [ref=f9e143]:
+    - banner [ref=f9e144]:
+      - generic [ref=f9e145]:
+        - heading "Your Journey" [level=1] [ref=f9e146]
+        - paragraph [ref=f9e147]: Every place you've been. Every place you're going.
+      - generic [ref=f9e148]:
+        - button "Search" [ref=f9e149]
+        - button "Notifications" [ref=f9e154]:
+          - generic [ref=f9e158]: "2"
+        - button "Toggle theme" [ref=f9e159]
+    - generic [ref=f9e162]:
+      - generic [ref=f9e163]:
+        - generic [ref=f9e164]:
+          - generic [ref=f9e165]: Countries
+          - text: "1"
+        - generic [ref=f9e170]:
+          - generic [ref=f9e171]: States
+          - text: "1"
+        - generic [ref=f9e176]:
+          - generic [ref=f9e177]: Destinations
+          - text: "3"
+        - generic [ref=f9e183]:
+          - generic [ref=f9e184]: Memories
+          - text: "0"
+      - generic [ref=f9e190]:
+        - paragraph [ref=f9e194]: Explore the map
+        - heading "My entire travel life, in one beautiful map." [level=2] [ref=f9e195]
+        - paragraph [ref=f9e196]: See where you've been, plan what's next, and relive every memory.
+        - generic [ref=f9e197]:
+          - button "Open Explore Map" [ref=f9e198]
+          - button "Add Destination" [ref=f9e199]
+      - generic [ref=f9e201]:
+        - heading "Recent Journeys" [level=2] [ref=f9e202]
+        - button "View all" [ref=f9e203]
+      - generic [ref=f9e204]:
+        - button "Hampi Visited Hampi 4.6 Karnataka, India Not scheduled 0 memories" [ref=f9e205]:
+          - generic [ref=f9e206]:
+            - img "Hampi" [ref=f9e207]
+            - generic [ref=f9e208]: Visited
+          - generic [ref=f9e211]:
+            - generic [ref=f9e212]:
+              - heading "Hampi" [level=3] [ref=f9e213]
+              - generic [ref=f9e214]: "4.6"
+            - paragraph [ref=f9e217]: Karnataka, India
+            - generic [ref=f9e221]:
+              - generic [ref=f9e222]: Not scheduled
+              - generic [ref=f9e223]: 0 memories
+        - button "Coorg Visited Coorg 4.8 Karnataka, India Not scheduled 0 memories" [ref=f9e224]:
+          - generic [ref=f9e225]:
+            - img "Coorg" [ref=f9e226]
+            - generic [ref=f9e227]: Visited
+          - generic [ref=f9e230]:
+            - generic [ref=f9e231]:
+              - heading "Coorg" [level=3] [ref=f9e232]
+              - generic [ref=f9e233]: "4.8"
+            - paragraph [ref=f9e236]: Karnataka, India
+            - generic [ref=f9e240]:
+              - generic [ref=f9e241]: Not scheduled
+              - generic [ref=f9e242]: 0 memories
+      - generic [ref=f9e243]:
+        - heading "Upcoming Trips" [level=2] [ref=f9e244]
+        - button "View all" [ref=f9e247]
+      - generic [ref=f9e248]:
+        - heading "What's Next?" [level=2] [ref=f9e250]
+        - paragraph [ref=f9e254]: You've already explored Karnataka. Here are destinations you might love next.
+        - generic [ref=f9e255]:
+          - generic [ref=f9e256]:
+            - generic [ref=f9e257]:
+              - img "Ladakh" [ref=f9e258]
+              - generic [ref=f9e260]:
+                - paragraph [ref=f9e261]: Ladakh
+                - paragraph [ref=f9e262]: Ladakh, India
+            - generic [ref=f9e263]:
+              - paragraph [ref=f9e264]: You've explored Karnataka — expand your India map.
+              - generic [ref=f9e265]:
+                - generic [ref=f9e266]: "Best season: May – Sep"
+                - generic [ref=f9e273]: 3–5 days
+                - generic [ref=f9e276]: ₹12,000 – ₹25,000
+              - generic [ref=f9e280]:
+                - button "Wishlist" [ref=f9e281]
+                - button "Plan Trip" [ref=f9e284]
+          - generic [ref=f9e285]:
+            - generic [ref=f9e286]:
+              - img "North Goa" [ref=f9e287]
+              - generic [ref=f9e289]:
+                - paragraph [ref=f9e290]: North Goa
+                - paragraph [ref=f9e291]: Goa, India
+            - generic [ref=f9e292]:
+              - paragraph [ref=f9e293]: You've explored Karnataka — expand your India map.
+              - generic [ref=f9e294]:
+                - generic [ref=f9e295]: "Best season: Year-round"
+                - generic [ref=f9e302]: 3–5 days
+                - generic [ref=f9e305]: ₹12,000 – ₹25,000
+              - generic [ref=f9e309]:
+                - button "Wishlist" [ref=f9e310]
+                - button "Plan Trip" [ref=f9e313]
+  - generic [ref=f9e315]:
+    - paragraph [ref=f9e319]: Welcome back to Travel Diaries
+    - button [ref=f9e320]

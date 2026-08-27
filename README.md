@@ -1,9 +1,9 @@
-# TravelCanvas
+# Travel Diaries
 
 **Your personal travel memory map.**
 _Remember where you've been. Plan where you're going._
 
-TravelCanvas turns your scattered travel history — old photos, forgotten wishlists, half-planned trips, random Drive folders — into one living, visual map of your life on the road. It's not a booking site and it's not another admin-style dashboard. It's the thing between a travel journal, a personal map, a trip planner, and a memory vault.
+Travel Diaries turns your scattered travel history — old photos, forgotten wishlists, half-planned trips, random Drive folders — into one living, visual map of your life on the road. It's not a booking site and it's not another admin-style dashboard. It's the thing between a travel journal, a personal map, a trip planner, and a memory vault.
 
 ---
 
@@ -16,7 +16,7 @@ Most people's travel data lives nowhere in particular:
 - Trip planning happens in a messy group chat, then gets forgotten.
 - There's no single place that shows _"here's everywhere I've actually been."_
 
-Booking apps (MakeMyTrip, Airbnb, Google Travel) are built to sell you the **next** trip. Journaling apps (Notion, Day One) aren't built for **geography**. Photo apps (Google Photos) aren't built for **travel intent** (visited vs. planned vs. dream destinations). TravelCanvas fills that specific gap: a map-first, memory-first personal travel system.
+Booking apps (MakeMyTrip, Airbnb, Google Travel) are built to sell you the **next** trip. Journaling apps (Notion, Day One) aren't built for **geography**. Photo apps (Google Photos) aren't built for **travel intent** (visited vs. planned vs. dream destinations). Travel Diaries fills that specific gap: a map-first, memory-first personal travel system.
 
 ## Who it's for
 
@@ -28,7 +28,7 @@ Booking apps (MakeMyTrip, Airbnb, Google Travel) are built to sell you the **nex
 
 ## What makes it useful (not just pretty)
 
-| Need                                                         | How TravelCanvas solves it                                                                                                                        |
+| Need                                                         | How Travel Diaries solves it                                                                                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "Where have I actually been?"                                | An interactive world + India map with visited / planned / wishlist markers, state-by-state India Explorer progress, and real travel statistics.   |
 | "I keep forgetting places I wanted to visit."                | A structured wishlist with priority levels and one-tap "Add to Planned."                                                                          |
@@ -72,27 +72,59 @@ Every visit becomes a memory, every memory feeds recommendations, every recommen
 
 ## Tech stack
 
-React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · React Router · Zustand · Leaflet / React-Leaflet
+**Frontend** (`/web`): React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · React Router · Zustand · Leaflet / React-Leaflet
+
+**Backend** (`/app`): FastAPI · SQLAlchemy 2.0 · PostgreSQL (SQLite for local dev) · Alembic · Redis (caching + rate limiting) · Celery (background jobs) · JWT auth
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full system design and [API.md](API.md) for API conventions.
 
 ## Getting started
 
+**Backend** (no Docker required — defaults to SQLite and gracefully runs without Redis):
+
 ```bash
+python -m venv .venv
+.venv\Scripts\activate            # or: source .venv/bin/activate
+pip install -e ".[dev]"
+copy .env.example .env
+alembic upgrade head
+python -m scripts.seed             # seeds demo users, destinations, guide, pricing plans
+uvicorn app.main:app --reload
+```
+
+**Frontend:**
+
+```bash
+cd web
 npm install
 npm run dev
 ```
 
-Try it instantly with the demo account on the login screen, or click **Explore Demo** on the landing page to skip auth entirely:
+Log in with the seeded demo account on the login screen, or click **Explore Demo** on the landing page:
 
 ```
-Email:    demo@travelcanvas.com
+Email:    demo@traveldiaries.com
 Password: Travel@123
 ```
 
+**Or run everything with Docker Compose** (Postgres + Redis + API + Celery worker + built frontend):
+
 ```bash
-npm run build   # production build
-npm run lint    # oxlint
+docker compose up --build
+```
+
+```bash
+cd web && npm run build   # production frontend build
+pytest tests/backend      # backend test suite
 ```
 
 ## Status
 
-This is a front-end product build with realistic mock data and a mock authentication layer (no real backend yet). The data layer, auth, and Google Drive integration are all structured so a real API/backend can be dropped in without rewriting the UI.
+Travel Diaries is now a full-stack application. Authentication, destinations, trip planning,
+guide bookings, photo sharing, AI travel stories, and pricing are wired end-to-end to a real
+FastAPI + PostgreSQL backend — no hardcoded credentials or fake data in those flows. A few
+secondary pages (trips/memories UI, statistics, achievements) still read from the frontend's
+local store while their equivalent backend APIs are already implemented and tested; wiring them
+follows the same pattern already used for destinations and pricing. See
+[ARCHITECTURE.md](ARCHITECTURE.md#4-whats-intentionally-still-on-the-frontends-local-zustand-mock-store)
+for the exact current state.

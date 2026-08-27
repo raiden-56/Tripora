@@ -1,0 +1,70 @@
+- generic [ref=f1e203]:
+  - complementary [ref=f1e204]:
+    - generic [ref=f1e205]: Travel Diaries
+    - navigation [ref=f1e212]:
+      - link "Dashboard" [ref=f1e213] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f1e219] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f1e223] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f1e232] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f1e235] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f1e240] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Photo Hub" [ref=f1e246] [cursor=pointer]:
+        - /url: /app/photos
+      - link "Upcoming Trips" [ref=f1e252] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Hire a Guide" [ref=f1e255] [cursor=pointer]:
+        - /url: /app/guides
+      - link "Canvas AI" [ref=f1e259] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f1e263] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f1e266] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f1e270] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f1e274]: Travel Diaries © 2026
+  - generic [ref=f1e276]:
+    - banner [ref=f1e277]:
+      - generic [ref=f1e278]:
+        - heading "Your Journey" [level=1] [ref=f1e279]
+        - paragraph [ref=f1e280]: Every place you've been. Every place you're going.
+      - generic [ref=f1e281]:
+        - button "Search" [ref=f1e282]
+        - button "Notifications" [ref=f1e287]
+        - button "Toggle theme" [ref=f1e291]
+    - generic [ref=f1e294]:
+      - generic [ref=f1e295]:
+        - generic [ref=f1e296]:
+          - generic [ref=f1e297]: Countries
+          - text: "0"
+        - generic [ref=f1e302]:
+          - generic [ref=f1e303]: States
+          - text: "0"
+        - generic [ref=f1e308]:
+          - generic [ref=f1e309]: Destinations
+          - text: "0"
+        - generic [ref=f1e315]:
+          - generic [ref=f1e316]: Memories
+          - text: "0"
+      - generic [ref=f1e322]:
+        - paragraph [ref=f1e326]: Explore the map
+        - heading "My entire travel life, in one beautiful map." [level=2] [ref=f1e327]
+        - paragraph [ref=f1e328]: See where you've been, plan what's next, and relive every memory.
+        - generic [ref=f1e329]:
+          - button "Open Explore Map" [ref=f1e330]
+          - button "Add Destination" [ref=f1e331]
+      - generic [ref=f1e333]:
+        - heading "Recent Journeys" [level=2] [ref=f1e334]
+        - button "View all" [ref=f1e335]
+      - generic [ref=f1e336]:
+        - heading "Upcoming Trips" [level=2] [ref=f1e337]
+        - button "View all" [ref=f1e340]
+  - generic [ref=f1e342]:
+    - paragraph [ref=f1e346]: Account created — let's build your travel map.
+    - button [ref=f1e347]

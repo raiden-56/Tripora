@@ -1,0 +1,43 @@
+- generic [ref=f1e3]:
+  - generic [ref=f1e4]:
+    - link "Travel Diaries" [ref=f1e8] [cursor=pointer]:
+      - /url: /
+    - generic [ref=f1e15]:
+      - heading "Your entire travel journey, beautifully mapped." [level=2] [ref=f1e16]
+      - paragraph [ref=f1e17]: Remember where you've been. Plan where you're going.
+    - generic [ref=f1e18]:
+      - generic [ref=f1e19]: 37 destinations
+      - generic [ref=f1e23]: 1,284 memories
+  - generic [ref=f1e28]:
+    - heading "Create your journey" [level=1] [ref=f1e29]
+    - paragraph [ref=f1e30]: Start mapping everywhere you've been and everywhere you're going.
+    - generic [ref=f1e31]:
+      - generic [ref=f1e32]:
+        - generic [ref=f1e33]:
+          - generic [ref=f1e34]: First name
+          - textbox "First name" [ref=f1e39]:
+            - /placeholder: Ganesh
+        - generic [ref=f1e40]:
+          - generic [ref=f1e41]: Last name
+          - textbox "Last name" [ref=f1e42]:
+            - /placeholder: Kumar
+      - generic [ref=f1e43]:
+        - generic [ref=f1e44]: Email
+        - textbox "Email" [ref=f1e49]:
+          - /placeholder: you@example.com
+      - generic [ref=f1e50]:
+        - generic [ref=f1e51]: Password
+        - textbox "Password" [ref=f1e56]:
+          - /placeholder: ••••••••
+      - generic [ref=f1e57]:
+        - generic [ref=f1e58]: Confirm password
+        - textbox "Confirm password" [ref=f1e63]:
+          - /placeholder: ••••••••
+      - button "Create Account" [ref=f1e64]
+      - generic [ref=f1e65]: OR
+      - button "Continue with Google" [ref=f1e68]
+      - button "Continue with Apple" [ref=f1e69]
+      - paragraph [ref=f1e70]:
+        - text: Already have an account?
+        - link "Login" [ref=f1e71] [cursor=pointer]:
+          - /url: /login

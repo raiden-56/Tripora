@@ -1,0 +1,57 @@
+- generic [ref=f7e3]:
+  - complementary [ref=f7e4]:
+    - generic [ref=f7e5]: Travel Diaries
+    - navigation [ref=f7e12]:
+      - link "Dashboard" [ref=f7e13] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f7e19] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f7e23] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f7e32] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f7e35] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f7e40] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Photo Hub" [ref=f7e46] [cursor=pointer]:
+        - /url: /app/photos
+      - link "Upcoming Trips" [ref=f7e52] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Hire a Guide" [ref=f7e55] [cursor=pointer]:
+        - /url: /app/guides
+      - link "Canvas AI" [ref=f7e59] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f7e63] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f7e66] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f7e70] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f7e74]: Travel Diaries © 2026
+  - generic [ref=f7e76]:
+    - banner [ref=f7e77]:
+      - generic [ref=f7e78]:
+        - heading "Canvas AI" [level=1] [ref=f7e79]
+        - paragraph [ref=f7e80]: Your personal travel assistant, powered by your own journey.
+      - generic [ref=f7e81]:
+        - button "Search" [ref=f7e82]
+        - button "Notifications" [ref=f7e87]
+        - button "Toggle theme" [ref=f7e91]
+    - generic [ref=f7e94]:
+      - generic [ref=f7e95]:
+        - button "Ask Canvas AI" [ref=f7e96]
+        - button "Create Trip with AI" [ref=f7e97]
+      - generic [ref=f7e98]:
+        - generic [ref=f7e99]:
+          - generic [ref=f7e100]: Hi! I'm Canvas AI. Ask me where to go next, or let me plan a trip around your travel history.
+          - generic [ref=f7e107]:
+            - textbox "Ask Canvas AI anything about your travels…" [ref=f7e108]
+            - button [ref=f7e109]
+        - generic [ref=f7e113]:
+          - button "Where should I go next?" [ref=f7e114]
+          - button "I have 3 days and ₹10,000." [ref=f7e115]
+          - button "Suggest places near Bangalore." [ref=f7e116]
+          - button "What destinations have I not visited?" [ref=f7e117]
+          - button "Suggest a road trip." [ref=f7e118]
+          - button "Give me destinations similar to my favorite places." [ref=f7e119]

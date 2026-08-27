@@ -1,0 +1,237 @@
+- generic [ref=f2e70]:
+  - complementary [ref=f2e71]:
+    - generic [ref=f2e72]: Travel Diaries
+    - navigation [ref=f2e79]:
+      - link "Dashboard" [ref=f2e80] [cursor=pointer]:
+        - /url: /app
+      - link "Explore Map" [ref=f2e86] [cursor=pointer]:
+        - /url: /app/map
+      - link "Discover" [ref=f2e90] [cursor=pointer]:
+        - /url: /app/discover
+      - link "My Journeys" [ref=f2e99] [cursor=pointer]:
+        - /url: /app/journeys
+      - link "Destinations" [ref=f2e102] [cursor=pointer]:
+        - /url: /app/destinations
+      - link "Memories" [ref=f2e107] [cursor=pointer]:
+        - /url: /app/memories
+      - link "Upcoming Trips" [ref=f2e113] [cursor=pointer]:
+        - /url: /app/trips
+      - link "Canvas AI" [ref=f2e116] [cursor=pointer]:
+        - /url: /app/ai
+      - link "Travel Statistics" [ref=f2e120] [cursor=pointer]:
+        - /url: /app/statistics
+      - link "Profile" [ref=f2e123] [cursor=pointer]:
+        - /url: /app/profile
+      - link "Settings" [ref=f2e127] [cursor=pointer]:
+        - /url: /app/settings
+    - generic [ref=f2e131]: Travel Diaries © 2026
+  - generic [ref=f2e133]:
+    - banner [ref=f2e134]:
+      - generic [ref=f2e135]:
+        - heading "Your Journey" [level=1] [ref=f2e136]
+        - paragraph [ref=f2e137]: Every place you've been. Every place you're going.
+      - generic [ref=f2e138]:
+        - button "Search" [ref=f2e139]
+        - button "Notifications" [ref=f2e144]:
+          - generic [ref=f2e148]: "6"
+        - button "Toggle theme" [ref=f2e149]
+    - generic [ref=f2e152]:
+      - generic [ref=f2e153]:
+        - generic [ref=f2e154]:
+          - generic [ref=f2e155]: Countries
+          - text: "2"
+        - generic [ref=f2e160]:
+          - generic [ref=f2e161]: States
+          - text: "3"
+        - generic [ref=f2e166]:
+          - generic [ref=f2e167]: Destinations
+          - text: "23"
+        - generic [ref=f2e173]:
+          - generic [ref=f2e174]: Memories
+          - text: "13"
+      - generic [ref=f2e180]:
+        - paragraph [ref=f2e184]: Explore the map
+        - heading "My entire travel life, in one beautiful map." [level=2] [ref=f2e185]
+        - paragraph [ref=f2e186]: See where you've been, plan what's next, and relive every memory.
+        - generic [ref=f2e187]:
+          - button "Open Explore Map" [ref=f2e188]
+          - button "Add Destination" [ref=f2e189]
+      - generic [ref=f2e191]:
+        - heading "Recent Journeys" [level=2] [ref=f2e192]
+        - button "View all" [ref=f2e193]
+      - generic [ref=f2e194]:
+        - button "Coorg Visited Coorg 4.8 Karnataka, India Sep 2026 3 memories" [ref=f2e195]:
+          - generic [ref=f2e196]:
+            - img "Coorg" [ref=f2e197]
+            - generic [ref=f2e198]: Visited
+          - generic [ref=f2e204]:
+            - generic [ref=f2e205]:
+              - heading "Coorg" [level=3] [ref=f2e206]
+              - generic [ref=f2e207]: "4.8"
+            - paragraph [ref=f2e210]: Karnataka, India
+            - generic [ref=f2e214]:
+              - generic [ref=f2e215]: Sep 2026
+              - generic [ref=f2e216]: 3 memories
+        - button "Hampi Visited Hampi 4.6 Karnataka, India Aug 2026 2 memories" [ref=f2e217]:
+          - generic [ref=f2e218]:
+            - img "Hampi" [ref=f2e219]
+            - generic [ref=f2e220]: Visited
+          - generic [ref=f2e223]:
+            - generic [ref=f2e224]:
+              - heading "Hampi" [level=3] [ref=f2e225]
+              - generic [ref=f2e226]: "4.6"
+            - paragraph [ref=f2e229]: Karnataka, India
+            - generic [ref=f2e233]:
+              - generic [ref=f2e234]: Aug 2026
+              - generic [ref=f2e235]: 2 memories
+        - button "Gokarna Visited Gokarna 4.3 Karnataka, India Dec 2025 1 memories" [ref=f2e236]:
+          - generic [ref=f2e237]:
+            - img "Gokarna" [ref=f2e238]
+            - generic [ref=f2e239]: Visited
+          - generic [ref=f2e242]:
+            - generic [ref=f2e243]:
+              - heading "Gokarna" [level=3] [ref=f2e244]
+              - generic [ref=f2e245]: "4.3"
+            - paragraph [ref=f2e248]: Karnataka, India
+            - generic [ref=f2e252]:
+              - generic [ref=f2e253]: Dec 2025
+              - generic [ref=f2e254]: 1 memories
+        - button "Mysore Visited Mysore 4.4 Karnataka, India Nov 2025 1 memories" [ref=f2e255]:
+          - generic [ref=f2e256]:
+            - img "Mysore" [ref=f2e257]
+            - generic [ref=f2e258]: Visited
+          - generic [ref=f2e261]:
+            - generic [ref=f2e262]:
+              - heading "Mysore" [level=3] [ref=f2e263]
+              - generic [ref=f2e264]: "4.4"
+            - paragraph [ref=f2e267]: Karnataka, India
+            - generic [ref=f2e271]:
+              - generic [ref=f2e272]: Nov 2025
+              - generic [ref=f2e273]: 1 memories
+      - generic [ref=f2e274]:
+        - heading "Upcoming Trips" [level=2] [ref=f2e275]
+        - button "View all" [ref=f2e278]
+      - generic [ref=f2e279]:
+        - generic [ref=f2e280]:
+          - button [disabled] [ref=f2e281]:
+            - img "Goa Getaway" [ref=f2e282]
+            - generic [ref=f2e284]: Planned
+            - generic [ref=f2e287]: 19d to go
+            - generic [ref=f2e291]:
+              - heading "Goa Getaway" [level=3] [ref=f2e292]
+              - paragraph [ref=f2e293]: North Goa
+          - button [ref=f2e294]
+          - generic [ref=f2e299]:
+            - generic [ref=f2e300]:
+              - text: Sep 15, 2026
+              - generic [ref=f2e303]: · 5 Days
+            - paragraph [ref=f2e304]: Beach hopping and seafood trail.
+            - generic [ref=f2e305]: "Checklist: 4/7"
+            - link "Drive Folder" [ref=f2e309] [cursor=pointer]:
+              - /url: https://drive.google.com/drive/folders/goa-trip
+        - generic [ref=f2e312]:
+          - button [disabled] [ref=f2e313]:
+            - img "Pink City Weekend" [ref=f2e314]
+            - generic [ref=f2e316]: Planned
+            - generic [ref=f2e319]: 100d to go
+            - generic [ref=f2e323]:
+              - heading "Pink City Weekend" [level=3] [ref=f2e324]
+              - paragraph [ref=f2e325]: Jaipur
+          - button [ref=f2e326]
+          - generic [ref=f2e332]:
+            - text: Dec 05, 2026
+            - generic [ref=f2e335]: · 4 Days
+        - generic [ref=f2e336]:
+          - button [disabled] [ref=f2e337]:
+            - img "Himalayan Winter" [ref=f2e338]
+            - generic [ref=f2e340]: Planned
+            - generic [ref=f2e343]: 113d to go
+            - generic [ref=f2e347]:
+              - heading "Himalayan Winter" [level=3] [ref=f2e348]
+              - paragraph [ref=f2e349]: Manali
+          - button [ref=f2e350]
+          - generic [ref=f2e356]:
+            - text: Dec 18, 2026
+            - generic [ref=f2e359]: · 6 Days
+      - generic [ref=f2e360]:
+        - heading "What's Next?" [level=2] [ref=f2e362]
+        - paragraph [ref=f2e366]: You've already explored Karnataka, Kerala, Tamil Nadu. Here are destinations you might love next.
+        - generic [ref=f2e367]:
+          - generic [ref=f2e368]:
+            - generic [ref=f2e369]:
+              - img "Varkala" [ref=f2e370]
+              - generic [ref=f2e372]:
+                - paragraph [ref=f2e373]: Varkala
+                - paragraph [ref=f2e374]: Kerala, India
+            - generic [ref=f2e375]:
+              - paragraph [ref=f2e376]: You've already explored Kerala — more of it awaits.
+              - generic [ref=f2e377]:
+                - generic [ref=f2e378]: "Best season: Year-round"
+                - generic [ref=f2e385]: 3–5 days
+                - generic [ref=f2e388]: ₹12,000 – ₹25,000
+              - generic [ref=f2e392]:
+                - button "Wishlist" [ref=f2e393]
+                - button "Plan Trip" [ref=f2e396]
+          - generic [ref=f2e397]:
+            - generic [ref=f2e398]:
+              - img "Kodaikanal" [ref=f2e399]
+              - generic [ref=f2e401]:
+                - paragraph [ref=f2e402]: Kodaikanal
+                - paragraph [ref=f2e403]: Tamil Nadu, India
+            - generic [ref=f2e404]:
+              - paragraph [ref=f2e405]: You've already explored Tamil Nadu — more of it awaits.
+              - generic [ref=f2e406]:
+                - generic [ref=f2e407]: "Best season: Year-round"
+                - generic [ref=f2e414]: 3–5 days
+                - generic [ref=f2e417]: ₹12,000 – ₹25,000
+              - generic [ref=f2e421]:
+                - button "Wishlist" [ref=f2e422]
+                - button "Plan Trip" [ref=f2e425]
+          - generic [ref=f2e426]:
+            - generic [ref=f2e427]:
+              - img "Udaipur" [ref=f2e428]
+              - generic [ref=f2e430]:
+                - paragraph [ref=f2e431]: Udaipur
+                - paragraph [ref=f2e432]: Rajasthan, India
+            - generic [ref=f2e433]:
+              - paragraph [ref=f2e434]: You've explored Karnataka, Kerala, Tamil Nadu — expand your India map.
+              - generic [ref=f2e435]:
+                - generic [ref=f2e436]: "Best season: Oct – Mar"
+                - generic [ref=f2e443]: 3–5 days
+                - generic [ref=f2e446]: ₹12,000 – ₹25,000
+              - generic [ref=f2e450]:
+                - button "Wishlist" [ref=f2e451]
+                - button "Plan Trip" [ref=f2e454]
+          - generic [ref=f2e455]:
+            - generic [ref=f2e456]:
+              - img "Ladakh" [ref=f2e457]
+              - generic [ref=f2e459]:
+                - paragraph [ref=f2e460]: Ladakh
+                - paragraph [ref=f2e461]: Ladakh, India
+            - generic [ref=f2e462]:
+              - paragraph [ref=f2e463]: You've explored Karnataka, Kerala, Tamil Nadu — expand your India map.
+              - generic [ref=f2e464]:
+                - generic [ref=f2e465]: "Best season: May – Sep"
+                - generic [ref=f2e472]: 3–5 days
+                - generic [ref=f2e475]: ₹12,000 – ₹25,000
+              - generic [ref=f2e479]:
+                - button "Wishlist" [ref=f2e480]
+                - button "Plan Trip" [ref=f2e483]
+          - generic [ref=f2e484]:
+            - generic [ref=f2e485]:
+              - img "Meghalaya" [ref=f2e486]
+              - generic [ref=f2e488]:
+                - paragraph [ref=f2e489]: Meghalaya
+                - paragraph [ref=f2e490]: Meghalaya, India
+            - generic [ref=f2e491]:
+              - paragraph [ref=f2e492]: You've explored Karnataka, Kerala, Tamil Nadu — expand your India map.
+              - generic [ref=f2e493]:
+                - generic [ref=f2e494]: "Best season: Sep – Apr"
+                - generic [ref=f2e501]: 3–5 days
+                - generic [ref=f2e504]: ₹12,000 – ₹25,000
+              - generic [ref=f2e508]:
+                - button "Wishlist" [ref=f2e509]
+                - button "Plan Trip" [ref=f2e512]
+  - generic [ref=f2e514]:
+    - paragraph [ref=f2e518]: Welcome back to Travel Diaries
+    - button [ref=f2e519]
