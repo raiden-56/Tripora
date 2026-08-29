@@ -25,10 +25,10 @@ DEMO_USERS = [
 ]
 
 DEMO_DESTINATIONS = [
-    {"name": "Coorg", "country": "India", "state": "Karnataka", "city": "Madikeri", "latitude": 12.4244, "longitude": 75.7382, "status": DestinationStatus.VISITED, "rating": 4.8},
-    {"name": "Hampi", "country": "India", "state": "Karnataka", "city": "Hampi", "latitude": 15.335, "longitude": 76.46, "status": DestinationStatus.VISITED, "rating": 4.6},
-    {"name": "North Goa", "country": "India", "state": "Goa", "city": "Calangute", "latitude": 15.5439, "longitude": 73.7553, "status": DestinationStatus.PLANNED},
-    {"name": "Ladakh", "country": "India", "state": "Ladakh", "city": "Leh", "latitude": 34.1526, "longitude": 77.5771, "status": DestinationStatus.WISHLIST, "priority": "high"},
+    {"name": "Coorg", "country": "India", "state": "Karnataka", "city": "Madikeri", "latitude": 12.4244, "longitude": 75.7382, "status": DestinationStatus.VISITED, "rating": 4.8, "hero_image_url": "https://picsum.photos/seed/coorg/900/650"},
+    {"name": "Hampi", "country": "India", "state": "Karnataka", "city": "Hampi", "latitude": 15.335, "longitude": 76.46, "status": DestinationStatus.VISITED, "rating": 4.6, "hero_image_url": "https://picsum.photos/seed/hampi/900/650"},
+    {"name": "North Goa", "country": "India", "state": "Goa", "city": "Calangute", "latitude": 15.5439, "longitude": 73.7553, "status": DestinationStatus.PLANNED, "hero_image_url": "https://picsum.photos/seed/north-goa/900/650"},
+    {"name": "Ladakh", "country": "India", "state": "Ladakh", "city": "Leh", "latitude": 34.1526, "longitude": 77.5771, "status": DestinationStatus.WISHLIST, "priority": "high", "hero_image_url": "https://picsum.photos/seed/ladakh/900/650"},
 ]
 
 PRICING_PLANS = [

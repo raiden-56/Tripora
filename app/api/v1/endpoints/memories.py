@@ -17,9 +17,7 @@ def _service(db: DbSession) -> MemoryService:
 
 
 def _to_out(memory) -> MemoryOut:
-    out = MemoryOut.model_validate(memory)
-    out.tags = MemoryService.tags_list(memory)
-    return out
+    return MemoryOut.model_validate(memory)
 
 
 @router.get("", response_model=Page[MemoryOut])

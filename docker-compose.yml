@@ -48,6 +48,8 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://localhost:5173,http://localhost:5174,http://localhost:5175}
     ports:
       - "8000:8000"
+    volumes:
+      - uploads_data:/srv/uploads
     command: >
       sh -c "alembic upgrade head &&
              python -m scripts.seed &&
@@ -69,6 +71,8 @@ services:
       DATABASE_URL: postgresql+psycopg://travel_diaries:travel_diaries@postgres:5432/travel_diaries
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+    volumes:
+      - uploads_data:/srv/uploads
     command: celery -A app.tasks.celery_app worker --loglevel=info
 
   web:
@@ -83,3 +87,4 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:

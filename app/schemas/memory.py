@@ -2,7 +2,9 @@
 
 from datetime import date
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from app.utils.validators import csv_to_list
 
 
 class MemoryBase(BaseModel):
@@ -36,3 +38,11 @@ class MemoryOut(BaseModel):
     description: str | None
     memory_date: date
     tags: list[str] = Field(default_factory=list)
+
+    @field_validator("tags", mode="before")
+    @classmethod
+    def _split_csv_tags(cls, value: object) -> object:
+        """The ORM model stores tags as a comma-separated string, or NULL when
+        empty (Memory.tags); this lets model_validate(memory_instance) work
+        directly instead of raising because a str/None isn't a list[str]."""
+        return csv_to_list(value) if value is None or isinstance(value, str) else value

@@ -4,7 +4,7 @@ from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.models.memory import Memory
 from app.repositories.memory_repository import MemoryRepository
 from app.schemas.memory import MemoryCreate, MemoryUpdate
-from app.utils.validators import csv_to_list, list_to_csv
+from app.utils.validators import list_to_csv
 
 
 class MemoryService:
@@ -41,7 +41,3 @@ class MemoryService:
     def delete(self, memory_id: int, user_id: int) -> None:
         memory = self.get_owned(memory_id, user_id)
         self.repo.delete(memory)
-
-    @staticmethod
-    def tags_list(memory: Memory) -> list[str]:
-        return csv_to_list(memory.tags)

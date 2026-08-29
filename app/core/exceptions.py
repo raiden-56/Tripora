@@ -4,6 +4,10 @@ from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
+
 
 class AppError(Exception):
     """Base class for domain errors that map to a clean API error response."""
@@ -53,7 +57,9 @@ async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
 
 
 async def unhandled_error_handler(request: Request, exc: Exception) -> JSONResponse:
-    # Never leak internal stack traces to clients.
+    # Never leak internal stack traces to clients, but always log them server-side —
+    # otherwise a 500 leaves no trace of what actually went wrong.
+    logger.exception("Unhandled error on %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"error": {"code": "INTERNAL_ERROR", "message": "An unexpected error occurred."}},

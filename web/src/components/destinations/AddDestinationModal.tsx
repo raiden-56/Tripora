@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Loader2, MapPin, Search, X } from "lucide-react";
+import { ImagePlus, Loader2, MapPin, Search, X } from "lucide-react";
 import { useAppStore } from "../../store/useAppStore";
+import * as photosApi from "../../api/photos.api";
 import type { Destination, DestinationStatus } from "../../types";
 
 interface GeoResult {
@@ -39,6 +40,9 @@ export function AddDestinationModal() {
   const [locationQuery, setLocationQuery] = useState("");
   const [results, setResults] = useState<GeoResult[]>([]);
   const [searching, setSearching] = useState(false);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -61,12 +65,23 @@ export function AddDestinationModal() {
         googleMapsUrl: editing.googleMapsUrl ?? "",
         googleDriveUrl: editing.googleDriveUrl ?? "",
       });
+      setCoverPreviewUrl(editing.heroImageUrl ?? "");
     } else {
       setForm(emptyForm);
+      setCoverPreviewUrl("");
     }
+    setCoverFile(null);
     setLocationQuery("");
     setResults([]);
   }, [open, editingId, destinations]);
+
+  const handleCoverFileChange = (file: File | null) => {
+    setCoverFile(file);
+    setCoverPreviewUrl((prev) => {
+      if (prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return file ? URL.createObjectURL(file) : "";
+    });
+  };
 
   useEffect(() => {
     if (locationQuery.trim().length < 3) {
@@ -129,18 +144,38 @@ export function AddDestinationModal() {
       googleDriveUrl: form.googleDriveUrl || undefined,
     };
 
-    if (editingId) {
-      await updateDestination(editingId, patch);
-      pushToast("Destination updated", "success");
-    } else {
-      const created = await addDestination({
-        ...patch,
-        isFavorite: false,
-        heroImageUrl: `https://picsum.photos/seed/${encodeURIComponent(form.name)}/900/650`,
-      });
-      if (created) pushToast("Added to your journey", "success");
+    setSaving(true);
+    try {
+      if (editingId) {
+        if (coverFile) {
+          const photo = await photosApi.uploadPhoto(coverFile, { destinationId: editingId });
+          patch.heroImageUrl = photo.url;
+        }
+        await updateDestination(editingId, patch);
+        pushToast("Destination updated", "success");
+      } else {
+        const created = await addDestination({
+          ...patch,
+          isFavorite: false,
+          heroImageUrl: `https://picsum.photos/seed/${encodeURIComponent(form.name)}/900/650`,
+        });
+        if (created) {
+          if (coverFile) {
+            const photo = await photosApi.uploadPhoto(coverFile, { destinationId: created.id });
+            await updateDestination(created.id, { heroImageUrl: photo.url });
+          }
+          pushToast("Added to your journey", "success");
+        }
+      }
+      closeAddDestination();
+    } catch (err) {
+      pushToast(
+        err instanceof Error ? err.message : "Could not save the cover photo.",
+        "error",
+      );
+    } finally {
+      setSaving(false);
     }
-    closeAddDestination();
   };
 
   return (
@@ -223,6 +258,36 @@ export function AddDestinationModal() {
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className={inputClass}
               />
+            </Field>
+
+            <Field label="Cover Photo">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <div className="w-16 h-16 rounded-xl overflow-hidden bg-ink/5 dark:bg-white/10 shrink-0 flex items-center justify-center">
+                  {coverPreviewUrl ? (
+                    <img
+                      src={coverPreviewUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ImagePlus size={18} className="text-ink-soft" />
+                  )}
+                </div>
+                <span className="text-xs font-semibold text-forest-600 dark:text-forest-400">
+                  {coverPreviewUrl ? "Change photo" : "Upload a photo"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={(e) => handleCoverFileChange(e.target.files?.[0] ?? null)}
+                />
+              </label>
+              {!coverPreviewUrl && !editingId && (
+                <p className="text-[11px] text-ink-soft dark:text-white/40 mt-1.5">
+                  Skip this and we'll use a placeholder until you add one.
+                </p>
+              )}
             </Field>
 
             <div className="grid grid-cols-2 gap-3">
@@ -365,8 +430,10 @@ export function AddDestinationModal() {
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 rounded-full bg-forest-500 text-white text-sm font-semibold hover:bg-forest-600 transition"
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-forest-500 text-white text-sm font-semibold hover:bg-forest-600 transition disabled:opacity-60"
             >
+              {saving && <Loader2 size={14} className="animate-spin" />}
               {editingId ? "Save Changes" : "Add to Journey"}
             </button>
           </div>

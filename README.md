@@ -81,28 +81,42 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full system design and [API.md](A
 ## Getting started
 
 **Fastest local dev** (Postgres + Redis + API + worker in Docker, frontend natively for hot-reload — no local Python needed):
-```
-.\scripts\dev-up.ps1
+
+macOS / Linux:
+```bash
+./scripts/dev-up.sh
+# or: bash scripts/dev-up.sh
 ```
 
-
+Windows:
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\dev-up.ps1
+.\scripts\dev-up.ps1
+# or: powershell -ExecutionPolicy Bypass -File scripts\dev-up.ps1
 ```
 
-This brings up the backend stack with `docker compose --env-file .env.development`
+Both scripts do the same thing. This brings up the backend stack with `docker compose --env-file .env.development`
 (migrations and demo-data seeding run automatically), waits for the API to report
 healthy, installs frontend dependencies on first run, and starts `npm run dev`. Stop
 the frontend with `Ctrl+C`; stop the backend afterwards with `docker compose down`.
 The frontend reads its API URL from `web/.env.development` (`VITE_API_BASE_URL`,
 loaded automatically by Vite in dev mode).
 
-**Backend** (no Docker required — defaults to SQLite and gracefully runs without Redis):
+**No Docker at all** (macOS/Linux — API runs natively against SQLite, reusing an
+already-installed `.venv` so it doesn't reinstall packages on every run; frontend
+runs natively too):
+```bash
+./scripts/dev-up-local.sh
+```
+Use this instead of `dev-up.sh` when you don't want Docker running, or want faster
+restarts. Ctrl+C stops both the frontend and the local API server together. Use
+`dev-up.sh` instead when you want Postgres/Redis/Celery parity with the deployed stack.
+
+**Backend, step by step** (no Docker required — defaults to SQLite and gracefully runs without Redis):
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate            # or: source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -e ".[dev]"           # or: pip install -r requirements.txt
 copy .env.example .env
 alembic upgrade head
 python -m scripts.seed             # seeds demo users, destinations, guide, pricing plans
