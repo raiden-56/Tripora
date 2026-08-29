@@ -101,11 +101,16 @@ the frontend with `Ctrl+C`; stop the backend afterwards with `docker compose dow
 The frontend reads its API URL from `web/.env.development` (`VITE_API_BASE_URL`,
 loaded automatically by Vite in dev mode).
 
-**No Docker at all** (macOS/Linux — API runs natively against SQLite, reusing an
-already-installed `.venv` so it doesn't reinstall packages on every run; frontend
-runs natively too):
+**No Docker at all** (API runs natively against SQLite, reusing an already-installed
+`.venv` so it doesn't reinstall packages on every run; frontend runs natively too):
+
+macOS / Linux:
 ```bash
 ./scripts/dev-up-local.sh
+```
+Windows:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\dev-up-local.ps1
 ```
 Use this instead of `dev-up.sh` when you don't want Docker running, or want faster
 restarts. Ctrl+C stops both the frontend and the local API server together. Use
