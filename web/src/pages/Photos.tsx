@@ -1,10 +1,29 @@
 import { useEffect, useRef, useState } from "react";
-import { Images, Loader2, Share2, Trash2, Upload } from "lucide-react";
+import {
+  Clapperboard,
+  Images,
+  Loader2,
+  Share2,
+  Trash2,
+  Upload,
+  Users,
+  X,
+} from "lucide-react";
 import { TopBar } from "../components/layout/TopBar";
 import { EmptyState } from "../components/common/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import * as photosApi from "../api/photos.api";
 import type { Photo } from "../api/photos.api";
+import * as animationsApi from "../api/photoAnimations.api";
+import type { PhotoAnimation } from "../api/photoAnimations.api";
+import * as communityApi from "../api/community.api";
+
+const ANIMATION_STATUS_LABEL: Record<PhotoAnimation["status"], string> = {
+  pending: "Queued…",
+  processing: "Generating…",
+  completed: "Ready",
+  failed: "Failed",
+};
 
 export default function Photos() {
   const destinations = useAppStore((s) => s.destinations);
@@ -17,6 +36,13 @@ export default function Photos() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadDestinationId, setUploadDestinationId] = useState("");
+  const [animations, setAnimations] = useState<PhotoAnimation[]>([]);
+  const [animateModalOpen, setAnimateModalOpen] = useState(false);
+  const [animationTitle, setAnimationTitle] = useState("");
+  const [creatingAnimation, setCreatingAnimation] = useState(false);
+  const [shareTarget, setShareTarget] = useState<PhotoAnimation | null>(null);
+  const [shareCaption, setShareCaption] = useState("");
+  const [sharingToCommunity, setSharingToCommunity] = useState(false);
 
   const load = async (destId?: string) => {
     setLoading(true);
@@ -34,8 +60,20 @@ export default function Photos() {
 
   useEffect(() => {
     load();
+    animationsApi.listAnimations().then(setAnimations).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const hasPending = animations.some(
+      (a) => a.status === "pending" || a.status === "processing",
+    );
+    if (!hasPending) return;
+    const interval = setInterval(() => {
+      animationsApi.listAnimations().then(setAnimations).catch(() => {});
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [animations]);
 
   const onFilterChange = (destId: string) => {
     setDestinationFilter(destId);
@@ -104,6 +142,61 @@ export default function Photos() {
     }
   };
 
+  const createAnimation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingAnimation(true);
+    try {
+      const animation = await animationsApi.createAnimation(
+        animationTitle.trim() || "Untitled Animation",
+        Array.from(selected),
+      );
+      setAnimations((prev) => [animation, ...prev]);
+      setAnimateModalOpen(false);
+      setAnimationTitle("");
+      setSelected(new Set());
+      pushToast("Animation queued — it'll appear below shortly.", "success");
+    } catch (err) {
+      pushToast(
+        err instanceof Error ? err.message : "Could not start animation.",
+        "error",
+      );
+    } finally {
+      setCreatingAnimation(false);
+    }
+  };
+
+  const removeAnimation = async (id: number) => {
+    try {
+      await animationsApi.deleteAnimation(id);
+      setAnimations((prev) => prev.filter((a) => a.id !== id));
+    } catch {
+      pushToast("Could not delete animation.", "error");
+    }
+  };
+
+  const shareToCommunity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!shareTarget) return;
+    setSharingToCommunity(true);
+    try {
+      await communityApi.createPost({
+        photoAnimationId: shareTarget.id,
+        caption: shareCaption.trim() || undefined,
+        visibility: "public",
+      });
+      pushToast("Shared to the community feed.", "success");
+      setShareTarget(null);
+      setShareCaption("");
+    } catch (err) {
+      pushToast(
+        err instanceof Error ? err.message : "Could not share to community.",
+        "error",
+      );
+    } finally {
+      setSharingToCommunity(false);
+    }
+  };
+
   return (
     <div>
       <TopBar
@@ -167,6 +260,14 @@ export default function Photos() {
               >
                 <Share2 size={15} /> Share ({selected.size})
               </button>
+              {selected.size >= 2 && (
+                <button
+                  onClick={() => setAnimateModalOpen(true)}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-sky-400 text-sky-600 text-sm font-semibold"
+                >
+                  <Clapperboard size={15} /> Animate ({selected.size})
+                </button>
+              )}
               <button
                 onClick={deleteSelected}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-coral-300 text-coral-600 text-sm font-semibold"
@@ -218,7 +319,157 @@ export default function Photos() {
             ))}
           </div>
         )}
+
+        {animations.length > 0 && (
+          <div className="mt-10">
+            <h2 className="font-display text-xl flex items-center gap-2 mb-4">
+              <Clapperboard size={18} className="text-sky-500" /> My Animations
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {animations.map((a) => (
+                <div
+                  key={a.id}
+                  className="relative rounded-2xl overflow-hidden aspect-square bg-ink/5 dark:bg-white/5 border border-ink/8 dark:border-white/10 group"
+                >
+                  {a.status === "completed" && a.outputUrl ? (
+                    <img
+                      src={a.outputUrl}
+                      alt={a.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-ink-soft dark:text-white/40">
+                      {a.status === "failed" ? (
+                        <X size={20} className="text-coral-500" />
+                      ) : (
+                        <Loader2 size={20} className="animate-spin" />
+                      )}
+                      <span className="text-xs">{ANIMATION_STATUS_LABEL[a.status]}</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-between gap-1">
+                    <span className="text-white text-xs font-medium truncate">
+                      {a.title}
+                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {a.status === "completed" && (
+                        <button
+                          onClick={() => setShareTarget(a)}
+                          className="text-white/70 hover:text-sky-400"
+                          aria-label="Share to community"
+                        >
+                          <Users size={13} />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => removeAnimation(a.id)}
+                        className="text-white/70 hover:text-coral-400"
+                        aria-label="Delete animation"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      {animateModalOpen && (
+        <div
+          className="fixed inset-0 z-[1100] bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setAnimateModalOpen(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-white dark:bg-[#1c2024] rounded-2xl shadow-soft-lg p-5"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display text-lg flex items-center gap-2">
+                <Clapperboard size={17} className="text-sky-500" /> Create Animation
+              </h3>
+              <button onClick={() => setAnimateModalOpen(false)}>
+                <X size={18} className="text-ink-soft" />
+              </button>
+            </div>
+            <p className="text-xs text-ink-soft dark:text-white/50 mb-3">
+              Turns {selected.size} selected photos into a looping GIF you can share to
+              the community.
+            </p>
+            <form onSubmit={createAnimation} className="flex flex-col gap-3">
+              <input
+                autoFocus
+                value={animationTitle}
+                onChange={(e) => setAnimationTitle(e.target.value)}
+                placeholder="e.g. Coorg Weekend Highlights"
+                className="w-full px-3 py-2 rounded-lg border border-ink/12 dark:border-white/15 bg-transparent text-sm outline-none focus:border-sky-400"
+              />
+              <button
+                type="submit"
+                disabled={creatingAnimation}
+                className="flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 transition disabled:opacity-60"
+              >
+                {creatingAnimation ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <Clapperboard size={15} />
+                )}
+                Generate Animation
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {shareTarget && (
+        <div
+          className="fixed inset-0 z-[1100] bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setShareTarget(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-white dark:bg-[#1c2024] rounded-2xl shadow-soft-lg p-5"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display text-lg flex items-center gap-2">
+                <Users size={17} className="text-sky-500" /> Share to Community
+              </h3>
+              <button onClick={() => setShareTarget(null)}>
+                <X size={18} className="text-ink-soft" />
+              </button>
+            </div>
+            <img
+              src={shareTarget.outputUrl ?? undefined}
+              alt={shareTarget.title}
+              className="w-full aspect-video object-cover rounded-xl mb-3"
+            />
+            <form onSubmit={shareToCommunity} className="flex flex-col gap-3">
+              <textarea
+                autoFocus
+                value={shareCaption}
+                onChange={(e) => setShareCaption(e.target.value)}
+                placeholder="Add a caption…"
+                rows={2}
+                className="w-full px-3 py-2 rounded-lg border border-ink/12 dark:border-white/15 bg-transparent text-sm outline-none focus:border-sky-400 resize-none"
+              />
+              <button
+                type="submit"
+                disabled={sharingToCommunity}
+                className="flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 transition disabled:opacity-60"
+              >
+                {sharingToCommunity ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <Users size={15} />
+                )}
+                Post to Community
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 """Trip + trip-plan persistence."""
 
-from sqlalchemy import select
+from sqlalchemy import exists, or_, select
 
 from app.models.trip import Trip, TripDestination, TripPlan, TripPlanActivity, TripPlanDay
+from app.models.trip_collaborator import CollaboratorStatus, TripCollaborator
 from app.repositories.base import BaseRepository
 
 
@@ -11,6 +12,18 @@ class TripRepository(BaseRepository[Trip]):
 
     def list_for_user(self, user_id: int, page: int = 1, page_size: int = 20) -> tuple[list[Trip], int]:
         stmt = select(Trip).where(Trip.user_id == user_id)
+        total = len(self.db.scalars(stmt).all())
+        stmt = stmt.order_by(Trip.start_date.asc()).offset((page - 1) * page_size).limit(page_size)
+        return list(self.db.scalars(stmt).all()), total
+
+    def list_accessible_for_user(self, user_id: int, page: int = 1, page_size: int = 20) -> tuple[list[Trip], int]:
+        """Trips the user owns, plus trips they've accepted a collaborator invite on."""
+        is_collaborator = exists().where(
+            TripCollaborator.trip_id == Trip.id,
+            TripCollaborator.user_id == user_id,
+            TripCollaborator.status == CollaboratorStatus.ACCEPTED,
+        )
+        stmt = select(Trip).where(or_(Trip.user_id == user_id, is_collaborator))
         total = len(self.db.scalars(stmt).all())
         stmt = stmt.order_by(Trip.start_date.asc()).offset((page - 1) * page_size).limit(page_size)
         return list(self.db.scalars(stmt).all()), total

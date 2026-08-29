@@ -14,6 +14,18 @@ export interface BackendProfile {
   handle: string | null;
 }
 
+export interface BackendUser {
+  id: number;
+  email: string;
+  name: string;
+  role: string;
+  is_active: boolean;
+}
+
+export function getMe() {
+  return apiRequest<BackendUser>("/api/v1/users/me");
+}
+
 export function getMyProfile() {
   return apiRequest<BackendProfile>("/api/v1/users/me/profile");
 }

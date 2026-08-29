@@ -7,13 +7,29 @@ from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.integrations.storage.local_storage import get_storage_service
 from app.models.photo import Photo, PhotoShare
 from app.repositories.photo_repository import PhotoRepository, PhotoShareRepository
+from app.services.trip_collaborator_service import TripCollaboratorService
 
 
 class PhotoService:
-    def __init__(self, repo: PhotoRepository, share_repo: PhotoShareRepository):
+    def __init__(self, repo: PhotoRepository, share_repo: PhotoShareRepository, trip_access: TripCollaboratorService):
         self.repo = repo
         self.share_repo = share_repo
+        self.trip_access = trip_access
         self.storage = get_storage_service()
+
+    def list_for_user(
+        self,
+        user_id: int,
+        *,
+        destination_id: int | None = None,
+        trip_id: int | None = None,
+        memory_id: int | None = None,
+    ) -> list[Photo]:
+        if trip_id is not None:
+            if self.trip_access.get_access_role(trip_id, user_id) is None:
+                raise PermissionDeniedError("You do not have access to this trip's photos.")
+            return self.repo.list_for_trip(trip_id)
+        return self.repo.list_for_user(user_id, destination_id=destination_id, memory_id=memory_id)
 
     def upload(
         self,
@@ -27,6 +43,9 @@ class PhotoService:
         trip_id: int | None,
         caption: str | None,
     ) -> Photo:
+        if trip_id is not None and self.trip_access.get_access_role(trip_id, user_id) not in ("owner", "editor"):
+            raise PermissionDeniedError("You do not have permission to add photos to this trip.")
+
         safe_name = f"{user_id}/{secrets.token_hex(8)}_{filename.replace('/', '_')}"
         url = self.storage.save(key=safe_name, content=content, content_type=content_type)
         photo = Photo(

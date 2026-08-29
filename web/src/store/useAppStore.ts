@@ -23,6 +23,7 @@ export interface Toast {
 }
 
 const emptyUser: User = {
+  id: null,
   name: "",
   bio: "",
   avatarUrl: "",
@@ -182,12 +183,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   fetchAllData: async () => {
     set({ loadingData: true });
     try {
-      const [destinations, trips, memories, profile, photos] =
+      const [destinations, trips, memories, profile, me, photos] =
         await Promise.all([
           destinationsApi.listDestinations(),
           tripsApi.listTrips(),
           memoriesApi.listMemories(),
           usersApi.getMyProfile().catch(() => null),
+          usersApi.getMe().catch(() => null),
           photosApi.listPhotos().catch(() => []),
         ]);
 
@@ -208,6 +210,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         user: profile
           ? {
               ...state.user,
+              id: me?.id ?? state.user.id,
+              name: me?.name ?? state.user.name,
               bio: profile.bio ?? "",
               avatarUrl: profile.avatar_url ?? "",
               visibility:

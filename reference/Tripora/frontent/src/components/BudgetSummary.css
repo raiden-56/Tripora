@@ -1,0 +1,171 @@
+/* BudgetSummary.css — Sidebar Widget Styles */
+
+.budget-summary-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.bs-section-box {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.bs-widget-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.bs-stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.bs-stat-item:last-of-type {
+  margin-bottom: 0;
+}
+
+.bs-stat-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted-text);
+}
+
+.bs-stat-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.bs-stat-value.under-budget {
+  color: #047857;
+}
+
+.bs-stat-value.over-budget {
+  color: #EF4444;
+}
+
+/* Progress bar inside summary widget */
+.bs-progress-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bs-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bs-progress-fill {
+  height: 100%;
+  background-color: var(--primary-purple);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+.bs-progress-fill.is-over {
+  background-color: #EF4444;
+}
+
+.bs-progress-pct-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--muted-text);
+}
+
+.bs-progress-alert {
+  color: #EF4444;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+/* Trip Details List */
+.bs-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bs-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.bs-detail-bullet {
+  color: var(--primary-purple);
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+/* Expenses Breakdown List */
+.bs-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bs-cat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.bs-cat-name {
+  font-weight: 500;
+  color: var(--muted-text);
+}
+
+.bs-cat-val {
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+/* Make it responsive for tablets and smaller screens */
+@media (max-width: 960px) {
+  .budget-summary-sidebar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .bs-section-box {
+    height: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .budget-summary-sidebar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

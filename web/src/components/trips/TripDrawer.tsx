@@ -9,14 +9,16 @@ import {
   ListChecks,
   MapPin,
   Plus,
+  Users,
   X,
 } from "lucide-react";
 import { useAppStore } from "../../store/useAppStore";
 import { StatusBadge } from "../common/StatusBadge";
 import { EmptyState } from "../common/EmptyState";
 import { TripExpensesTab } from "./TripExpensesTab";
+import { TripCollaboratorsTab } from "./TripCollaboratorsTab";
 
-type Tab = "overview" | "checklist" | "budget" | "expenses";
+type Tab = "overview" | "checklist" | "budget" | "expenses" | "collaborators";
 
 function daysUntil(dateStr: string) {
   return Math.ceil((new Date(dateStr).getTime() - Date.now()) / 86400000);
@@ -105,10 +107,15 @@ export function TripDrawer({
                 {countdown === 0 ? "Today" : `${countdown} days to go`}
               </span>
             )}
+            {trip.role !== "owner" && (
+              <span className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600 capitalize">
+                <Users size={11} /> Shared · {trip.role}
+              </span>
+            )}
           </div>
 
-          <div className="px-5 mt-4 flex gap-1 border-b border-ink/8 dark:border-white/10">
-            {(["overview", "checklist", "budget", "expenses"] as Tab[]).map(
+          <div className="px-5 mt-4 flex gap-1 border-b border-ink/8 dark:border-white/10 overflow-x-auto">
+            {(["overview", "checklist", "budget", "expenses", "collaborators"] as Tab[]).map(
               (t) => (
                 <button
                   key={t}
@@ -265,6 +272,10 @@ export function TripDrawer({
             )}
 
             {tab === "expenses" && <TripExpensesTab tripId={trip.id} />}
+
+            {tab === "collaborators" && (
+              <TripCollaboratorsTab tripId={trip.id} role={trip.role} />
+            )}
           </div>
         </motion.div>
       </motion.div>

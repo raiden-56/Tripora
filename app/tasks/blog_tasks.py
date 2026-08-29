@@ -12,7 +12,7 @@ from app.core.logging import get_logger
 from app.db.session import SessionLocal
 from app.repositories.blog_repository import BlogRepository
 from app.services.blog_service import BlogService
-from app.tasks.celery_app import celery_app
+from app.tasks.celery_app import celery_app, is_broker_available
 
 logger = get_logger(__name__)
 
@@ -31,8 +31,12 @@ def generate_blog_task(blog_id: int, facts: dict) -> None:
 
 
 def run_blog_generation(*, blog_id: int, facts: dict, background_tasks: BackgroundTasks) -> None:
+    if not is_broker_available():
+        logger.info("Celery broker unavailable — running blog generation inline via BackgroundTasks.")
+        background_tasks.add_task(_process, blog_id, facts)
+        return
     try:
         generate_blog_task.delay(blog_id, facts)
-    except Exception:  # noqa: BLE001 - no broker available in this environment
-        logger.info("Celery broker unavailable — running blog generation inline via BackgroundTasks.")
+    except Exception:  # noqa: BLE001 - submission failed even though the broker answered
+        logger.info("Could not submit Celery task — running blog generation inline via BackgroundTasks.")
         background_tasks.add_task(_process, blog_id, facts)

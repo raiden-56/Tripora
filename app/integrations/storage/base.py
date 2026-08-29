@@ -12,3 +12,8 @@ class StorageService(ABC):
     @abstractmethod
     def delete(self, *, key: str) -> None:
         raise NotImplementedError
+
+    @abstractmethod
+    def load(self, *, key: str) -> bytes:
+        """Reads back a previously saved file's bytes (e.g. to re-process an upload)."""
+        raise NotImplementedError

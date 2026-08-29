@@ -23,6 +23,11 @@ class PhotoRepository(BaseRepository[Photo]):
         stmt = select(Photo).where(Photo.id.in_(ids), Photo.user_id == user_id)
         return list(self.db.scalars(stmt).all())
 
+    def list_for_trip(self, trip_id: int) -> list[Photo]:
+        """All photos on a shared trip, regardless of which collaborator uploaded them."""
+        stmt = select(Photo).where(Photo.trip_id == trip_id).order_by(Photo.created_at.desc())
+        return list(self.db.scalars(stmt).all())
+
 
 class PhotoShareRepository(BaseRepository[PhotoShare]):
     model = PhotoShare

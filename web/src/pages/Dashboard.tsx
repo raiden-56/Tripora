@@ -17,6 +17,7 @@ import { computeStats } from "../utils/stats";
 import { DestinationCard } from "../components/destinations/DestinationCard";
 import { TripCard } from "../components/trips/TripCard";
 import { WhatsNextSection } from "../components/dashboard/WhatsNextSection";
+import { TripInvitesBanner } from "../components/dashboard/TripInvitesBanner";
 
 export default function Dashboard() {
   const destinations = useAppStore((s) => s.destinations);
@@ -55,6 +56,7 @@ export default function Dashboard() {
       />
 
       <div className="px-5 md:px-8 pb-10">
+        <TripInvitesBanner />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           <StatCard
             label="Countries"

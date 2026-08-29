@@ -11,12 +11,16 @@ class TripService:
         self.repo = repo
 
     def list_trips(self, user_id: int, page: int, page_size: int) -> tuple[list[Trip], int]:
-        return self.repo.list_for_user(user_id, page=page, page_size=page_size)
+        return self.repo.list_accessible_for_user(user_id, page=page, page_size=page_size)
 
-    def get_owned(self, trip_id: int, user_id: int) -> Trip:
+    def get_or_404(self, trip_id: int) -> Trip:
         trip = self.repo.get(trip_id)
         if not trip:
             raise NotFoundError("Trip not found.", code="TRIP_NOT_FOUND")
+        return trip
+
+    def get_owned(self, trip_id: int, user_id: int) -> Trip:
+        trip = self.get_or_404(trip_id)
         if trip.user_id != user_id:
             raise PermissionDeniedError("You do not have access to this trip.")
         return trip

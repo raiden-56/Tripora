@@ -4,9 +4,15 @@ from fastapi import APIRouter, Depends, File, Form, UploadFile
 
 from app.api.dependencies import CurrentUser, DbSession
 from app.core.exceptions import AppError, NotFoundError
+from app.repositories.notification_repository import NotificationRepository
 from app.repositories.photo_repository import PhotoRepository, PhotoShareRepository
+from app.repositories.trip_collaborator_repository import TripCollaboratorRepository
+from app.repositories.trip_repository import TripRepository
+from app.repositories.user_repository import UserRepository
 from app.schemas.photo import PhotoOut, PhotoShareCreate, PhotoShareOut, PublicPhotoShareOut
+from app.services.notification_service import NotificationService
 from app.services.photo_service import PhotoService
+from app.services.trip_collaborator_service import TripCollaboratorService
 
 router = APIRouter(tags=["photos"])
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
@@ -14,19 +20,24 @@ ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 
 def _service(db: DbSession) -> PhotoService:
-    return PhotoService(PhotoRepository(db), PhotoShareRepository(db))
+    trip_access = TripCollaboratorService(
+        TripCollaboratorRepository(db),
+        TripRepository(db),
+        UserRepository(db),
+        NotificationService(NotificationRepository(db)),
+    )
+    return PhotoService(PhotoRepository(db), PhotoShareRepository(db), trip_access)
 
 
 @router.get("/photos", response_model=list[PhotoOut])
 def list_photos(
     user: CurrentUser,
-    db: DbSession,
     destination_id: int | None = None,
     trip_id: int | None = None,
     memory_id: int | None = None,
+    service: PhotoService = Depends(_service),
 ) -> list[PhotoOut]:
-    repo = PhotoRepository(db)
-    photos = repo.list_for_user(user.id, destination_id=destination_id, trip_id=trip_id, memory_id=memory_id)
+    photos = service.list_for_user(user.id, destination_id=destination_id, trip_id=trip_id, memory_id=memory_id)
     return [PhotoOut.model_validate(p) for p in photos]
 
 

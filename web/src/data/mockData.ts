@@ -700,6 +700,7 @@ export const trips: Trip[] = [
       { category: "Food", planned: 2500, actual: 2100 },
       { category: "Activities", planned: 1500, actual: 0 },
     ],
+    role: "owner",
   },
   {
     id: "t2",
@@ -709,6 +710,7 @@ export const trips: Trip[] = [
     endDate: "2026-12-23",
     status: "planned",
     coverImageUrl: img("manali"),
+    role: "owner",
   },
   {
     id: "t3",
@@ -718,6 +720,7 @@ export const trips: Trip[] = [
     endDate: "2027-01-16",
     status: "planned",
     coverImageUrl: img("kerala2"),
+    role: "owner",
   },
   {
     id: "t4",
@@ -727,6 +730,7 @@ export const trips: Trip[] = [
     endDate: "2026-12-08",
     status: "planned",
     coverImageUrl: img("jaipur"),
+    role: "owner",
   },
   {
     id: "t5",
@@ -736,6 +740,7 @@ export const trips: Trip[] = [
     endDate: "2027-05-12",
     status: "planned",
     coverImageUrl: img("ladakh"),
+    role: "owner",
   },
   {
     id: "t6",
@@ -745,6 +750,7 @@ export const trips: Trip[] = [
     endDate: "2026-09-06",
     status: "visited",
     coverImageUrl: img("coorg"),
+    role: "owner",
   },
 ];
 
@@ -923,6 +929,7 @@ export const TRAVEL_INTERESTS = [
 ];
 
 export const currentUser: User = {
+  id: null,
   name: "Ganesh",
   bio: "Collecting places, not things.",
   avatarUrl: img("avatar", 200, 200),

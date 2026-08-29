@@ -8,11 +8,13 @@ import {
   LayoutDashboard,
   MapPinned,
   Plane,
+  Route,
   Settings,
   Sparkles,
   Telescope,
   User,
   UserPlus,
+  Users,
 } from "lucide-react";
 import { Logo } from "../common/Logo";
 
@@ -24,7 +26,9 @@ const NAV_ITEMS = [
   { to: "/app/destinations", label: "Destinations", icon: MapPinned },
   { to: "/app/memories", label: "Memories", icon: Images },
   { to: "/app/photos", label: "Photo Hub", icon: Images },
+  { to: "/app/community", label: "Community", icon: Users },
   { to: "/app/trips", label: "Upcoming Trips", icon: Calendar },
+  { to: "/app/planner", label: "Trip Planner", icon: Route },
   { to: "/app/guides", label: "Hire a Guide", icon: UserPlus },
   { to: "/app/ai", label: "Canvas AI", icon: Sparkles },
   { to: "/app/statistics", label: "Travel Statistics", icon: BarChart3 },

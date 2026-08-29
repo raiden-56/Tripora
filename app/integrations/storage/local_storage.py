@@ -30,6 +30,9 @@ class LocalStorageService(StorageService):
         if path.exists():
             path.unlink()
 
+    def load(self, *, key: str) -> bytes:
+        return (_UPLOAD_DIR / key).read_bytes()
+
 
 def get_storage_service() -> StorageService:
     # A cloud-backed implementation would be selected here once

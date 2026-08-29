@@ -61,6 +61,8 @@ export interface TripBudget {
   actual: number;
 }
 
+export type TripRole = "owner" | "editor" | "viewer";
+
 export interface Trip {
   id: string;
   title: string;
@@ -73,6 +75,8 @@ export interface Trip {
   driveFolderUrl?: string;
   checklist?: ChecklistItem[];
   budget?: TripBudget[];
+  /** The current user's access level on this trip — "owner" unless it's a shared trip. */
+  role: TripRole;
 }
 
 export interface Achievement {
@@ -88,6 +92,7 @@ export interface Achievement {
 export type JourneyVisibility = "private" | "friends" | "public";
 
 export interface User {
+  id: number | null;
   name: string;
   bio: string;
   avatarUrl: string;

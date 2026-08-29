@@ -38,6 +38,7 @@ class TripOut(TripBase):
     id: int
     user_id: int
     destination_ids: list[int] = Field(default_factory=list)
+    role: str = "owner"
 
 
 class PlannerRequest(BaseModel):

@@ -24,6 +24,8 @@ import Guides from "./pages/Guides";
 import BecomeGuide from "./pages/BecomeGuide";
 import Photos from "./pages/Photos";
 import PublicPhotoShare from "./pages/PublicPhotoShare";
+import Planner from "./pages/Planner";
+import Community from "./pages/Community";
 
 function App() {
   return (
@@ -51,6 +53,8 @@ function App() {
         <Route path="destinations" element={<Destinations />} />
         <Route path="memories" element={<Memories />} />
         <Route path="trips" element={<UpcomingTrips />} />
+        <Route path="planner" element={<Planner />} />
+        <Route path="community" element={<Community />} />
         <Route path="guides" element={<Guides />} />
         <Route path="become-guide" element={<BecomeGuide />} />
         <Route path="photos" element={<Photos />} />

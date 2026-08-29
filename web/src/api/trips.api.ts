@@ -12,6 +12,7 @@ interface BackendTrip {
   notes: string | null;
   drive_folder_url: string | null;
   destination_ids: number[];
+  role: Trip["role"];
 }
 
 interface Page<T> {
@@ -30,6 +31,7 @@ function toFrontend(t: BackendTrip): Trip {
     coverImageUrl: t.cover_image_url ?? "",
     notes: t.notes ?? undefined,
     driveFolderUrl: t.drive_folder_url ?? undefined,
+    role: t.role ?? "owner",
   };
 }
 
