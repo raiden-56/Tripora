@@ -9,7 +9,7 @@ feature still works end-to-end without extra infrastructure.
 from fastapi import BackgroundTasks
 
 from app.core.logging import get_logger
-from app.db.session import SessionLocal
+from app.db import session as db_session
 from app.repositories.blog_repository import BlogRepository
 from app.services.blog_service import BlogService
 from app.tasks.celery_app import celery_app, is_broker_available
@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 
 
 def _process(blog_id: int, facts: dict) -> None:
-    db = SessionLocal()
+    db = db_session.SessionLocal()
     try:
         BlogService(BlogRepository(db)).process_generation(blog_id, facts)
     finally:

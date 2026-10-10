@@ -56,6 +56,9 @@ class AuthService:
         user = self.repo.get(int(payload["sub"]))
         if not user:
             raise UnauthorizedError("User no longer exists.")
+        if not user.is_active:
+            self.repo.revoke_refresh_token(stored)
+            raise UnauthorizedError("This account has been deactivated.", code="ACCOUNT_INACTIVE")
 
         # Rotate: revoke the used refresh token and issue a fresh pair.
         self.repo.revoke_refresh_token(stored)

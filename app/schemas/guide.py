@@ -1,7 +1,5 @@
 """Guide marketplace schemas."""
 
-from datetime import date
-
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
@@ -24,6 +22,8 @@ class GuideOut(BaseModel):
     @field_validator("languages", mode="before")
     @classmethod
     def _split_languages(cls, value: object) -> object:
+        if value is None:  # stored as NULL when the guide listed no languages
+            return []
         if isinstance(value, str):
             return [lang.strip() for lang in value.split(",") if lang.strip()]
         return value
@@ -31,18 +31,18 @@ class GuideOut(BaseModel):
 
 class GuideCreate(BaseModel):
     headline: str = Field(min_length=1, max_length=150)
-    about: str | None = None
-    destination_name: str
-    languages: list[str] = Field(default_factory=list)
+    about: str | None = Field(default=None, max_length=3000)
+    destination_name: str = Field(min_length=1, max_length=150)
+    languages: list[str] = Field(default_factory=list, max_length=10)
     experience_years: int = 0
-    specialization: str | None = None
+    specialization: str | None = Field(default=None, max_length=150)
     price_per_day: float = Field(ge=0)
 
 
 class GuideReviewCreate(BaseModel):
     booking_id: int
     rating: int = Field(ge=1, le=5)
-    comment: str | None = None
+    comment: str | None = Field(default=None, max_length=2000)
 
 
 class GuideReviewOut(BaseModel):

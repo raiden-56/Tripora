@@ -1,5 +1,15 @@
 """Trip collaborator invite/accept flow and the permission gate it puts on trip photos."""
 
+import io
+
+from PIL import Image
+
+
+def _tiny_png() -> bytes:
+    buffer = io.BytesIO()
+    Image.new("RGB", (8, 8), (10, 120, 200)).save(buffer, format="PNG")
+    return buffer.getvalue()
+
 
 def _signup_and_login(client, email: str) -> dict:
     client.post(
@@ -111,7 +121,7 @@ def test_viewer_can_see_photos_but_not_upload(client, auth_headers):
     owner_upload = client.post(
         "/api/v1/photos",
         data={"trip_id": str(trip_id)},
-        files={"file": ("trip.png", b"fake-bytes", "image/png")},
+        files={"file": ("trip.png", _tiny_png(), "image/png")},
         headers=auth_headers,
     )
     assert owner_upload.status_code == 201
@@ -123,7 +133,7 @@ def test_viewer_can_see_photos_but_not_upload(client, auth_headers):
     viewer_upload = client.post(
         "/api/v1/photos",
         data={"trip_id": str(trip_id)},
-        files={"file": ("nope.png", b"fake-bytes", "image/png")},
+        files={"file": ("nope.png", _tiny_png(), "image/png")},
         headers=viewer_headers,
     )
     assert viewer_upload.status_code == 403
@@ -142,7 +152,7 @@ def test_editor_can_upload_photos(client, auth_headers):
     upload = client.post(
         "/api/v1/photos",
         data={"trip_id": str(trip_id)},
-        files={"file": ("trip.png", b"fake-bytes", "image/png")},
+        files={"file": ("trip.png", _tiny_png(), "image/png")},
         headers=editor_headers,
     )
     assert upload.status_code == 201

@@ -27,12 +27,15 @@ def _service(db: DbSession) -> CommunityService:
 
 
 def _to_out(post: CommunityPost, viewer_id: int) -> CommunityPostOut:
+    # Media rows are cascade-deleted with the post, but stay defensive: one post whose
+    # media went missing must never take down the whole feed.
     if post.photo_animation_id:
         media_type, photo_urls = "animation", []
-        media_url = post.photo_animation.output_url
+        media_url = post.photo_animation.output_url if post.photo_animation else None
     else:
         media_type = "album"
-        photo_urls = [item.photo.url for item in post.photo_share.items]
+        items = post.photo_share.items if post.photo_share else []
+        photo_urls = [item.photo.url for item in items if item.photo]
         media_url = photo_urls[0] if photo_urls else None
 
     return CommunityPostOut(

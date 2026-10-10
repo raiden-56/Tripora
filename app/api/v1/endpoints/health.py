@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from sqlalchemy import text
 
 from app.core.config import get_settings
-from app.db.session import SessionLocal
+from app.db import session as db_session
 
 router = APIRouter(tags=["health"])
 settings = get_settings()
@@ -16,7 +16,7 @@ APP_VERSION = "0.1.0"
 def health_check() -> dict:
     db_status = "ok"
     try:
-        db = SessionLocal()
+        db = db_session.SessionLocal()
         db.execute(text("SELECT 1"))
         db.close()
     except Exception:  # noqa: BLE001

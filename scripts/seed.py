@@ -3,15 +3,15 @@
 Run with:
     python -m scripts.seed
 
-Safe to re-run — skips records that already exist.
+Safe to re-run — skips records that already exist. Run `alembic upgrade head` first;
+the schema is owned by migrations. Refuses to run outside development/test because
+the demo accounts below have published passwords.
 """
 
-from datetime import date
-
+from app.core.config import get_settings
 from app.core.constants import DestinationStatus, UserRole
 from app.core.security import hash_password
-from app.db.base import Base
-from app.db.session import SessionLocal, engine
+from app.db.session import SessionLocal
 from app.models.destination import Destination
 from app.models.guide import GuideProfile
 from app.models.subscription import SubscriptionPlan
@@ -42,7 +42,9 @@ PRICING_PLANS = [
 
 
 def seed() -> None:
-    Base.metadata.create_all(bind=engine)
+    settings = get_settings()
+    if not settings.is_local:
+        raise SystemExit(f"Refusing to seed demo accounts with ENVIRONMENT={settings.environment!r}.")
     db = SessionLocal()
     try:
         users_by_email: dict[str, User] = {}

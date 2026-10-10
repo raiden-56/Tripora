@@ -12,7 +12,7 @@ class BookingCreate(BaseModel):
     booking_time: str = Field(pattern=r"^\d{2}:\d{2}$")
     people_count: int = Field(default=1, ge=1, le=50)
     duration_hours: int = Field(default=4, ge=1, le=24)
-    special_requirements: str | None = None
+    special_requirements: str | None = Field(default=None, max_length=1000)
 
 
 class BookingStatusUpdate(BaseModel):

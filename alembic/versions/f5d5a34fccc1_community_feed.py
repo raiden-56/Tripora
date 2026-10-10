@@ -85,3 +85,5 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_community_posts_user_id'), table_name='community_posts')
     op.drop_index(op.f('ix_community_posts_created_at'), table_name='community_posts')
     op.drop_table('community_posts')
+    # Enum types outlive their tables on Postgres; drop them so a re-upgrade works.
+    sa.Enum(name='postvisibility').drop(op.get_bind(), checkfirst=True)

@@ -1,13 +1,13 @@
 """Google Drive link schemas."""
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.integrations.google_drive.validator import is_valid_drive_url
 
 
 class DriveLinkCreate(BaseModel):
-    title: str
-    drive_url: str
+    title: str = Field(min_length=1, max_length=150)
+    drive_url: str = Field(max_length=500)
     destination_id: int | None = None
     trip_id: int | None = None
 

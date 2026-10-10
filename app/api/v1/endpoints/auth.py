@@ -47,13 +47,18 @@ def login(payload: LoginRequest, service: AuthService = Depends(_service)) -> To
     return TokenResponse(access_token=access_token, refresh_token=refresh_token, user=UserOut.model_validate(user))
 
 
-@router.post("/refresh", response_model=TokenResponse)
+# Refresh/logout are called automatically by the app, so they get a roomier limit
+# than login — enough for many open tabs, still a wall against token guessing.
+_token_limit = Depends(RateLimiter(times=settings.rate_limit_default_per_minute, seconds=60))
+
+
+@router.post("/refresh", response_model=TokenResponse, dependencies=[_token_limit])
 def refresh(payload: RefreshRequest, service: AuthService = Depends(_service)) -> TokenResponse:
     user, access_token, refresh_token = service.refresh(payload.refresh_token)
     return TokenResponse(access_token=access_token, refresh_token=refresh_token, user=UserOut.model_validate(user))
 
 
-@router.post("/logout", status_code=204)
+@router.post("/logout", status_code=204, dependencies=[_token_limit])
 def logout(payload: RefreshRequest, service: AuthService = Depends(_service)) -> None:
     service.logout(payload.refresh_token)
 

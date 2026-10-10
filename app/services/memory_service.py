@@ -4,12 +4,14 @@ from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.models.memory import Memory
 from app.repositories.memory_repository import MemoryRepository
 from app.schemas.memory import MemoryCreate, MemoryUpdate
+from app.services.reference_guard import ReferenceGuard
 from app.utils.validators import list_to_csv
 
 
 class MemoryService:
     def __init__(self, repo: MemoryRepository):
         self.repo = repo
+        self.guard = ReferenceGuard(repo.db)
 
     def list_memories(self, user_id: int, destination_id: int | None, trip_id: int | None, page: int, page_size: int):
         return self.repo.list_for_user(
@@ -25,6 +27,8 @@ class MemoryService:
         return memory
 
     def create(self, user_id: int, payload: MemoryCreate) -> Memory:
+        self.guard.destination(payload.destination_id, user_id)
+        self.guard.trip_editable(payload.trip_id, user_id)
         data = payload.model_dump(exclude={"tags"})
         memory = Memory(user_id=user_id, tags=list_to_csv(payload.tags), **data)
         return self.repo.add(memory)
