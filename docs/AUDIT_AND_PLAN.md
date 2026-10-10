@@ -198,7 +198,8 @@ requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
       UI says which one answered. The rule-based planner no longer invents budgets/distances.
 - [ ] Calendar view.
 - [ ] Admin dashboard UI.
-- [ ] Bundle code-splitting.
+- [x] Bundle code-splitting: pages load on demand (main bundle 840 kB → 511 kB, 236 → 150 kB
+      gzipped); unknown URLs show a "Page not found" page instead of a blank screen.
 
 ### Phase 4 — Integrations that need accounts
 - Email provider (password reset, invites), Razorpay checkout + webhooks, Google OAuth / Drive,
