@@ -27,6 +27,8 @@ const Photos = lazy(() => import("./pages/Photos"));
 const PublicPhotoShare = lazy(() => import("./pages/PublicPhotoShare"));
 const Planner = lazy(() => import("./pages/Planner"));
 const Community = lazy(() => import("./pages/Community"));
+const Admin = lazy(() => import("./pages/Admin"));
+const TravelCalendar = lazy(() => import("./pages/TravelCalendar"));
 
 function PageLoading() {
   return (
@@ -87,6 +89,8 @@ function App() {
           <Route path="upgrade" element={<Upgrade />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="admin" element={<Admin />} />
+          <Route path="calendar" element={<TravelCalendar />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="*" element={<NotFound />} />

@@ -85,6 +85,7 @@ export interface User {
   id: number | null;
   name: string;
   email: string;
+  role: "USER" | "GUIDE" | "ADMIN";
   bio: string;
   avatarUrl: string;
   homeLocation: string;

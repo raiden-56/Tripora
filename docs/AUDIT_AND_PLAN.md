@@ -185,7 +185,7 @@ Known gaps carried forward: Discover's "Near you" still assumes Bangalore; "frie
 visibility behaves like private (no friends graph); counters animate with
 requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
 
-### Phase 3 — New features (branch `feat/phase-3-itinerary`)
+### Phase 3 — New features — ✅ done (branch `feat/phase-3-itinerary`)
 - [x] Itinerary day editor on trips — stops per day (time, type, cost, notes), day names,
       reorder/move, import from a Trip Planner result; "Save as trip" creates a real itinerary.
 - [x] Packing suggestions from trip length, expected weather, places and itinerary.
@@ -196,8 +196,11 @@ requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
       schema outputs, server-side refusal fallback, prompt caching for chat context; every path
       falls back to the offline/template logic when the key is missing or the API fails, and the
       UI says which one answered. The rule-based planner no longer invents budgets/distances.
-- [ ] Calendar view.
-- [ ] Admin dashboard UI.
+- [x] Calendar view (`/app/calendar`): month grid with trips and visits; picking a day shows
+      that day's itinerary stops.
+- [x] Admin dashboard (`/app/admin`, admins only): usage overview, user search with
+      activate/deactivate (signs the user out) and role changes (no self-lockout), guide
+      verification, bookings list.
 - [x] Bundle code-splitting: pages load on demand (main bundle 840 kB → 511 kB, 236 → 150 kB
       gzipped); unknown URLs show a "Page not found" page instead of a blank screen.
 

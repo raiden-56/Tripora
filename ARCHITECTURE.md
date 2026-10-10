@@ -102,8 +102,7 @@ AI: with `AI_API_KEY` set, Canvas AI chat (`/assistant/chat`), the Trip Planner 
 stories use Claude (`app/integrations/ai/claude_provider.py`); without it, or if the API fails,
 they fall back to the offline/template logic and the UI says which one answered.
 
-Not built yet (see `docs/AUDIT_AND_PLAN.md`): calendar view, admin dashboard, password reset
-email, payments, Google Drive sync.
+Not built yet (see `docs/AUDIT_AND_PLAN.md`): password reset email, payments, Google Drive sync.
 
 ## 5. Deliberate simplifications (and why)
 
