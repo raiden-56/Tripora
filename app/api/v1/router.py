@@ -18,7 +18,9 @@ from app.api.v1.endpoints import (
     photos,
     planner,
     pricing,
+    public,
     trip_collaborators,
+    trip_planning,
     trips,
     users,
 )
@@ -32,6 +34,7 @@ api_router.include_router(trips.router)
 api_router.include_router(trip_collaborators.router)
 api_router.include_router(trip_collaborators.me_router)
 api_router.include_router(expenses.router)
+api_router.include_router(trip_planning.router)
 api_router.include_router(memories.router)
 api_router.include_router(photos.router)
 api_router.include_router(photo_animations.router)
@@ -44,3 +47,4 @@ api_router.include_router(pricing.router)
 api_router.include_router(payments.router)
 api_router.include_router(notifications.router)
 api_router.include_router(admin.router)
+api_router.include_router(public.router)

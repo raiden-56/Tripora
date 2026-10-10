@@ -18,6 +18,7 @@ import { DestinationCard } from "../components/destinations/DestinationCard";
 import { TripCard } from "../components/trips/TripCard";
 import { WhatsNextSection } from "../components/dashboard/WhatsNextSection";
 import { TripInvitesBanner } from "../components/dashboard/TripInvitesBanner";
+import { todayIso } from "../utils/dates";
 
 export default function Dashboard() {
   const destinations = useAppStore((s) => s.destinations);
@@ -36,12 +37,10 @@ export default function Dashboard() {
         new Date(a.visitedFrom ?? 0).getTime(),
     )
     .slice(0, 4);
+  const today = todayIso();
   const upcoming = trips
-    .filter((t) => t.status === "planned")
-    .sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    )
+    .filter((t) => t.status === "planned" && t.endDate >= today)
+    .sort((a, b) => a.startDate.localeCompare(b.startDate))
     .slice(0, 3);
   const memoryCounts = memories.reduce<Record<string, number>>((acc, m) => {
     acc[m.destinationId] = (acc[m.destinationId] ?? 0) + 1;
@@ -152,7 +151,7 @@ export default function Dashboard() {
             <Plane size={18} className="text-sky-500" /> Upcoming Trips
           </h2>
           <button
-            onClick={() => navigate("/app/journeys")}
+            onClick={() => navigate("/app/trips")}
             className="text-sm font-semibold text-forest-600 dark:text-forest-400"
           >
             View all
@@ -168,8 +167,7 @@ export default function Dashboard() {
                   .map((id) => destinations.find((d) => d.id === id)?.name)
                   .filter(Boolean)
                   .join(", ")}
-                onEdit={() => navigate("/app/journeys")}
-                onDelete={() => {}}
+                onOpen={() => navigate(`/app/trips?trip=${t.id}`)}
               />
             ))
           ) : (

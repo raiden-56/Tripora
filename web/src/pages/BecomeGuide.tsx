@@ -3,12 +3,53 @@ import { useNavigate } from "react-router-dom";
 import { CalendarCheck, Loader2 } from "lucide-react";
 import { TopBar } from "../components/layout/TopBar";
 import { useAppStore } from "../store/useAppStore";
+import { confirmAction, type ConfirmOptions } from "../store/useConfirmStore";
 import * as guidesApi from "../api/guides.api";
-import type { Guide, Booking } from "../api/guides.api";
+import type { Guide, Booking, BookingStatus } from "../api/guides.api";
 import { EmptyState } from "../components/common/EmptyState";
 
 const inputClass =
   "w-full px-3.5 py-2.5 rounded-xl border border-ink/12 dark:border-white/15 bg-transparent text-sm outline-none focus:border-forest-400";
+
+type GuideAction = "accepted" | "rejected" | "completed" | "cancelled";
+
+const ACTIONS: Record<
+  GuideAction,
+  { label: string; primary: boolean; done: string; confirm?: ConfirmOptions }
+> = {
+  accepted: { label: "Accept", primary: true, done: "Booking accepted" },
+  rejected: {
+    label: "Decline",
+    primary: false,
+    done: "Booking declined",
+    confirm: {
+      title: "Decline this booking?",
+      danger: true,
+      confirmLabel: "Decline booking",
+    },
+  },
+  completed: {
+    label: "Mark completed",
+    primary: true,
+    done: "Booking marked completed",
+  },
+  cancelled: {
+    label: "Cancel",
+    primary: false,
+    done: "Booking cancelled",
+    confirm: {
+      title: "Cancel this booking?",
+      danger: true,
+      confirmLabel: "Cancel booking",
+    },
+  },
+};
+
+/** What the guide may do next — mirrors the server's allowed transitions. */
+const NEXT_ACTIONS: Partial<Record<BookingStatus, GuideAction[]>> = {
+  pending: ["accepted", "rejected"],
+  accepted: ["completed", "cancelled"],
+};
 
 export default function BecomeGuide() {
   const pushToast = useAppStore((s) => s.pushToast);
@@ -26,23 +67,28 @@ export default function BecomeGuide() {
   const [specialization, setSpecialization] = useState("");
   const [pricePerDay, setPricePerDay] = useState(1500);
   const [saving, setSaving] = useState(false);
+  const [busyBookingId, setBusyBookingId] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
+        // Resolves to null (not an error) when the user has no guide profile yet.
         const profile = await guidesApi.getMyGuideProfile();
         setExistingProfile(profile);
         if (profile) {
           const bookings = await guidesApi.listBookingsReceived();
           setReceived(bookings);
         }
-      } catch {
-        // no profile yet — fine
+      } catch (err) {
+        pushToast(
+          err instanceof Error ? err.message : "Could not load your guide profile.",
+          "error",
+        );
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [pushToast]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,28 +124,35 @@ export default function BecomeGuide() {
     }
   };
 
-  const respond = async (
-    bookingId: number,
-    status: "accepted" | "rejected" | "completed",
-  ) => {
+  const respond = async (bookingId: number, status: GuideAction) => {
+    const { confirm, done } = ACTIONS[status];
+    if (confirm && !(await confirmAction(confirm))) return;
+    setBusyBookingId(bookingId);
     try {
-      await guidesApi.updateBookingStatus(bookingId, status);
+      const updated = await guidesApi.updateBookingStatus(bookingId, status);
       setReceived((prev) =>
-        prev.map((b) => (b.id === bookingId ? { ...b, status } : b)),
+        prev.map((b) =>
+          b.id === bookingId ? { ...b, status: updated.status } : b,
+        ),
       );
-      pushToast(`Booking ${status}`, "success");
+      pushToast(done, "success");
     } catch (err) {
       pushToast(
         err instanceof Error ? err.message : "Could not update booking.",
         "error",
       );
+    } finally {
+      setBusyBookingId(null);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24">
-        <Loader2 className="animate-spin text-forest-500" size={24} />
+      <div>
+        <TopBar title="Guide Profile" subtitle="Loading your guide details…" />
+        <div className="flex justify-center py-24">
+          <Loader2 className="animate-spin text-forest-500" size={24} />
+        </div>
       </div>
     );
   }
@@ -144,10 +197,11 @@ export default function BecomeGuide() {
                 >
                   <div>
                     <p className="font-semibold">
-                      {b.bookingDate} · {b.bookingTime}
+                      {b.travelerName ?? "Traveler"}
                     </p>
                     <p className="text-ink-soft dark:text-white/50 text-xs">
-                      {b.peopleCount} people · {b.durationHours}h
+                      {b.bookingDate} · {b.bookingTime} · {b.peopleCount}{" "}
+                      people · {b.durationHours}h
                     </p>
                     {b.specialRequirements && (
                       <p className="text-xs text-ink-soft dark:text-white/50 mt-1">
@@ -155,26 +209,25 @@ export default function BecomeGuide() {
                       </p>
                     )}
                   </div>
-                  {b.status === "pending" ? (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => respond(b.id, "accepted")}
-                        className="px-3 py-1.5 rounded-full bg-forest-500 text-white text-xs font-semibold"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() => respond(b.id, "rejected")}
-                        className="px-3 py-1.5 rounded-full border border-ink/15 dark:border-white/20 text-xs font-semibold"
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  ) : (
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-ink/5 dark:bg-white/10 capitalize">
                       {b.status}
                     </span>
-                  )}
+                    {(NEXT_ACTIONS[b.status] ?? []).map((action) => (
+                      <button
+                        key={action}
+                        onClick={() => respond(b.id, action)}
+                        disabled={busyBookingId === b.id}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold disabled:opacity-60 ${
+                          ACTIONS[action].primary
+                            ? "bg-forest-500 text-white hover:bg-forest-600 transition"
+                            : "border border-ink/15 dark:border-white/20"
+                        }`}
+                      >
+                        {ACTIONS[action].label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

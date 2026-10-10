@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, pickBody } from "./client";
 import type { Memory } from "../types";
 
 interface BackendMemory {
@@ -30,15 +30,14 @@ function toFrontend(m: BackendMemory): Memory {
 }
 
 function toBackend(payload: Partial<Memory>) {
-  return {
-    destination_id: payload.destinationId
-      ? Number(payload.destinationId)
-      : undefined,
-    title: payload.title,
-    description: payload.description,
-    memory_date: payload.date,
-    tags: payload.tags,
-  };
+  const body = pickBody(payload, {
+    title: "title",
+    description: "description",
+    date: "memory_date",
+    tags: "tags",
+  });
+  if (payload.destinationId) body.destination_id = Number(payload.destinationId);
+  return body;
 }
 
 export async function listMemories(): Promise<Memory[]> {

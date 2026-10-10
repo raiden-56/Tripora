@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.core.constants import UserRole
 from app.schemas.common import PatchModel
+from app.utils.handles import HANDLE_PATTERN
 
 Visibility = Literal["private", "friends", "public"]
 
@@ -33,10 +34,22 @@ class UserProfileOut(BaseModel):
     group_size_preference: str | None = None
     visibility: str
     handle: str | None = None
+    notifications_enabled: bool = True
+    onboarding_completed: bool = True
+
+
+class UserUpdate(PatchModel):
+    required_fields = frozenset({"name"})
+
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+
+
+class AccountDeleteRequest(BaseModel):
+    password: str = Field(min_length=1, max_length=128)
 
 
 class UserProfileUpdate(PatchModel):
-    required_fields = frozenset({"visibility"})
+    required_fields = frozenset({"visibility", "handle", "notifications_enabled", "onboarding_completed"})
 
     bio: str | None = Field(default=None, max_length=2000)
     avatar_url: str | None = Field(default=None, max_length=500)
@@ -47,3 +60,6 @@ class UserProfileUpdate(PatchModel):
     trip_duration_preference: str | None = Field(default=None, max_length=50)
     group_size_preference: str | None = Field(default=None, max_length=50)
     visibility: Visibility | None = None
+    handle: str | None = Field(default=None, pattern=HANDLE_PATTERN)
+    notifications_enabled: bool | None = None
+    onboarding_completed: bool | None = None

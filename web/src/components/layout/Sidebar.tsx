@@ -1,48 +1,20 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import {
-  BarChart3,
-  Calendar,
-  Compass,
-  Images,
-  LayoutDashboard,
-  MapPinned,
-  Plane,
-  Route,
-  Settings,
-  Sparkles,
-  Telescope,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Logo } from "../common/Logo";
-
-const NAV_ITEMS = [
-  { to: "/app", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/app/map", label: "Explore Map", icon: Compass },
-  { to: "/app/discover", label: "Discover", icon: Telescope },
-  { to: "/app/journeys", label: "My Journeys", icon: Plane },
-  { to: "/app/destinations", label: "Destinations", icon: MapPinned },
-  { to: "/app/memories", label: "Memories", icon: Images },
-  { to: "/app/photos", label: "Photo Hub", icon: Images },
-  { to: "/app/community", label: "Community", icon: Users },
-  { to: "/app/trips", label: "Upcoming Trips", icon: Calendar },
-  { to: "/app/planner", label: "Trip Planner", icon: Route },
-  { to: "/app/guides", label: "Hire a Guide", icon: UserPlus },
-  { to: "/app/ai", label: "Canvas AI", icon: Sparkles },
-  { to: "/app/statistics", label: "Travel Statistics", icon: BarChart3 },
-  { to: "/app/profile", label: "Profile", icon: User },
-  { to: "/app/settings", label: "Settings", icon: Settings },
-];
+import { NAV_ITEMS } from "./navItems";
+import { useAuthStore } from "../../store/useAuthStore";
 
 export function Sidebar() {
+  const logout = useAuthStore((s) => s.logout);
+  const navigate = useNavigate();
+
   return (
     <aside className="hidden md:flex flex-col w-60 shrink-0 h-screen sticky top-0 border-r border-ink/8 dark:border-white/8 px-3 py-5">
       <div className="px-3 mb-6">
         <Logo />
       </div>
-      <nav className="flex-1 flex flex-col gap-1">
+      <nav className="flex-1 flex flex-col gap-1 overflow-y-auto">
         {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -62,8 +34,17 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
-      <div className="px-3 pt-3 border-t border-ink/8 dark:border-white/8 text-xs text-ink-soft dark:text-white/40">
-        Travel Diaries &copy; 2026
+      <div className="px-3 pt-3 border-t border-ink/8 dark:border-white/8 flex items-center justify-between text-xs text-ink-soft dark:text-white/40">
+        <span>Travel Diaries &copy; {new Date().getFullYear()}</span>
+        <button
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+          className="flex items-center gap-1 font-semibold hover:text-coral-500"
+        >
+          <LogOut size={13} /> Log out
+        </button>
       </div>
     </aside>
   );

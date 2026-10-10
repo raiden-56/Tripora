@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, pickBody } from "./client";
 import type { Destination, DestinationStatus } from "../types";
 
 interface BackendDestination {
@@ -21,6 +21,7 @@ interface BackendDestination {
   notes: string | null;
   hero_image_url: string | null;
   google_maps_url: string | null;
+  drive_folder_url: string | null;
 }
 
 interface Page<T> {
@@ -47,30 +48,34 @@ function toFrontend(d: BackendDestination): Destination {
     notes: d.notes ?? undefined,
     heroImageUrl: d.hero_image_url ?? "",
     googleMapsUrl: d.google_maps_url ?? undefined,
-    places: [],
-    createdAt: new Date().toISOString(),
+    googleDriveUrl: d.drive_folder_url ?? undefined,
+    category: d.category ?? undefined,
   };
 }
 
+/** Only keys present in the payload are sent; present-but-empty ones are sent as
+ * null, which is how an edit clears an optional field. */
 function toBackend(payload: Partial<Destination>) {
-  return {
-    name: payload.name,
-    country: payload.country,
-    state: payload.state,
-    city: payload.city,
-    latitude: payload.latitude,
-    longitude: payload.longitude,
-    status: payload.status,
-    is_favorite: payload.isFavorite,
-    priority: payload.priority,
-    visited_from: payload.visitedFrom,
-    visited_to: payload.visitedTo,
-    rating: payload.rating,
-    description: payload.description,
-    notes: payload.notes,
-    hero_image_url: payload.heroImageUrl,
-    google_maps_url: payload.googleMapsUrl,
-  };
+  return pickBody(payload, {
+    name: "name",
+    country: "country",
+    state: "state",
+    city: "city",
+    category: "category",
+    latitude: "latitude",
+    longitude: "longitude",
+    status: "status",
+    isFavorite: "is_favorite",
+    priority: "priority",
+    visitedFrom: "visited_from",
+    visitedTo: "visited_to",
+    rating: "rating",
+    description: "description",
+    notes: "notes",
+    heroImageUrl: "hero_image_url",
+    googleMapsUrl: "google_maps_url",
+    googleDriveUrl: "drive_folder_url",
+  });
 }
 
 export async function listDestinations(): Promise<Destination[]> {

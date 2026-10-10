@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Clock, Sparkles } from "lucide-react";
 import { TopBar } from "../components/layout/TopBar";
-import { useAppStore } from "../store/useAppStore";
 import { listPricingPlans, type PricingPlan } from "../api/pricing.api";
 
 export default function Upgrade() {
-  const pushToast = useAppStore((s) => s.pushToast);
   const [plans, setPlans] = useState<PricingPlan[] | null>(null);
   const [error, setError] = useState(false);
 
@@ -22,6 +20,13 @@ export default function Upgrade() {
         subtitle="Unlock deeper AI planning, richer stats, and premium sharing."
       />
       <div className="px-5 md:px-8 pb-10 max-w-3xl">
+        <p className="flex items-start gap-2 text-sm text-forest-600 dark:text-forest-400 bg-forest-50 dark:bg-forest-500/10 px-4 py-3 rounded-xl mb-6">
+          <Sparkles size={15} className="shrink-0 mt-0.5" />
+          <span>
+            Paid plans aren't available yet. During early access, every current
+            feature is free for everyone — no payment needed.
+          </span>
+        </p>
         {error && (
           <p className="text-sm text-coral-500 bg-coral-500/10 px-4 py-3 rounded-xl mb-5">
             Unable to load pricing plans right now. Please try again shortly.
@@ -82,17 +87,19 @@ export default function Upgrade() {
                     remain fully usable.
                   </p>
                 ) : (
-                  <button
-                    onClick={() =>
-                      pushToast(
-                        `${plan.name} plan checkout is launching soon — you'll be notified.`,
-                        "info",
-                      )
-                    }
-                    className="w-full py-2.5 rounded-full bg-forest-500 text-white text-sm font-semibold hover:bg-forest-600 transition"
-                  >
-                    Notify Me
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full py-2.5 rounded-full bg-forest-500/40 dark:bg-forest-500/30 text-white text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-1.5"
+                    >
+                      <Clock size={14} /> Coming soon
+                    </button>
+                    <p className="text-xs text-ink-soft dark:text-white/40 mt-2 text-center">
+                      Checkout isn't live yet — everything is free during early
+                      access.
+                    </p>
+                  </>
                 )}
               </div>
             ))}

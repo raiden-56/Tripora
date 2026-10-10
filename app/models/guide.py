@@ -29,6 +29,7 @@ class GuideProfile(Base, TimestampMixin):
     rating_avg: Mapped[float] = mapped_column(Float, default=0, index=True)
     rating_count: Mapped[int] = mapped_column(Integer, default=0)
 
+    user: Mapped["User"] = relationship()
     availability: Mapped[list["GuideAvailability"]] = relationship(back_populates="guide", cascade="all, delete-orphan")
     reviews: Mapped[list["GuideReview"]] = relationship(back_populates="guide", cascade="all, delete-orphan")
 

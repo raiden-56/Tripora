@@ -1,34 +1,34 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Check,
-  CloudUpload,
-  FolderSync,
-  ImagePlus,
-  MapPin,
-  SkipForward,
-  Sparkles,
-} from "lucide-react";
+import { Check, ImagePlus, MapPin, SkipForward, Sparkles } from "lucide-react";
 import { Logo } from "../../components/common/Logo";
 import { AnimatedCounter } from "../../components/common/AnimatedCounter";
 import { destinations, TRAVEL_INTERESTS } from "../../data/mockData";
-import { INDIA_STATES } from "../../data/indiaStates";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useAppStore } from "../../store/useAppStore";
 
-const ALREADY_BEEN_OPTIONS = Array.from(
-  new Set([
-    "India",
-    "Karnataka",
-    "Kerala",
-    "Goa",
-    "Tamil Nadu",
-    "Maharashtra",
-    "Rajasthan",
-    ...INDIA_STATES.slice(0, 6).map((s) => s.name),
-  ]),
-);
+/** States offered on the first step, pinned at their capital so each becomes a real
+ * visited destination on the user's map (they can rename or move it later). */
+const STATE_PINS: Record<string, { city: string; lat: number; lng: number }> = {
+  Karnataka: { city: "Bengaluru", lat: 12.9716, lng: 77.5946 },
+  Kerala: { city: "Thiruvananthapuram", lat: 8.5241, lng: 76.9366 },
+  Goa: { city: "Panaji", lat: 15.4909, lng: 73.8278 },
+  "Tamil Nadu": { city: "Chennai", lat: 13.0827, lng: 80.2707 },
+  Maharashtra: { city: "Mumbai", lat: 19.076, lng: 72.8777 },
+  Rajasthan: { city: "Jaipur", lat: 26.9124, lng: 75.7873 },
+  Delhi: { city: "New Delhi", lat: 28.6139, lng: 77.209 },
+  "Himachal Pradesh": { city: "Shimla", lat: 31.1048, lng: 77.1734 },
+  Uttarakhand: { city: "Dehradun", lat: 30.3165, lng: 78.0322 },
+  Ladakh: { city: "Leh", lat: 34.1526, lng: 77.5771 },
+  "West Bengal": { city: "Kolkata", lat: 22.5726, lng: 88.3639 },
+  Assam: { city: "Guwahati", lat: 26.1445, lng: 91.7362 },
+  "Andhra Pradesh": { city: "Amaravati", lat: 16.5062, lng: 80.648 },
+  Telangana: { city: "Hyderabad", lat: 17.385, lng: 78.4867 },
+  Gujarat: { city: "Ahmedabad", lat: 23.0225, lng: 72.5714 },
+  "Uttar Pradesh": { city: "Lucknow", lat: 26.8467, lng: 80.9462 },
+};
+const ALREADY_BEEN_OPTIONS = Object.keys(STATE_PINS);
 const SUGGESTED = destinations
   .filter((d) => d.status === "wishlist")
   .slice(0, 6);
@@ -37,8 +37,13 @@ const STEPS = ["Been there", "Traveler type", "Next up", "Memories", "Ready"];
 
 export default function Onboarding() {
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const completeOnboarding = useAuthStore((s) => s.completeOnboarding);
   const pushToast = useAppStore((s) => s.pushToast);
+  const addDestination = useAppStore((s) => s.addDestination);
+  const updateProfile = useAppStore((s) => s.updateProfile);
+  const [goToPhotos, setGoToPhotos] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const [step, setStep] = useState(0);
   const [beenTo, setBeenTo] = useState<string[]>([]);
@@ -57,10 +62,52 @@ export default function Onboarding() {
 
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
 
-  const finish = () => {
+  const finish = async () => {
+    setSaving(true);
+    let failed = 0;
+    for (const state of beenTo) {
+      const pin = STATE_PINS[state];
+      const created = await addDestination({
+        name: state,
+        country: "India",
+        state,
+        city: pin.city,
+        latitude: pin.lat,
+        longitude: pin.lng,
+        status: "visited",
+        category: "state",
+        heroImageUrl: `https://picsum.photos/seed/${encodeURIComponent(state)}/900/650`,
+      });
+      if (!created) failed += 1;
+    }
+    for (const id of wishlisted) {
+      const d = SUGGESTED.find((x) => x.id === id);
+      if (!d) continue;
+      const created = await addDestination({
+        name: d.name,
+        country: d.country,
+        state: d.state,
+        city: d.city,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        status: "wishlist",
+        priority: d.priority ?? "medium",
+        description: d.description,
+        heroImageUrl: d.heroImageUrl,
+      });
+      if (!created) failed += 1;
+    }
+    const saved = await updateProfile({ interests, onboardingCompleted: true });
+    setSaving(false);
+    if (!saved) return; // the store already showed why
+    if (failed > 0) pushToast(`${failed} place(s) couldn't be added — you can add them from the map.`, "info");
+    // The journey is (re)loaded from the server when the app opens.
+    useAppStore.getState().resetData();
     completeOnboarding();
-    navigate("/app", { replace: true });
+    navigate(goToPhotos ? "/app/photos" : "/app", { replace: true });
   };
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return (
     <div className="min-h-screen bg-paper dark:bg-[#14171a] flex flex-col">
@@ -197,37 +244,25 @@ export default function Onboarding() {
                 Bring your memories with you
               </h1>
               <p className="text-ink-soft dark:text-white/50 mb-8">
-                Connect your photos so every trip stays organized.
+                Upload trip photos to the Photo Hub, or link a Google Drive folder to any place
+                later.
               </p>
               <div className="grid grid-cols-2 gap-3 mb-10">
                 <MemoryOption
-                  icon={<FolderSync size={20} />}
-                  label="Connect Google Drive"
-                  onClick={() => {
-                    pushToast("Google Drive connected (mock).", "success");
-                    next();
-                  }}
-                />
-                <MemoryOption
                   icon={<ImagePlus size={20} />}
-                  label="Upload Photos"
+                  label="Upload photos first"
                   onClick={() => {
-                    pushToast("Photo upload is mocked in this demo.", "info");
-                    next();
-                  }}
-                />
-                <MemoryOption
-                  icon={<CloudUpload size={20} />}
-                  label="Import Memories"
-                  onClick={() => {
-                    pushToast("Memories imported (mock).", "success");
+                    setGoToPhotos(true);
                     next();
                   }}
                 />
                 <MemoryOption
                   icon={<SkipForward size={20} />}
                   label="Skip for now"
-                  onClick={next}
+                  onClick={() => {
+                    setGoToPhotos(false);
+                    next();
+                  }}
                 />
               </div>
             </motion.div>
@@ -251,15 +286,16 @@ export default function Onboarding() {
               </p>
               <div className="grid grid-cols-4 gap-3 mb-12 max-w-md mx-auto">
                 <Stat value={wishlisted.length} label="Wishlisted" />
-                <Stat value={beenTo.length} label="States Explored" />
+                <Stat value={beenTo.length} label="States Visited" />
                 <Stat value={interests.length} label="Interests" />
                 <Stat value={0} label="Memories" />
               </div>
               <button
                 onClick={finish}
-                className="px-8 py-3 rounded-full bg-forest-500 text-white text-sm font-semibold shadow-soft-lg hover:bg-forest-600 transition inline-flex items-center gap-2"
+                disabled={saving}
+                className="px-8 py-3 rounded-full bg-forest-500 text-white text-sm font-semibold shadow-soft-lg hover:bg-forest-600 transition inline-flex items-center gap-2 disabled:opacity-60"
               >
-                <MapPin size={16} /> Enter My Journey
+                <MapPin size={16} /> {saving ? "Building your map…" : "Enter My Journey"}
               </button>
             </motion.div>
           )}

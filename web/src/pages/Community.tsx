@@ -5,7 +5,8 @@ import { TopBar } from "../components/layout/TopBar";
 import { EmptyState } from "../components/common/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import * as communityApi from "../api/community.api";
-import type { CommunityPost } from "../api/community.api";
+import type { Comment as PostComment, CommunityPost } from "../api/community.api";
+import { confirmAction } from "../store/useConfirmStore";
 
 function timeAgo(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();
@@ -80,11 +81,50 @@ export default function Community() {
   };
 
   const removePost = async (postId: number) => {
+    const ok = await confirmAction({
+      title: "Delete this post?",
+      message: "It will be removed from the community feed along with its likes and comments.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+    if (!ok) return;
     try {
       await communityApi.deletePost(postId);
       setPosts((prev) => prev.filter((p) => p.id !== postId));
-    } catch {
-      pushToast("Could not delete post.", "error");
+      pushToast("Post deleted", "success");
+    } catch (err) {
+      pushToast(err instanceof Error ? err.message : "Could not delete post.", "error");
+    }
+  };
+
+  /** Comment authors can delete their comments; post owners can delete any comment on their post. */
+  const canDeleteComment = (post: CommunityPost, comment: PostComment) =>
+    currentUserId != null &&
+    (comment.author.id === currentUserId || post.author.id === currentUserId);
+
+  const removeComment = async (postId: number, commentId: number) => {
+    const ok = await confirmAction({
+      title: "Delete this comment?",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await communityApi.deleteComment(postId, commentId);
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId
+            ? {
+                ...p,
+                comments: p.comments.filter((c) => c.id !== commentId),
+                commentCount: Math.max(0, p.commentCount - 1),
+              }
+            : p,
+        ),
+      );
+      pushToast("Comment deleted", "success");
+    } catch (err) {
+      pushToast(err instanceof Error ? err.message : "Could not delete comment.", "error");
     }
   };
 
@@ -184,9 +224,20 @@ export default function Community() {
                 {openComments.has(post.id) && (
                   <div className="px-4 pb-4 flex flex-col gap-2.5 border-t border-ink/8 dark:border-white/10 pt-3">
                     {post.comments.map((c) => (
-                      <div key={c.id} className="text-sm">
-                        <span className="font-semibold mr-1.5">{c.author.name}</span>
-                        <span className="text-ink-soft dark:text-white/70">{c.body}</span>
+                      <div key={c.id} className="group flex items-start gap-2 text-sm">
+                        <p className="flex-1 min-w-0 break-words">
+                          <span className="font-semibold mr-1.5">{c.author.name}</span>
+                          <span className="text-ink-soft dark:text-white/70">{c.body}</span>
+                        </p>
+                        {canDeleteComment(post, c) && (
+                          <button
+                            onClick={() => removeComment(post.id, c.id)}
+                            className="mt-0.5 shrink-0 text-ink-soft dark:text-white/40 hover:text-coral-500 md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100 transition"
+                            aria-label="Delete comment"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
                       </div>
                     ))}
                     <form

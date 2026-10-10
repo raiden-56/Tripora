@@ -31,6 +31,31 @@ const STYLES = [
   "Budget",
 ];
 const COMPANIONS = ["Solo", "Partner", "Friends", "Family"];
+const DEFAULT_ORIGIN = "Bangalore";
+
+const COMPANION_PHRASE: Record<string, string> = {
+  Solo: "travelling solo",
+  Partner: "with your partner",
+  Friends: "with friends",
+  Family: "with family",
+};
+
+/** One-line recap of the request, including inputs the local generator can't use yet. */
+function buildSummary(p: {
+  from: string;
+  to: string;
+  days: number;
+  style: string[];
+  companions: string;
+  interests: string[];
+}) {
+  const styleText = p.style.length ? `${p.style.join(" / ").toLowerCase()} ` : "";
+  const who = COMPANION_PHRASE[p.companions] ?? `with ${p.companions.toLowerCase()}`;
+  const focus = p.interests.length
+    ? ` Focus: ${p.interests.join(", ")} — pick the stops below that fit these best.`
+    : "";
+  return `A ${p.days}-day ${styleText}trip from ${p.from} to ${p.to}, ${who}.${focus}`;
+}
 
 export default function CanvasAI() {
   const [tab, setTab] = useState<"chat" | "planner">("chat");
@@ -38,7 +63,7 @@ export default function CanvasAI() {
     <div>
       <TopBar
         title="Canvas AI"
-        subtitle="Your personal travel assistant, powered by your own journey."
+        subtitle="Your travel assistant — suggestions are generated from your own map (no AI service yet)."
       />
       <div className="px-5 md:px-8 pb-10">
         <div className="flex gap-1.5 mb-6 bg-ink/5 dark:bg-white/5 p-1 rounded-full w-fit">
@@ -72,26 +97,18 @@ function ChatPanel() {
     },
   ]);
   const [input, setInput] = useState("");
-  const [thinking, setThinking] = useState(false);
 
+  // Replies are computed synchronously from the user's own destinations — no fake delay.
   const send = (text: string) => {
     if (!text.trim()) return;
-    const userMsg: ChatMessage = {
-      id: `u-${Date.now()}`,
-      role: "user",
-      content: text,
-    };
-    setMessages((m) => [...m, userMsg]);
+    const now = Date.now();
+    const reply = generateAssistantReply(text, destinations);
+    setMessages((m) => [
+      ...m,
+      { id: `u-${now}`, role: "user", content: text },
+      { id: `a-${now}`, role: "assistant", content: reply },
+    ]);
     setInput("");
-    setThinking(true);
-    setTimeout(() => {
-      const reply = generateAssistantReply(text, destinations);
-      setMessages((m) => [
-        ...m,
-        { id: `a-${Date.now()}`, role: "assistant", content: reply },
-      ]);
-      setThinking(false);
-    }, 500);
   };
 
   return (
@@ -117,16 +134,6 @@ function ChatPanel() {
               </div>
             </motion.div>
           ))}
-          {thinking && (
-            <div className="flex gap-2.5">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-forest-50 dark:bg-white/10 text-forest-500">
-                <Bot size={14} />
-              </div>
-              <div className="px-4 py-2.5 rounded-2xl text-sm bg-ink/5 dark:bg-white/5 text-ink-soft">
-                Thinking…
-              </div>
-            </div>
-          )}
         </div>
         <div className="p-3 border-t border-ink/8 dark:border-white/10 flex gap-2">
           <input
@@ -162,15 +169,23 @@ function ChatPanel() {
 function TripPlannerPanel() {
   const destinations = useAppStore((s) => s.destinations);
   const pushToast = useAppStore((s) => s.pushToast);
+  const homeLocation = useAppStore((s) => s.user.homeLocation);
 
-  const [from, setFrom] = useState("Bangalore");
-  const [to, setTo] = useState(destinations[0]?.name ?? "");
+  // null = untouched, so the fields follow the user's profile / destinations once they load.
+  const [fromInput, setFrom] = useState<string | null>(null);
+  const [toInput, setTo] = useState<string | null>(null);
+  const from = fromInput ?? (homeLocation || DEFAULT_ORIGIN);
+  const to =
+    toInput && destinations.some((d) => d.name === toInput)
+      ? toInput
+      : (destinations[0]?.name ?? "");
   const [days, setDays] = useState(3);
   const [budget, setBudget] = useState(15000);
   const [style, setStyle] = useState<string[]>(["Adventure"]);
   const [companions, setCompanions] = useState("Friends");
   const [interests, setInterests] = useState<string[]>([]);
   const [itinerary, setItinerary] = useState<GeneratedItinerary | null>(null);
+  const [summary, setSummary] = useState("");
 
   const toggle = (
     list: string[],
@@ -182,18 +197,28 @@ function TripPlannerPanel() {
     );
 
   const generate = () => {
+    if (!to) {
+      pushToast("Add a destination to your map first.", "error");
+      return;
+    }
+    const origin = from.trim() || DEFAULT_ORIGIN;
+    const tripDays = Math.max(1, days || 1);
     const destination = destinations.find((d) => d.name === to);
     setItinerary(
       generateItinerary({
-        from,
+        from: origin,
         to,
-        days,
+        days: tripDays,
         budget,
         style: style.join(", "),
         destination,
       }),
     );
-    pushToast("Your AI itinerary is ready", "success");
+    // The local generator has no companions/interests inputs, so surface them in the summary.
+    setSummary(
+      buildSummary({ from: origin, to, days: tripDays, style, companions, interests }),
+    );
+    pushToast("Itinerary drafted from your map", "success");
   };
 
   return (
@@ -329,16 +354,21 @@ function TripPlannerPanel() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
           >
+            {summary && (
+              <p className="text-sm text-ink-soft dark:text-white/60 mb-4">
+                {summary}
+              </p>
+            )}
             <div className="grid grid-cols-3 gap-3 mb-6">
               <MiniStat
                 icon={<Banknote size={14} />}
-                label="Estimated Budget"
+                label="Budget"
                 value={itinerary.estimatedBudget}
               />
               <MiniStat
                 icon={<Route size={14} />}
-                label="Distance"
-                value={`${itinerary.distanceKm} km`}
+                label="Duration"
+                value={`${itinerary.days.length} ${itinerary.days.length === 1 ? "day" : "days"}`}
               />
               <MiniStat
                 icon={<MapPinned size={14} />}

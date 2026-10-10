@@ -84,15 +84,23 @@ repository → SQLAlchemy → PostgreSQL (or SQLite in dev) → response → fro
 - **Rate limiting & caching** — Redis-backed, both degrade to "disabled" (never "crash") if
   Redis isn't running, which is the default in local dev without Docker.
 
-## 4. What's intentionally still on the frontend's local (zustand) mock store
+## 4. What's computed on the client, and what isn't built yet
 
-Given the size of this change, trips, memories, achievements, statistics, and the map/discover
-pages still read from `web/src/store/useAppStore.ts`'s in-memory mock data rather than the
-backend. The backend APIs for trips and memories are fully implemented and tested
-(`app/api/v1/endpoints/trips.py`, `memories.py`) — wiring the remaining pages is the same
-pattern already proven for destinations/pricing (`web/src/api/destinations.api.ts` /
-`pricing.api.ts`), just repeated across more pages. This is called out explicitly rather than
-silently left as a gap.
+Every user-owned record (destinations, trips + checklist + planned budget, memories, photos,
+profile, notifications) now loads from and saves to the API; `web/src/store/useAppStore.ts`
+starts empty and is hydrated by `fetchAllData()`. Marketing pages and onboarding suggestions
+still use showcase data from `web/src/data/mockData.ts`.
+
+Derived views are computed in the browser from that real data rather than stored:
+statistics (`utils/stats.ts`), achievements (`utils/achievements.ts`), travel score,
+"What's Next" suggestions (`utils/recommendations.ts`), the yearly recap, and Canvas AI
+(`utils/aiAssistant.ts`, a rule-based assistant — labelled as such in the UI until a real AI
+provider is added). The public journey page is the exception: it is served by
+`GET /api/v1/public/journeys/{handle}` so it works for anonymous visitors, and only when the
+owner's visibility is "public".
+
+Not built yet (see `docs/AUDIT_AND_PLAN.md`): itinerary day editor, packing-list generator,
+weather, calendar view, real AI, password reset email, payments, Google Drive sync.
 
 ## 5. Deliberate simplifications (and why)
 

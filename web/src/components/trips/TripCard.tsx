@@ -1,24 +1,12 @@
 import { motion } from "framer-motion";
-import {
-  Calendar,
-  CheckCircle2,
-  Clock,
-  FolderOpen,
-  MoreVertical,
-} from "lucide-react";
+import { Calendar, Clock, FolderOpen, MoreVertical, Users } from "lucide-react";
 import { useState } from "react";
 import type { Trip } from "../../types";
 import { StatusBadge } from "../common/StatusBadge";
+import { daysUntil, formatDateRange } from "../../utils/dates";
 
-function daysBetween(a: string, b: string) {
-  return Math.max(
-    1,
-    Math.round((new Date(b).getTime() - new Date(a).getTime()) / 86400000) + 1,
-  );
-}
-
-function daysUntil(dateStr: string) {
-  return Math.ceil((new Date(dateStr).getTime() - Date.now()) / 86400000);
+function tripLength(start: string, end: string) {
+  return Math.max(1, daysUntil(end) - daysUntil(start) + 1);
 }
 
 export function TripCard({
@@ -30,15 +18,15 @@ export function TripCard({
 }: {
   trip: Trip;
   destinationNames: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  /** Edit/delete are only offered to the trip's owner — the server enforces the same. */
+  onEdit?: () => void;
+  onDelete?: () => void;
   onOpen?: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const countdown =
     trip.status === "planned" ? daysUntil(trip.startDate) : null;
-  const checklistDone = trip.checklist?.filter((c) => c.done).length ?? 0;
-  const checklistTotal = trip.checklist?.length ?? 0;
+  const canManage = trip.role === "owner" && (onEdit || onDelete);
 
   return (
     <motion.div
@@ -53,7 +41,10 @@ export function TripCard({
         className="relative h-36 w-full block text-left disabled:cursor-default"
       >
         <img
-          src={trip.coverImageUrl}
+          src={
+            trip.coverImageUrl ||
+            `https://picsum.photos/seed/${encodeURIComponent(trip.title)}/900/650`
+          }
           alt={trip.title}
           className="w-full h-full object-cover"
         />
@@ -75,59 +66,57 @@ export function TripCard({
           <p className="text-xs opacity-85">{destinationNames}</p>
         </div>
       </button>
-      <button
-        onClick={() => setMenuOpen((v) => !v)}
-        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur"
-      >
-        <MoreVertical size={15} />
-      </button>
-      {menuOpen && (
+      {canManage ? (
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Trip actions"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur"
+        >
+          <MoreVertical size={15} />
+        </button>
+      ) : (
+        trip.role !== "owner" && (
+          <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur text-[11px] font-semibold capitalize">
+            <Users size={10} /> {trip.role}
+          </span>
+        )
+      )}
+      {menuOpen && canManage && (
         <div className="absolute top-12 right-3 bg-white dark:bg-[#242830] rounded-xl shadow-soft-lg border border-ink/10 dark:border-white/10 overflow-hidden z-10 text-sm">
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              onEdit();
-            }}
-            className="block w-full text-left px-4 py-2 hover:bg-ink/5 dark:hover:bg-white/5"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              onDelete();
-            }}
-            className="block w-full text-left px-4 py-2 text-coral-500 hover:bg-coral-500/10"
-          >
-            Delete
-          </button>
+          {onEdit && (
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                onEdit();
+              }}
+              className="block w-full text-left px-4 py-2 hover:bg-ink/5 dark:hover:bg-white/5"
+            >
+              Edit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                onDelete();
+              }}
+              className="block w-full text-left px-4 py-2 text-coral-500 hover:bg-coral-500/10"
+            >
+              Delete
+            </button>
+          )}
         </div>
       )}
       <div className="p-4">
         <div className="flex items-center gap-1.5 text-xs text-ink-soft dark:text-white/50 mb-1.5">
           <Calendar size={12} />
-          {new Date(trip.startDate).toLocaleDateString(undefined, {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })}
-          <span>&middot; {daysBetween(trip.startDate, trip.endDate)} Days</span>
+          {formatDateRange(trip.startDate, trip.endDate)}
+          <span>&middot; {tripLength(trip.startDate, trip.endDate)} days</span>
         </div>
         {trip.notes && (
           <p className="text-xs text-ink-soft dark:text-white/50 mb-2 line-clamp-2">
             {trip.notes}
           </p>
-        )}
-        {checklistTotal > 0 && (
-          <div className="flex items-center gap-1.5 text-xs text-ink-soft dark:text-white/50 mb-2">
-            <CheckCircle2
-              size={12}
-              className={
-                checklistDone === checklistTotal ? "text-forest-500" : ""
-              }
-            />
-            Checklist: {checklistDone}/{checklistTotal}
-          </div>
         )}
         {trip.driveFolderUrl && (
           <a

@@ -4,8 +4,10 @@ import { Sparkles } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { MobileNav } from "./MobileNav";
 import { ToastHost } from "../common/ToastHost";
+import { ConfirmDialog } from "../common/ConfirmDialog";
 import { DestinationDrawer } from "../destinations/DestinationDrawer";
 import { AddDestinationModal } from "../destinations/AddDestinationModal";
+import { GlobalAddMemoryModal } from "../memories/GlobalAddMemoryModal";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useAppStore } from "../../store/useAppStore";
 
@@ -42,8 +44,10 @@ export function AppLayout() {
       </div>
       <MobileNav />
       <ToastHost />
+      <ConfirmDialog />
       <DestinationDrawer />
       <AddDestinationModal />
+      <GlobalAddMemoryModal />
     </div>
   );
 }

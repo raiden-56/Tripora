@@ -9,15 +9,22 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState<string | null>(null);
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(await requestPasswordReset(email));
+    setError(null);
+    try {
+      setSent(await requestPasswordReset(email));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (
     <AuthShell
       title="Forgot your password?"
-      subtitle="Enter your email and we'll send you a reset link."
+      subtitle="Enter the email you signed up with."
     >
       {sent ? (
         <div className="flex flex-col gap-4">
@@ -33,6 +40,11 @@ export default function ForgotPassword() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {error && (
+            <p className="text-xs font-medium text-coral-500 bg-coral-500/10 px-3.5 py-2.5 rounded-xl">
+              {error}
+            </p>
+          )}
           <label className="block">
             <span className="text-xs font-semibold text-ink-soft mb-1.5 block">
               Email

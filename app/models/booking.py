@@ -29,3 +29,7 @@ class GuideBooking(Base, TimestampMixin):
     status: Mapped[BookingStatus] = mapped_column(Enum(BookingStatus), default=BookingStatus.PENDING, index=True)
 
     guide: Mapped["GuideProfile"] = relationship()
+    traveler: Mapped["User"] = relationship(foreign_keys=[user_id])
+    review: Mapped["GuideReview | None"] = relationship(
+        primaryjoin="GuideBooking.id == foreign(GuideReview.booking_id)", uselist=False, viewonly=True
+    )

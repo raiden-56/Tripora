@@ -27,7 +27,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await login(email, password);
+    const result = await login(email, password, rememberMe);
     if (!result.success) {
       setError(result.error ?? "Invalid email or password.");
       return;
@@ -128,29 +128,6 @@ export default function Login() {
           Login
         </button>
 
-        <div className="flex items-center gap-3 text-xs text-ink-soft my-1">
-          <div className="h-px flex-1 bg-ink/10 dark:bg-white/10" /> OR{" "}
-          <div className="h-px flex-1 bg-ink/10 dark:bg-white/10" />
-        </div>
-
-        <button
-          type="button"
-          onClick={() =>
-            pushToast("Google sign-in is mocked in this demo.", "info")
-          }
-          className="w-full py-2.5 rounded-full border border-ink/15 dark:border-white/20 text-sm font-semibold hover:bg-ink/5 dark:hover:bg-white/5 transition"
-        >
-          Continue with Google
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            pushToast("Apple sign-in is mocked in this demo.", "info")
-          }
-          className="w-full py-2.5 rounded-full border border-ink/15 dark:border-white/20 text-sm font-semibold hover:bg-ink/5 dark:hover:bg-white/5 transition"
-        >
-          Continue with Apple
-        </button>
 
         <p className="text-center text-sm text-ink-soft dark:text-white/50 mt-1">
           Don't have an account?{" "}

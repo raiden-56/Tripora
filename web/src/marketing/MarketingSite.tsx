@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { useAppStore } from "../store/useAppStore";
 import { MarketingNav } from "./MarketingNav";
 import { Hero } from "./Hero";
 import { ProblemSection } from "./ProblemSection";
@@ -42,8 +43,14 @@ export function MarketingSite() {
   const startJourney = () => navigate(isAuthenticated ? "/app" : "/login");
   const goToLogin = () => navigate("/login");
   const exploreDemo = async () => {
-    await startDemo();
-    navigate("/app");
+    const result = await startDemo();
+    if (result.success) {
+      navigate("/app");
+    } else {
+      useAppStore
+        .getState()
+        .pushToast(result.error ?? "The demo isn't available right now.", "error");
+    }
   };
 
   return (

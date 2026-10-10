@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, mediaUrl } from "./client";
 
 export type AnimationStatus = "pending" | "processing" | "completed" | "failed";
 
@@ -18,20 +18,13 @@ interface BackendPhotoAnimation {
   error_message: string | null;
 }
 
-const API_BASE_URL =
-  (import.meta as unknown as { env: Record<string, string | undefined> }).env
-    .VITE_API_BASE_URL ?? "http://localhost:8000";
 
 function toFrontend(a: BackendPhotoAnimation): PhotoAnimation {
   return {
     id: a.id,
     title: a.title,
     status: a.status,
-    outputUrl: a.output_url
-      ? a.output_url.startsWith("http")
-        ? a.output_url
-        : `${API_BASE_URL}${a.output_url}`
-      : null,
+    outputUrl: mediaUrl(a.output_url),
     errorMessage: a.error_message,
   };
 }

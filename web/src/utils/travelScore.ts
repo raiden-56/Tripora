@@ -16,7 +16,7 @@ const BEACH_STATES = ["Goa", "Kerala", "Andaman and Nicobar Islands"];
 const CULTURE_STATES = ["Rajasthan", "Tamil Nadu", "Karnataka"];
 
 function clampPercent(value: number) {
-  return Math.max(8, Math.min(98, Math.round(value)));
+  return Math.max(0, Math.min(98, Math.round(value)));
 }
 
 /** Derives a lightweight "travel personality" score from the user's destinations — deterministic, no external AI call. */
@@ -30,7 +30,7 @@ export function computeTravelScore(
   const total = Math.max(1, destinations.length);
 
   const adventure =
-    visited.filter((d) => d.places.length >= 2).length +
+    visited.filter((d) => (d.rating ?? 0) >= 4.5).length +
     wishlist.filter((d) => d.priority === "high").length;
   const nature = visited.filter(
     (d) =>
@@ -46,7 +46,7 @@ export function computeTravelScore(
   const culture = visited.filter(
     (d) =>
       CULTURE_STATES.includes(d.state ?? "") ||
-      d.places.some((p) => /temple|fort|palace|heritage/i.test(p.name)),
+      /temple|fort|palace|heritage/i.test(d.description ?? ""),
   ).length;
   const beach = visited.filter((d) =>
     BEACH_STATES.includes(d.state ?? ""),
