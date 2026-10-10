@@ -97,3 +97,12 @@ export async function saveBudget(
     }),
   );
 }
+
+/** Adds several items at once; ones already on the list are skipped. Returns the full list. */
+export async function addChecklistItems(tripId: string, texts: string[]): Promise<ChecklistItem[]> {
+  const items = await apiRequest<BackendChecklistItem[]>(`/api/v1/trips/${tripId}/checklist/bulk`, {
+    method: "POST",
+    body: { texts },
+  });
+  return items.map(toItem);
+}

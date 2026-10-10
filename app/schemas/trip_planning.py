@@ -12,6 +12,18 @@ class ChecklistItemCreate(BaseModel):
     text: str = Field(min_length=1, max_length=200)
 
 
+class ChecklistBulkCreate(BaseModel):
+    texts: list[str] = Field(min_length=1, max_length=60)
+
+    @field_validator("texts")
+    @classmethod
+    def _clean(cls, texts: list[str]) -> list[str]:
+        cleaned = [t.strip() for t in texts if t.strip()]
+        if any(len(t) > 200 for t in cleaned):
+            raise ValueError("Checklist items can be at most 200 characters.")
+        return cleaned
+
+
 class ChecklistItemUpdate(PatchModel):
     required_fields = frozenset({"text", "is_done"})
 

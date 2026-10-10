@@ -60,6 +60,18 @@ def test_checklist_crud_and_permissions(client, auth_headers):
     assert len(client.get(base, headers=auth_headers).json()) == 2
 
 
+def test_checklist_bulk_add_skips_duplicates(client, auth_headers):
+    trip_id = _trip(client, auth_headers)
+    base = f"/api/v1/trips/{trip_id}/checklist"
+    client.post(base, json={"text": "Passport"}, headers=auth_headers)
+    response = client.post(
+        f"{base}/bulk", json={"texts": ["passport", "Sunscreen", " Sunscreen ", "Rain jacket", ""]}, headers=auth_headers
+    )
+    assert response.status_code == 201
+    assert [i["text"] for i in response.json()] == ["Passport", "Sunscreen", "Rain jacket"]
+    assert client.post(f"{base}/bulk", json={"texts": ["x" * 201]}, headers=auth_headers).status_code == 422
+
+
 def test_checklist_item_must_belong_to_trip(client, auth_headers):
     trip_a, trip_b = _trip(client, auth_headers), _trip(client, auth_headers)
     item = client.post(f"/api/v1/trips/{trip_a}/checklist", json={"text": "Tickets"}, headers=auth_headers).json()

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, CheckCircle2, FolderOpen, MapPin, Users, X } from "lucide-react";
 import { useAppStore } from "../../store/useAppStore";
@@ -7,6 +7,7 @@ import { EmptyState } from "../common/EmptyState";
 import { TripExpensesTab } from "./TripExpensesTab";
 import { TripCollaboratorsTab } from "./TripCollaboratorsTab";
 import { TripChecklistTab } from "./TripChecklistTab";
+import { TripWeatherCard } from "./TripWeatherCard";
 import { TripBudgetTab } from "./TripBudgetTab";
 import { TripItineraryTab } from "./TripItineraryTab";
 import { daysUntil, formatDateRange, todayIso } from "../../utils/dates";
@@ -27,9 +28,10 @@ export function TripDrawer({
   const [tab, setTab] = useState<Tab>("overview");
 
   const trip = trips.find((t) => t.id === tripId);
-  const tripDestinations = trip
-    ? destinations.filter((d) => trip.destinationIds.includes(d.id))
-    : [];
+  const tripDestinations = useMemo(
+    () => (trip ? destinations.filter((d) => trip.destinationIds.includes(d.id)) : []),
+    [trip, destinations],
+  );
 
   const close = () => {
     onClose();
@@ -127,6 +129,7 @@ export function TripDrawer({
           <div className="p-5">
             {tab === "overview" && (
               <div className="flex flex-col gap-4">
+                <TripWeatherCard trip={trip} destinations={tripDestinations} />
                 {canMarkCompleted && (
                   <button
                     onClick={markCompleted}
@@ -179,7 +182,7 @@ export function TripDrawer({
             {tab === "itinerary" && <TripItineraryTab tripId={trip.id} role={trip.role} />}
 
             {tab === "checklist" && (
-              <TripChecklistTab tripId={trip.id} role={trip.role} />
+              <TripChecklistTab trip={trip} destinations={tripDestinations} />
             )}
 
             {tab === "budget" && <TripBudgetTab tripId={trip.id} role={trip.role} />}
