@@ -14,6 +14,7 @@ import clsx from "clsx";
 import { TopBar } from "../components/layout/TopBar";
 import { EmptyState } from "../components/common/EmptyState";
 import * as plannerApi from "../api/planner.api";
+import * as itineraryApi from "../api/itinerary.api";
 import type { TripPlan } from "../api/planner.api";
 import { ApiError } from "../api/client";
 import { useAppStore } from "../store/useAppStore";
@@ -73,7 +74,7 @@ function addDaysIso(iso: string, days: number) {
   return toIsoDate(new Date(y, m - 1, d + days));
 }
 
-/** Plain-text, day-by-day version of a plan for a trip's notes. */
+/** Short summary of a plan for a trip's notes (the days themselves become the trip's itinerary). */
 function buildTripNotes(plan: TripPlan): string {
   const header = [`Itinerary: ${plan.origin} → ${plan.destinationName}`];
   if (plan.routeDescription) header.push(`Route: ${plan.routeDescription}`);
@@ -82,13 +83,7 @@ function buildTripNotes(plan: TripPlan): string {
   if (plan.distanceKm != null) {
     header.push(`Distance: ${plan.distanceKm.toLocaleString("en-IN")} km`);
   }
-  const days = plan.daysDetail.map((day) =>
-    [
-      `Day ${day.dayNumber} – ${day.title}`,
-      ...day.activities.map((a) => `• ${a.description}`),
-    ].join("\n"),
-  );
-  return [header.join("\n"), ...days].join("\n\n");
+  return header.join("\n");
 }
 
 export default function Planner() {
@@ -450,7 +445,7 @@ function PlanActions({
   const [open, setOpen] = useState(false);
   const [startDate, setStartDate] = useState(() => addDaysIso(toIsoDate(new Date()), 14));
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<string | null>(null);
 
   const tripDays = Math.max(1, plan.days || plan.daysDetail.length || 1);
   const endDate = startDate ? addDaysIso(startDate, tripDays - 1) : "";
@@ -473,8 +468,13 @@ function PlanActions({
       });
       // addTrip shows its own error toast and returns null on failure.
       if (trip) {
-        pushToast("Trip saved — find it in Trips", "success");
-        setSaved(true);
+        try {
+          await itineraryApi.importPlan(trip.id, plan.id);
+          pushToast("Trip saved with a day-by-day itinerary", "success");
+        } catch {
+          pushToast("Trip saved, but its itinerary couldn't be copied — import it from the trip.", "info");
+        }
+        setSaved(trip.id);
         setOpen(false);
       }
     } finally {
@@ -488,7 +488,7 @@ function PlanActions({
         {saved ? (
           <button
             type="button"
-            onClick={() => navigate("/app/trips")}
+            onClick={() => navigate(`/app/trips?trip=${saved}`)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest-500 text-white text-xs font-semibold hover:bg-forest-600 transition"
           >
             <CalendarPlus size={14} /> View in Trips

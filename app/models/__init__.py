@@ -15,7 +15,12 @@ from app.models.photo_animation import PhotoAnimation, PhotoAnimationItem
 from app.models.subscription import Subscription, SubscriptionPlan
 from app.models.trip import Trip, TripDestination, TripPlan, TripPlanActivity, TripPlanDay
 from app.models.trip_collaborator import TripCollaborator
-from app.models.trip_planning import TripBudgetItem, TripChecklistItem
+from app.models.trip_planning import (
+    TripBudgetItem,
+    TripChecklistItem,
+    TripItineraryDay,
+    TripItineraryItem,
+)
 from app.models.user import RefreshToken, User, UserProfile
 
 __all__ = [
@@ -51,6 +56,8 @@ __all__ = [
     "TripCollaborator",
     "TripBudgetItem",
     "TripChecklistItem",
+    "TripItineraryDay",
+    "TripItineraryItem",
     "RefreshToken",
     "User",
     "UserProfile",

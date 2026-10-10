@@ -8,9 +8,10 @@ import { TripExpensesTab } from "./TripExpensesTab";
 import { TripCollaboratorsTab } from "./TripCollaboratorsTab";
 import { TripChecklistTab } from "./TripChecklistTab";
 import { TripBudgetTab } from "./TripBudgetTab";
+import { TripItineraryTab } from "./TripItineraryTab";
 import { daysUntil, formatDateRange, todayIso } from "../../utils/dates";
 
-type Tab = "overview" | "checklist" | "budget" | "expenses" | "collaborators";
+type Tab = "overview" | "itinerary" | "checklist" | "budget" | "expenses" | "collaborators";
 
 export function TripDrawer({
   tripId,
@@ -42,8 +43,8 @@ export function TripDrawer({
   // Expenses are owner-only on the server; collaborators see the budget instead.
   const tabs: Tab[] =
     trip.role === "owner"
-      ? ["overview", "checklist", "budget", "expenses", "collaborators"]
-      : ["overview", "checklist", "budget", "collaborators"];
+      ? ["overview", "itinerary", "checklist", "budget", "expenses", "collaborators"]
+      : ["overview", "itinerary", "checklist", "budget", "collaborators"];
   const canMarkCompleted =
     trip.role === "owner" && trip.status === "planned" && trip.startDate <= todayIso();
 
@@ -68,7 +69,7 @@ export function TripDrawer({
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", damping: 28, stiffness: 260 }}
-          className="absolute right-0 top-0 h-full w-full md:w-[440px] bg-white dark:bg-[#1c2024] shadow-soft-lg overflow-y-auto"
+          className="absolute right-0 top-0 h-full w-full md:w-[520px] bg-white dark:bg-[#1c2024] shadow-soft-lg overflow-y-auto"
         >
           <div className="relative h-44 shrink-0">
             <img
@@ -174,6 +175,8 @@ export function TripDrawer({
                 )}
               </div>
             )}
+
+            {tab === "itinerary" && <TripItineraryTab tripId={trip.id} role={trip.role} />}
 
             {tab === "checklist" && (
               <TripChecklistTab tripId={trip.id} role={trip.role} />

@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     drive_links,
     expenses,
     guides,
+    itinerary,
     memories,
     notifications,
     payments,
@@ -35,6 +36,7 @@ api_router.include_router(trip_collaborators.router)
 api_router.include_router(trip_collaborators.me_router)
 api_router.include_router(expenses.router)
 api_router.include_router(trip_planning.router)
+api_router.include_router(itinerary.router)
 api_router.include_router(memories.router)
 api_router.include_router(photos.router)
 api_router.include_router(photo_animations.router)
