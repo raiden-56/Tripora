@@ -40,7 +40,8 @@ class Settings(BaseSettings):
     rate_limit_default_per_minute: int = 60
 
     # Integrations (all optional — features degrade gracefully without them)
-    ai_api_key: str | None = None
+    ai_api_key: str | None = None  # an Anthropic API key enables Claude-powered features
+    ai_model: str = "claude-opus-5-5"
     maps_api_key: str | None = None
     google_client_id: str | None = None
     google_client_secret: str | None = None

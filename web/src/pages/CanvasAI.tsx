@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import * as assistantApi from "../api/assistant.api";
+import { ApiError } from "../api/client";
 import { motion } from "framer-motion";
 import {
   Banknote,
@@ -59,11 +62,21 @@ function buildSummary(p: {
 
 export default function CanvasAI() {
   const [tab, setTab] = useState<"chat" | "planner">("chat");
+  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    assistantApi.getAssistantStatus().then((s) => setAiAvailable(s.available));
+  }, []);
+
   return (
     <div>
       <TopBar
         title="Canvas AI"
-        subtitle="Your travel assistant — suggestions are generated from your own map (no AI service yet)."
+        subtitle={
+          aiAvailable
+            ? "Your AI travel assistant, grounded in your own map. Powered by Claude."
+            : "Your travel assistant — offline suggestions generated from your own map."
+        }
       />
       <div className="px-5 md:px-8 pb-10">
         <div className="flex gap-1.5 mb-6 bg-ink/5 dark:bg-white/5 p-1 rounded-full w-fit">
@@ -80,14 +93,15 @@ export default function CanvasAI() {
             Create Trip with AI
           </button>
         </div>
-        {tab === "chat" ? <ChatPanel /> : <TripPlannerPanel />}
+        {tab === "chat" ? <ChatPanel aiAvailable={aiAvailable === true} /> : <TripPlannerPanel aiAvailable={aiAvailable === true} />}
       </div>
     </div>
   );
 }
 
-function ChatPanel() {
+function ChatPanel({ aiAvailable }: { aiAvailable: boolean }) {
   const destinations = useAppStore((s) => s.destinations);
+  const [thinking, setThinking] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "m0",
@@ -98,17 +112,33 @@ function ChatPanel() {
   ]);
   const [input, setInput] = useState("");
 
-  // Replies are computed synchronously from the user's own destinations — no fake delay.
-  const send = (text: string) => {
-    if (!text.trim()) return;
+  // With an AI model configured, the conversation goes to the server; otherwise (or if
+  // the AI is unavailable) replies are computed locally from the user's own destinations.
+  const send = async (text: string) => {
+    if (!text.trim() || thinking) return;
     const now = Date.now();
-    const reply = generateAssistantReply(text, destinations);
-    setMessages((m) => [
-      ...m,
-      { id: `u-${now}`, role: "user", content: text },
-      { id: `a-${now}`, role: "assistant", content: reply },
-    ]);
+    const userMessage: ChatMessage = { id: `u-${now}`, role: "user", content: text.trim() };
+    const history = [...messages.slice(1), userMessage]; // drop the canned greeting
+    setMessages((m) => [...m, userMessage]);
     setInput("");
+
+    let reply: string;
+    if (aiAvailable) {
+      setThinking(true);
+      try {
+        reply = await assistantApi.chat(
+          history.slice(-20).map((m) => ({ role: m.role, content: m.content })),
+        );
+      } catch (err) {
+        const reason = err instanceof ApiError ? err.message : "The AI assistant isn't reachable.";
+        reply = `${generateAssistantReply(text, destinations)}\n\n(${reason} This answer came from your offline assistant.)`;
+      } finally {
+        setThinking(false);
+      }
+    } else {
+      reply = generateAssistantReply(text, destinations);
+    }
+    setMessages((m) => [...m, { id: `a-${now}`, role: "assistant", content: reply }]);
   };
 
   return (
@@ -128,12 +158,22 @@ function ChatPanel() {
                 {m.role === "user" ? <UserIcon size={14} /> : <Bot size={14} />}
               </div>
               <div
-                className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${m.role === "user" ? "bg-ink text-white dark:bg-white dark:text-ink" : "bg-ink/5 dark:bg-white/5"}`}
+                className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm whitespace-pre-line ${m.role === "user" ? "bg-ink text-white dark:bg-white dark:text-ink" : "bg-ink/5 dark:bg-white/5"}`}
               >
                 {m.content}
               </div>
             </motion.div>
           ))}
+          {thinking && (
+            <div className="flex gap-2.5" aria-live="polite">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-forest-50 dark:bg-white/10 text-forest-500">
+                <Bot size={14} />
+              </div>
+              <div className="px-4 py-2.5 rounded-2xl text-sm bg-ink/5 dark:bg-white/5 text-ink-soft">
+                Thinking…
+              </div>
+            </div>
+          )}
         </div>
         <div className="p-3 border-t border-ink/8 dark:border-white/10 flex gap-2">
           <input
@@ -145,7 +185,9 @@ function ChatPanel() {
           />
           <button
             onClick={() => send(input)}
-            className="w-10 h-10 rounded-full bg-forest-500 text-white flex items-center justify-center shrink-0 hover:bg-forest-600"
+            disabled={thinking}
+            aria-label="Send"
+            className="w-10 h-10 rounded-full bg-forest-500 text-white flex items-center justify-center shrink-0 hover:bg-forest-600 disabled:opacity-50"
           >
             <Send size={15} />
           </button>
@@ -166,7 +208,7 @@ function ChatPanel() {
   );
 }
 
-function TripPlannerPanel() {
+function TripPlannerPanel({ aiAvailable }: { aiAvailable: boolean }) {
   const destinations = useAppStore((s) => s.destinations);
   const pushToast = useAppStore((s) => s.pushToast);
   const homeLocation = useAppStore((s) => s.user.homeLocation);
@@ -224,6 +266,15 @@ function TripPlannerPanel() {
   return (
     <div className="grid lg:grid-cols-[360px_1fr] gap-6">
       <div className="rounded-3xl border border-ink/8 dark:border-white/10 bg-white dark:bg-[#1c2024] shadow-soft p-5 h-fit flex flex-col gap-4">
+        {aiAvailable && (
+          <p className="text-xs text-ink-soft dark:text-white/50 bg-forest-500/5 rounded-xl px-3 py-2">
+            This is a quick offline sketch. For a detailed day-by-day plan written by AI that you can
+            save as a trip, use the{" "}
+            <Link to="/app/planner" className="font-semibold text-forest-600 dark:text-forest-400">
+              Trip Planner →
+            </Link>
+          </p>
+        )}
         <div className="grid grid-cols-2 gap-3">
           <label className="block">
             <span className="text-xs font-semibold text-ink-soft mb-1.5 block">

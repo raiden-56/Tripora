@@ -94,13 +94,16 @@ still use showcase data from `web/src/data/mockData.ts`.
 Derived views are computed in the browser from that real data rather than stored:
 statistics (`utils/stats.ts`), achievements (`utils/achievements.ts`), travel score,
 "What's Next" suggestions (`utils/recommendations.ts`), the yearly recap, and Canvas AI
-(`utils/aiAssistant.ts`, a rule-based assistant — labelled as such in the UI until a real AI
-provider is added). The public journey page is the exception: it is served by
+(`utils/aiAssistant.ts`, the offline assistant used when no AI key is configured). The public journey page is the exception: it is served by
 `GET /api/v1/public/journeys/{handle}` so it works for anonymous visitors, and only when the
 owner's visibility is "public".
 
-Not built yet (see `docs/AUDIT_AND_PLAN.md`): itinerary day editor, packing-list generator,
-weather, calendar view, real AI, password reset email, payments, Google Drive sync.
+AI: with `AI_API_KEY` set, Canvas AI chat (`/assistant/chat`), the Trip Planner and travel
+stories use Claude (`app/integrations/ai/claude_provider.py`); without it, or if the API fails,
+they fall back to the offline/template logic and the UI says which one answered.
+
+Not built yet (see `docs/AUDIT_AND_PLAN.md`): calendar view, admin dashboard, password reset
+email, payments, Google Drive sync.
 
 ## 5. Deliberate simplifications (and why)
 

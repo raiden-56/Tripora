@@ -52,8 +52,3 @@ class TemplateAIProvider(AIProvider):
             {"heading": "Closing Thoughts", "content": conclusion},
         ]
 
-
-def get_ai_provider() -> AIProvider:
-    """Returns the configured AI provider. Falls back to the template provider
-    whenever no external AI credentials are configured."""
-    return TemplateAIProvider()

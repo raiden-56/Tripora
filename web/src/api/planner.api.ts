@@ -36,6 +36,8 @@ export interface TripPlan {
   distanceKm: number | null;
   routeDescription: string | null;
   status: TripPlanStatus;
+  /** "claude" when an AI model wrote the plan, "rules" for the basic built-in planner. */
+  generatedBy: string;
   daysDetail: TripPlanDay[];
 }
 
@@ -63,6 +65,7 @@ interface BackendTripPlan {
   distance_km: number | null;
   route_description: string | null;
   status: TripPlanStatus;
+  generated_by: string;
   days_detail: BackendTripPlanDay[];
 }
 
@@ -80,6 +83,7 @@ function toFrontend(p: BackendTripPlan): TripPlan {
     distanceKm: p.distance_km,
     routeDescription: p.route_description,
     status: p.status,
+    generatedBy: p.generated_by ?? "rules",
     daysDetail: p.days_detail
       .slice()
       .sort((a, b) => a.day_number - b.day_number)

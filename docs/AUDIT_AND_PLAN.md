@@ -185,14 +185,20 @@ Known gaps carried forward: Discover's "Near you" still assumes Bangalore; "frie
 visibility behaves like private (no friends graph); counters animate with
 requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
 
-### Phase 3 — New features (needs your prioritisation)
-- Itinerary day editor on trips (convert a Planner plan into a trip itinerary).
-- Packing list (generated from trip length/type, editable).
-- Weather on upcoming trips (Open-Meteo — free, no key).
-- Calendar view.
-- Real AI for Canvas AI / travel stories / planner (e.g. Claude API — needs a key).
-- Admin dashboard UI.
-- Bundle code-splitting.
+### Phase 3 — New features (branch `feat/phase-3-itinerary`)
+- [x] Itinerary day editor on trips — stops per day (time, type, cost, notes), day names,
+      reorder/move, import from a Trip Planner result; "Save as trip" creates a real itinerary.
+- [x] Packing suggestions from trip length, expected weather, places and itinerary.
+- [x] Weather on trips (Open-Meteo, no key): forecast ≤ 16 days out, same dates last year
+      for later trips, recorded weather for past trips.
+- [x] Real AI (Claude, `claude-opus-5-5`) behind `AI_API_KEY`: Canvas AI chat grounded in the
+      traveler's own data (`/assistant/chat`), AI day-by-day planning, AI travel stories. JSON
+      schema outputs, server-side refusal fallback, prompt caching for chat context; every path
+      falls back to the offline/template logic when the key is missing or the API fails, and the
+      UI says which one answered. The rule-based planner no longer invents budgets/distances.
+- [ ] Calendar view.
+- [ ] Admin dashboard UI.
+- [ ] Bundle code-splitting.
 
 ### Phase 4 — Integrations that need accounts
 - Email provider (password reset, invites), Razorpay checkout + webhooks, Google OAuth / Drive,

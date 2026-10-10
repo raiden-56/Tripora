@@ -365,6 +365,20 @@ export default function Planner() {
                       {activePlan.routeDescription}
                     </p>
                   )}
+                  <span
+                    className={`inline-block mt-2 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                      activePlan.generatedBy === "rules"
+                        ? "bg-ink/5 text-ink-soft dark:bg-white/10 dark:text-white/60"
+                        : "bg-forest-500/10 text-forest-700 dark:text-forest-300"
+                    }`}
+                    title={
+                      activePlan.generatedBy === "rules"
+                        ? "The AI planner wasn't available, so this is a simple template you can edit."
+                        : "Written by AI — check opening hours and prices before you go."
+                    }
+                  >
+                    {activePlan.generatedBy === "rules" ? "Basic template plan" : "Planned by AI"}
+                  </span>
                 </div>
                 {(budgetLabel || activePlan.distanceKm != null) && (
                   <div className="flex gap-4 text-sm">
