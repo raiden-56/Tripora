@@ -51,6 +51,7 @@ async def upload_photo(
     caption: str | None = Form(default=None),
     service: PhotoService = Depends(_service),
 ) -> PhotoOut:
+    # Quick reject on the declared type; the bytes themselves are verified in PhotoService.
     if file.content_type not in ALLOWED_CONTENT_TYPES:
         raise AppError("Only JPEG, PNG, or WEBP images are allowed.", code="INVALID_FILE_TYPE", status_code=422)
 
@@ -61,8 +62,6 @@ async def upload_photo(
     photo = service.upload(
         user_id=user.id,
         content=content,
-        content_type=file.content_type,
-        filename=file.filename or "photo.jpg",
         destination_id=destination_id,
         memory_id=memory_id,
         trip_id=trip_id,

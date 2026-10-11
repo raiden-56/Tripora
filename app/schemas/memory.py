@@ -4,6 +4,7 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.schemas.common import PatchModel
 from app.utils.validators import csv_to_list
 
 
@@ -13,18 +14,20 @@ class MemoryBase(BaseModel):
     title: str = Field(min_length=1, max_length=150)
     description: str | None = None
     memory_date: date
-    tags: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list, max_length=15)
 
 
 class MemoryCreate(MemoryBase):
     pass
 
 
-class MemoryUpdate(BaseModel):
-    title: str | None = None
+class MemoryUpdate(PatchModel):
+    required_fields = frozenset({"title", "memory_date"})
+
+    title: str | None = Field(default=None, min_length=1, max_length=150)
     description: str | None = None
     memory_date: date | None = None
-    tags: list[str] | None = None
+    tags: list[str] | None = Field(default=None, max_length=15)
 
 
 class MemoryOut(BaseModel):

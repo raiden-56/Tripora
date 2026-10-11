@@ -1,13 +1,14 @@
 """Google Drive folder link endpoints — stores/validates the URL only (see
 integrations/google_drive for what a real API integration would add)."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from app.api.dependencies import CurrentUser, DbSession
 from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.models.drive_link import GoogleDriveLink
 from app.repositories.drive_link_repository import DriveLinkRepository
 from app.schemas.drive_link import DriveLinkCreate, DriveLinkOut
+from app.services.reference_guard import ReferenceGuard
 
 router = APIRouter(prefix="/drive-links", tags=["google-drive"])
 
@@ -25,6 +26,9 @@ def list_drive_links(
 
 @router.post("", response_model=DriveLinkOut, status_code=201)
 def create_drive_link(payload: DriveLinkCreate, user: CurrentUser, db: DbSession) -> DriveLinkOut:
+    guard = ReferenceGuard(db)
+    guard.destination(payload.destination_id, user.id)
+    guard.trip_editable(payload.trip_id, user.id)
     repo = DriveLinkRepository(db)
     link = GoogleDriveLink(user_id=user.id, **payload.model_dump())
     return DriveLinkOut.model_validate(repo.add(link))

@@ -5,6 +5,8 @@ blocks on image processing — see app/tasks/animation_tasks.py."""
 from fastapi import APIRouter, BackgroundTasks, Depends
 
 from app.api.dependencies import CurrentUser, DbSession
+from app.core.config import get_settings
+from app.middleware.rate_limit import RateLimiter
 from app.repositories.photo_animation_repository import PhotoAnimationRepository
 from app.repositories.photo_repository import PhotoRepository
 from app.schemas.photo_animation import PhotoAnimationCreate, PhotoAnimationOut
@@ -18,7 +20,12 @@ def _service(db: DbSession) -> PhotoAnimationService:
     return PhotoAnimationService(PhotoAnimationRepository(db), PhotoRepository(db))
 
 
-@router.post("", response_model=PhotoAnimationOut, status_code=202)
+@router.post(
+    "",
+    response_model=PhotoAnimationOut,
+    status_code=202,
+    dependencies=[Depends(RateLimiter(times=get_settings().rate_limit_ai_per_minute, seconds=60))],
+)
 def create_animation(
     payload: PhotoAnimationCreate,
     user: CurrentUser,

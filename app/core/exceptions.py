@@ -66,6 +66,25 @@ async def unhandled_error_handler(request: Request, exc: Exception) -> JSONRespo
     )
 
 
+async def integrity_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    # Last line of defence: schemas and services validate references and limits up
+    # front, but a constraint the database still rejects (FK, unique, NOT NULL, value
+    # too long) is the client's fault, not a server crash.
+    logger.warning("Database rejected %s %s: %s", request.method, request.url.path, exc)
+    return JSONResponse(
+        status_code=status.HTTP_409_CONFLICT,
+        content={"error": {"code": "CONFLICT", "message": "That change conflicts with existing data."}},
+    )
+
+
+async def data_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    logger.warning("Database rejected a value on %s %s: %s", request.method, request.url.path, exc)
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        content={"error": {"code": "VALIDATION_ERROR", "message": "One of the values is invalid or too long."}},
+    )
+
+
 async def validation_error_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     errors = exc.errors()
     message = errors[0]["msg"] if errors else "Invalid request."

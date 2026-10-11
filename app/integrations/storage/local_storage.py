@@ -19,19 +19,28 @@ class LocalStorageService(StorageService):
     def __init__(self) -> None:
         _UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
+    @staticmethod
+    def _path(key: str) -> Path:
+        """Resolve a storage key, refusing anything that escapes the upload directory."""
+        root = _UPLOAD_DIR.resolve()
+        path = (root / key).resolve()
+        if not path.is_relative_to(root):
+            raise ValueError(f"Invalid storage key: {key!r}")
+        return path
+
     def save(self, *, key: str, content: bytes, content_type: str) -> str:
-        path = _UPLOAD_DIR / key
+        path = self._path(key)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(content)
         return f"/uploads/{key}"
 
     def delete(self, *, key: str) -> None:
-        path = _UPLOAD_DIR / key
+        path = self._path(key)
         if path.exists():
             path.unlink()
 
     def load(self, *, key: str) -> bytes:
-        return (_UPLOAD_DIR / key).read_bytes()
+        return self._path(key).read_bytes()
 
 
 def get_storage_service() -> StorageService:

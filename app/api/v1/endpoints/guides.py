@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends
 
 from app.api.dependencies import CurrentUser, DbSession
-from app.core.constants import BookingStatus, UserRole
+from app.core.constants import BookingStatus
 from app.repositories.booking_repository import BookingRepository
 from app.repositories.guide_repository import GuideRepository
 from app.schemas.booking import BookingCreate, BookingOut, BookingStatusUpdate
@@ -78,7 +78,12 @@ def review_guide(
     guide_service: GuideService = Depends(_guide_service),
 ) -> GuideReviewOut:
     booking = BookingRepository(db).get(payload.booking_id)
-    belongs_to_user = bool(booking and booking.user_id == user.id and booking.status == BookingStatus.COMPLETED)
+    belongs_to_user = bool(
+        booking
+        and booking.user_id == user.id
+        and booking.guide_id == guide_id
+        and booking.status == BookingStatus.COMPLETED
+    )
     review = guide_service.add_review(guide_id=guide_id, user_id=user.id, payload=payload, booking_belongs_to_user=belongs_to_user)
     return GuideReviewOut.model_validate(review)
 
@@ -100,12 +105,11 @@ def list_bookings_received(
 
 @router.get("/bookings/{booking_id}", response_model=BookingOut)
 def get_booking(booking_id: int, user: CurrentUser, service: BookingService = Depends(_booking_service)) -> BookingOut:
-    return BookingOut.model_validate(service.get_owned_by_user(booking_id, user.id))
+    return BookingOut.model_validate(service.get_visible(booking_id, user.id))
 
 
 @router.patch("/bookings/{booking_id}", response_model=BookingOut)
 def update_booking_status(booking_id: int, payload: BookingStatusUpdate, user: CurrentUser, service: BookingService = Depends(_booking_service)) -> BookingOut:
-    is_guide = user.role == UserRole.GUIDE
     return BookingOut.model_validate(
-        service.update_status(booking_id=booking_id, actor_user_id=user.id, actor_is_guide=is_guide, status=payload.status)
+        service.update_status(booking_id=booking_id, actor_user_id=user.id, status=payload.status)
     )

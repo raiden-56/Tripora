@@ -18,9 +18,9 @@ class PhotoOut(BaseModel):
 
 
 class PhotoShareCreate(BaseModel):
-    title: str
-    description: str | None = None
-    photo_ids: list[int] = Field(min_length=1)
+    title: str = Field(min_length=1, max_length=150)
+    description: str | None = Field(default=None, max_length=500)
+    photo_ids: list[int] = Field(min_length=1, max_length=200)
     is_public: bool = True
 
 

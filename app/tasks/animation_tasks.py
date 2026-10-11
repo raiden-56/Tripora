@@ -10,7 +10,7 @@ from fastapi import BackgroundTasks
 
 from app.core.constants import GenerationStatus
 from app.core.logging import get_logger
-from app.db.session import SessionLocal
+from app.db import session as db_session
 from app.repositories.notification_repository import NotificationRepository
 from app.repositories.photo_animation_repository import PhotoAnimationRepository
 from app.repositories.photo_repository import PhotoRepository
@@ -22,7 +22,7 @@ logger = get_logger(__name__)
 
 
 def _process(animation_id: int, user_id: int) -> None:
-    db = SessionLocal()
+    db = db_session.SessionLocal()
     try:
         service = PhotoAnimationService(PhotoAnimationRepository(db), PhotoRepository(db))
         service.process_generation(animation_id)

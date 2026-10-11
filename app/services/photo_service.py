@@ -7,7 +7,9 @@ from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.integrations.storage.local_storage import get_storage_service
 from app.models.photo import Photo, PhotoShare
 from app.repositories.photo_repository import PhotoRepository, PhotoShareRepository
+from app.services.reference_guard import ReferenceGuard
 from app.services.trip_collaborator_service import TripCollaboratorService
+from app.utils.images import inspect_image
 
 
 class PhotoService:
@@ -16,6 +18,7 @@ class PhotoService:
         self.share_repo = share_repo
         self.trip_access = trip_access
         self.storage = get_storage_service()
+        self.guard = ReferenceGuard(repo.db)
 
     def list_for_user(
         self,
@@ -36,8 +39,6 @@ class PhotoService:
         *,
         user_id: int,
         content: bytes,
-        content_type: str,
-        filename: str,
         destination_id: int | None,
         memory_id: int | None,
         trip_id: int | None,
@@ -45,9 +46,14 @@ class PhotoService:
     ) -> Photo:
         if trip_id is not None and self.trip_access.get_access_role(trip_id, user_id) not in ("owner", "editor"):
             raise PermissionDeniedError("You do not have permission to add photos to this trip.")
+        self.guard.destination(destination_id, user_id)
+        self.guard.memory(memory_id, user_id)
 
-        safe_name = f"{user_id}/{secrets.token_hex(8)}_{filename.replace('/', '_')}"
-        url = self.storage.save(key=safe_name, content=content, content_type=content_type)
+        image = inspect_image(content)
+        # The stored name is entirely server-generated: no client filename, so no
+        # path tricks, and the extension always matches the verified image format.
+        safe_name = f"{user_id}/{secrets.token_hex(16)}.{image.extension}"
+        url = self.storage.save(key=safe_name, content=content, content_type=image.content_type)
         photo = Photo(
             user_id=user_id,
             destination_id=destination_id,
@@ -56,7 +62,7 @@ class PhotoService:
             storage_key=safe_name,
             url=url,
             caption=caption,
-            taken_at=datetime.now(timezone.utc),
+            taken_at=image.taken_at or datetime.now(timezone.utc),
         )
         return self.repo.add(photo)
 

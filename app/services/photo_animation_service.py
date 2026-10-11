@@ -13,6 +13,7 @@ from app.integrations.storage.local_storage import get_storage_service
 from app.models.photo_animation import PhotoAnimation
 from app.repositories.photo_animation_repository import PhotoAnimationRepository
 from app.repositories.photo_repository import PhotoRepository
+from app.services.reference_guard import ReferenceGuard
 
 _CANVAS_SIZE = (720, 720)
 _FRAME_DURATION_MS = 800
@@ -30,6 +31,7 @@ class PhotoAnimationService:
         owned = self.photo_repo.get_owned_many(photo_ids, user_id)
         if len(owned) != len(set(photo_ids)):
             raise PermissionDeniedError("You can only animate photos you own.")
+        ReferenceGuard(self.repo.db).trip_editable(trip_id, user_id)
         animation = PhotoAnimation(user_id=user_id, trip_id=trip_id, title=title, status=GenerationStatus.PENDING)
         return self.repo.create_with_items(animation, photo_ids)
 

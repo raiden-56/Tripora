@@ -50,3 +50,6 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_trip_collaborators_created_at'), table_name='trip_collaborators')
     op.drop_table('trip_collaborators')
     # ### end Alembic commands ###
+    # Enum types outlive their tables on Postgres; drop them so a re-upgrade works.
+    sa.Enum(name='collaboratorrole').drop(op.get_bind(), checkfirst=True)
+    sa.Enum(name='collaboratorstatus').drop(op.get_bind(), checkfirst=True)

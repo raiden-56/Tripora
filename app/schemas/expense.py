@@ -19,7 +19,7 @@ class ParticipantOut(BaseModel):
 class ExpenseCreate(BaseModel):
     description: str = Field(min_length=1, max_length=200)
     amount: float = Field(gt=0)
-    category: str = "other"
+    category: str = Field(default="other", min_length=1, max_length=50)
     paid_by_id: int
     expense_date: date | None = None
     # Participant ids to split the expense across; defaults to all trip participants if omitted.

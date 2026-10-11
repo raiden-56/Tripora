@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.exc import DataError, IntegrityError
 
 from app.api.v1.endpoints.health import router as health_router
 from app.api.v1.router import api_router
@@ -13,6 +14,8 @@ from app.core.config import get_settings
 from app.core.exceptions import (
     AppError,
     app_error_handler,
+    data_error_handler,
+    integrity_error_handler,
     unhandled_error_handler,
     validation_error_handler,
 )
@@ -42,6 +45,8 @@ app.add_middleware(RequestLoggingMiddleware)
 
 app.add_exception_handler(AppError, app_error_handler)
 app.add_exception_handler(RequestValidationError, validation_error_handler)
+app.add_exception_handler(IntegrityError, integrity_error_handler)
+app.add_exception_handler(DataError, data_error_handler)
 app.add_exception_handler(Exception, unhandled_error_handler)
 
 app.include_router(health_router)
@@ -54,3 +59,14 @@ app.include_router(api_router, prefix=settings.api_v1_prefix)
 _uploads_dir = Path("uploads")
 _uploads_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=_uploads_dir), name="uploads")
+
+
+@app.middleware("http")
+async def _no_sniff_uploads(request, call_next):  # noqa: ANN001
+    # Uploaded files are served as-is; stop browsers from guessing a different
+    # (executable) type than the one we verified at upload time.
+    response = await call_next(request)
+    if request.url.path.startswith("/uploads/"):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Content-Security-Policy"] = "default-src 'none'; sandbox"
+    return response

@@ -5,7 +5,9 @@ never blocks on the AI call — see app/tasks/blog_tasks.py."""
 from fastapi import APIRouter, BackgroundTasks, Depends
 
 from app.api.dependencies import CurrentUser, DbSession
+from app.core.config import get_settings
 from app.core.exceptions import NotFoundError
+from app.middleware.rate_limit import RateLimiter
 from app.models.destination import Destination
 from app.models.memory import Memory
 from app.models.trip import Trip
@@ -55,7 +57,12 @@ def _gather_facts(db: DbSession, user_id: int, trip_id: int | None, destination_
     return "My Travel Story", {"destination_name": "my travels", "days": 1, "memory_titles": [], "places": [], "rating": None}
 
 
-@router.post("/generate", response_model=BlogGenerateResponse, status_code=202)
+@router.post(
+    "/generate",
+    response_model=BlogGenerateResponse,
+    status_code=202,
+    dependencies=[Depends(RateLimiter(times=get_settings().rate_limit_ai_per_minute, seconds=60))],
+)
 def generate_blog(
     payload: BlogGenerateRequest,
     user: CurrentUser,

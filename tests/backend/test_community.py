@@ -4,6 +4,7 @@ import io
 
 from PIL import Image
 
+from app.api.v1.endpoints import photo_animations as photo_animations_endpoint
 from app.repositories.photo_animation_repository import PhotoAnimationRepository
 from app.repositories.photo_repository import PhotoRepository
 from app.services.photo_animation_service import PhotoAnimationService
@@ -75,7 +76,9 @@ def test_create_album_post_and_see_it_in_feed(client, auth_headers):
     assert feed["data"][0]["caption"] == "What a trip!"
 
 
-def test_cannot_post_incomplete_animation(client, auth_headers):
+def test_cannot_post_incomplete_animation(client, auth_headers, monkeypatch):
+    # Keep the animation "pending": skip the background generation job.
+    monkeypatch.setattr(photo_animations_endpoint, "run_animation_generation", lambda **_: None)
     photo_ids = [
         client.post(
             "/api/v1/photos", files={"file": ("a.png", _tiny_png(), "image/png")}, headers=auth_headers
