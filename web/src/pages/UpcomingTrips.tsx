@@ -25,8 +25,10 @@ export default function UpcomingTrips() {
   const updateTrip = useAppStore((s) => s.updateTrip);
   const pushToast = useAppStore((s) => s.pushToast);
   const [params, setParams] = useSearchParams();
-  // ?plan=<destinationId> (from "Plan Trip" elsewhere) opens the form pre-filled.
-  const [modalOpen, setModalOpen] = useState(() => params.has("plan"));
+  // ?plan=<destinationId> (from "Plan Trip" elsewhere) and ?start=<date> (from the
+  // calendar) open the new-trip form pre-filled.
+  const [modalOpen, setModalOpen] = useState(() => params.has("plan") || params.has("start"));
+  const [startFor] = useState<string | null>(() => params.get("start"));
   const [editingTrip, setEditingTrip] = useState<Trip | null>(null);
   const [planFor, setPlanFor] = useState<string | null>(() => params.get("plan"));
   const openTripId = params.get("trip");
@@ -238,10 +240,11 @@ export default function UpcomingTrips() {
         open={modalOpen}
         onClose={() => {
           setModalOpen(false);
-          if (params.has("plan")) setParams({}, { replace: true });
+          if (params.has("plan") || params.has("start")) setParams({}, { replace: true });
         }}
         editingTrip={editingTrip}
         initialDestinationId={planFor}
+        initialStartDate={editingTrip ? null : startFor}
       />
       <TripDrawer tripId={openTripId} onClose={() => setOpenTripId(null)} />
     </div>

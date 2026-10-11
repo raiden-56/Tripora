@@ -94,6 +94,38 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
+function FilterChips<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: { value: T; label: string; count?: number }[];
+  value: T;
+  onChange: (value: T) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2 mb-4" role="radiogroup">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          role="radio"
+          aria-checked={value === o.value}
+          onClick={() => onChange(o.value)}
+          className={clsx(
+            "px-3.5 py-1.5 rounded-full text-xs font-semibold border transition",
+            value === o.value
+              ? "bg-forest-500 border-forest-500 text-white"
+              : "border-ink/12 dark:border-white/15 hover:border-forest-400",
+          )}
+        >
+          {o.label}
+          {o.count !== undefined && <span className="ml-1 opacity-70">{o.count}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Overview() {
   const [report] = useLoad<AdminReport>(adminApi.getReport);
   if (!report) return <p className="text-sm text-ink-soft">Loading report…</p>;
@@ -316,6 +348,7 @@ function Users() {
 function Guides() {
   const pushToast = useAppStore((s) => s.pushToast);
   const [guides, setGuides] = useLoad<Guide[]>(adminApi.listGuides);
+  const [show, setShow] = useState<"all" | "pending" | "verified">("all");
 
   const toggle = async (g: Guide) => {
     try {
@@ -329,66 +362,102 @@ function Guides() {
 
   if (!guides) return <p className="text-sm text-ink-soft">Loading guides…</p>;
   if (guides.length === 0) return <EmptyState compact icon={<BadgeCheck size={20} />} title="No guides yet" />;
+  const pending = guides.filter((g) => !g.isVerified);
+  const shown = show === "pending" ? pending : show === "verified" ? guides.filter((g) => g.isVerified) : guides;
   return (
-    <div className="grid md:grid-cols-2 gap-3">
-      {guides.map((g) => (
-        <div key={g.id} className="p-4 rounded-2xl bg-white dark:bg-[#1c2024] border border-ink/8 dark:border-white/10 flex gap-3">
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm">{g.headline}</p>
-            <p className="text-xs text-ink-soft dark:text-white/50">
-              {g.destinationName} · ₹{g.pricePerDay.toLocaleString("en-IN")}/day · {g.experienceYears} yrs ·{" "}
-              {g.ratingCount > 0 ? `${g.ratingAvg.toFixed(1)}★ (${g.ratingCount})` : "no reviews"}
-            </p>
-            {g.about && <p className="text-xs text-ink-soft dark:text-white/50 mt-1 line-clamp-2">{g.about}</p>}
-          </div>
-          <button
-            onClick={() => toggle(g)}
-            className={clsx(
-              "self-start px-3 py-1.5 rounded-full text-xs font-semibold shrink-0",
-              g.isVerified ? "bg-forest-500 text-white" : "border border-ink/15 dark:border-white/20",
-            )}
-          >
-            {g.isVerified ? "Verified ✓" : "Verify"}
-          </button>
+    <div>
+      <FilterChips
+        value={show}
+        onChange={setShow}
+        options={[
+          { value: "all", label: "All", count: guides.length },
+          { value: "pending", label: "Awaiting verification", count: pending.length },
+          { value: "verified", label: "Verified", count: guides.length - pending.length },
+        ]}
+      />
+      {shown.length === 0 ? (
+        <p className="text-sm text-ink-soft">No guides in this list.</p>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-3">
+          {shown.map((g) => (
+            <div key={g.id} className="p-4 rounded-2xl bg-white dark:bg-[#1c2024] border border-ink/8 dark:border-white/10 flex gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm">{g.headline}</p>
+                <p className="text-xs text-ink-soft dark:text-white/50">
+                  {g.destinationName} · ₹{g.pricePerDay.toLocaleString("en-IN")}/day · {g.experienceYears} yrs ·{" "}
+                  {g.ratingCount > 0 ? `${g.ratingAvg.toFixed(1)}★ (${g.ratingCount})` : "no reviews"}
+                </p>
+                {g.about && <p className="text-xs text-ink-soft dark:text-white/50 mt-1 line-clamp-2">{g.about}</p>}
+              </div>
+              <button
+                onClick={() => toggle(g)}
+                className={clsx(
+                  "self-start px-3 py-1.5 rounded-full text-xs font-semibold shrink-0",
+                  g.isVerified ? "bg-forest-500 text-white" : "border border-ink/15 dark:border-white/20",
+                )}
+              >
+                {g.isVerified ? "Verified ✓" : "Verify"}
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
 
+const BOOKING_STATUSES = ["pending", "accepted", "completed", "rejected", "cancelled"] as const;
+
 function Bookings() {
   const [bookings] = useLoad<Booking[]>(adminApi.listBookings);
+  const [status, setStatus] = useState<"all" | (typeof BOOKING_STATUSES)[number]>("all");
   if (!bookings) return <p className="text-sm text-ink-soft">Loading bookings…</p>;
   if (bookings.length === 0) return <EmptyState compact icon={<ShieldAlert size={20} />} title="No bookings yet" />;
+  const shown = status === "all" ? bookings : bookings.filter((b) => b.status === status);
   return (
-    <div className="rounded-2xl border border-ink/8 dark:border-white/10 overflow-x-auto bg-white dark:bg-[#1c2024]">
-      <table className="w-full text-sm min-w-[560px]">
-        <thead className="text-left text-xs text-ink-soft dark:text-white/50 uppercase tracking-wide">
-          <tr className="border-b border-ink/8 dark:border-white/10">
-            <th className="px-4 py-3 font-semibold">Date</th>
-            <th className="px-4 py-3 font-semibold">Traveler</th>
-            <th className="px-4 py-3 font-semibold">Guide</th>
-            <th className="px-4 py-3 font-semibold">People</th>
-            <th className="px-4 py-3 font-semibold">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((b) => (
-            <tr key={b.id} className="border-b border-ink/6 dark:border-white/5 last:border-0">
-              <td className="px-4 py-3">
-                {formatDate(b.bookingDate)} <span className="text-ink-soft">{b.bookingTime}</span>
-              </td>
-              <td className="px-4 py-3">{b.travelerName ?? "—"}</td>
-              <td className="px-4 py-3">
-                {b.guideName ?? "—"}
-                {b.guideDestination && <span className="text-xs text-ink-soft"> · {b.guideDestination}</span>}
-              </td>
-              <td className="px-4 py-3">{b.peopleCount}</td>
-              <td className="px-4 py-3 capitalize">{b.status}</td>
+    <div>
+      <FilterChips
+        value={status}
+        onChange={setStatus}
+        options={[
+          { value: "all" as const, label: "All", count: bookings.length },
+          ...BOOKING_STATUSES.map((s) => ({
+            value: s,
+            label: s[0].toUpperCase() + s.slice(1),
+            count: bookings.filter((b) => b.status === s).length,
+          })),
+        ]}
+      />
+      <div className="rounded-2xl border border-ink/8 dark:border-white/10 overflow-x-auto bg-white dark:bg-[#1c2024]">
+        <table className="w-full text-sm min-w-[560px]">
+          <thead className="text-left text-xs text-ink-soft dark:text-white/50 uppercase tracking-wide">
+            <tr className="border-b border-ink/8 dark:border-white/10">
+              <th className="px-4 py-3 font-semibold">Date</th>
+              <th className="px-4 py-3 font-semibold">Traveler</th>
+              <th className="px-4 py-3 font-semibold">Guide</th>
+              <th className="px-4 py-3 font-semibold">People</th>
+              <th className="px-4 py-3 font-semibold">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {shown.map((b) => (
+              <tr key={b.id} className="border-b border-ink/6 dark:border-white/5 last:border-0">
+                <td className="px-4 py-3">
+                  {formatDate(b.bookingDate)} <span className="text-ink-soft">{b.bookingTime}</span>
+                </td>
+                <td className="px-4 py-3">{b.travelerName ?? "—"}</td>
+                <td className="px-4 py-3">
+                  {b.guideName ?? "—"}
+                  {b.guideDestination && <span className="text-xs text-ink-soft"> · {b.guideDestination}</span>}
+                </td>
+                <td className="px-4 py-3">{b.peopleCount}</td>
+                <td className="px-4 py-3 capitalize">{b.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {shown.length === 0 && <p className="text-sm text-ink-soft p-4">No bookings with this status.</p>}
+      </div>
     </div>
   );
 }

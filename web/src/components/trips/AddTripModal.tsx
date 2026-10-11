@@ -10,22 +10,26 @@ export function AddTripModal({
   onClose,
   editingTrip,
   initialDestinationId,
+  initialStartDate,
 }: {
   open: boolean;
   onClose: () => void;
   editingTrip?: Trip | null;
   /** Preselects a destination for a new trip (e.g. "Plan a trip" from the wishlist). */
   initialDestinationId?: string | null;
+  /** Prefills the start date of a new trip (e.g. a day picked on the calendar). */
+  initialStartDate?: string | null;
 }) {
   if (!open) return null;
   // Keyed so the form's state is initialised fresh each time it opens for a
   // different trip, and is never reset by unrelated store updates mid-edit.
   return (
     <TripForm
-      key={editingTrip?.id ?? `new-${initialDestinationId ?? ""}`}
+      key={editingTrip?.id ?? `new-${initialDestinationId ?? ""}-${initialStartDate ?? ""}`}
       onClose={onClose}
       editingTrip={editingTrip ?? null}
       initialDestinationId={initialDestinationId ?? null}
+      initialStartDate={initialStartDate ?? null}
     />
   );
 }
@@ -34,10 +38,12 @@ function TripForm({
   onClose,
   editingTrip,
   initialDestinationId,
+  initialStartDate,
 }: {
   onClose: () => void;
   editingTrip: Trip | null;
   initialDestinationId: string | null;
+  initialStartDate: string | null;
 }) {
   const destinations = useAppStore((s) => s.destinations);
   const addTrip = useAppStore((s) => s.addTrip);
@@ -49,8 +55,8 @@ function TripForm({
   const [destinationIds, setDestinationIds] = useState<string[]>(
     editingTrip?.destinationIds ?? (initialDestinationId ? [initialDestinationId] : []),
   );
-  const [startDate, setStartDate] = useState(editingTrip?.startDate ?? "");
-  const [endDate, setEndDate] = useState(editingTrip?.endDate ?? "");
+  const [startDate, setStartDate] = useState(editingTrip?.startDate ?? initialStartDate ?? "");
+  const [endDate, setEndDate] = useState(editingTrip?.endDate ?? initialStartDate ?? "");
   const [status, setStatus] = useState<Trip["status"]>(editingTrip?.status ?? "planned");
   const [notes, setNotes] = useState(editingTrip?.notes ?? "");
   const [driveFolderUrl, setDriveFolderUrl] = useState(editingTrip?.driveFolderUrl ?? "");

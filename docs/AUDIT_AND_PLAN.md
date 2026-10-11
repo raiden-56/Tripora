@@ -198,9 +198,10 @@ requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
       UI says which one answered. The rule-based planner no longer invents budgets/distances.
 - [x] Calendar view (`/app/calendar`): month grid with trips and visits; picking a day shows
       that day's itinerary stops.
+      Export all trips or one trip as .ics (Google/Apple/Outlook); plan a new trip from any day.
 - [x] Admin dashboard (`/app/admin`, admins only): usage overview, user search with
       activate/deactivate (signs the user out) and role changes (no self-lockout), guide
-      verification, bookings list.
+      verification (all / awaiting / verified), bookings list filterable by status.
 - [x] Bundle code-splitting: pages load on demand (main bundle 840 kB → 511 kB, 236 → 150 kB
       gzipped); unknown URLs show a "Page not found" page instead of a blank screen.
 

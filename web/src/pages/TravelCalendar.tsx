@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { ChevronLeft, ChevronRight, MapPin, Plane } from "lucide-react";
+import { CalendarPlus, ChevronLeft, ChevronRight, Download, MapPin, Plane, Plus } from "lucide-react";
 import { TopBar } from "../components/layout/TopBar";
 import { useAppStore } from "../store/useAppStore";
 import * as itineraryApi from "../api/itinerary.api";
 import type { ItineraryItem } from "../api/itinerary.api";
 import { addDays, formatDateRange, toIsoDate, todayIso } from "../utils/dates";
 import type { Destination, Trip } from "../types";
+import { downloadIcs, tripsToIcs } from "../utils/ics";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const TRIP_STYLE: Record<Trip["status"], string> = {
@@ -87,6 +88,11 @@ export default function TravelCalendar() {
   };
 
   const monthPrefix = `${cursor.year}-${String(cursor.month + 1).padStart(2, "0")}`;
+  const exportAll = () => {
+    if (trips.length === 0) return;
+    downloadIcs("travel-diaries-trips.ics", tripsToIcs(trips, destinations));
+  };
+
   const nextTrip = trips
     .filter((t) => t.status === "planned" && t.endDate >= today)
     .sort((a, b) => a.startDate.localeCompare(b.startDate))[0];
@@ -99,6 +105,14 @@ export default function TravelCalendar() {
           <div className="flex items-center justify-between gap-2 mb-4">
             <h2 className="font-display text-xl">{monthLabel}</h2>
             <div className="flex items-center gap-1.5">
+              <button
+                onClick={exportAll}
+                disabled={trips.length === 0}
+                title="Download your trips as an .ics file for Google, Apple or Outlook Calendar"
+                className="hidden sm:flex items-center gap-1.5 px-3.5 h-9 rounded-full border border-ink/12 dark:border-white/15 text-xs font-semibold hover:bg-ink/5 disabled:opacity-40"
+              >
+                <Download size={13} /> Export
+              </button>
               <button onClick={() => move(-1)} aria-label="Previous month" className="w-9 h-9 rounded-full border border-ink/12 dark:border-white/15 flex items-center justify-center hover:bg-ink/5">
                 <ChevronLeft size={16} />
               </button>
@@ -177,7 +191,7 @@ export default function TravelCalendar() {
           </div>
         </div>
 
-        <DayPanel date={selected} events={eventsOn(selected)} nextTrip={nextTrip} />
+        <DayPanel date={selected} events={eventsOn(selected)} nextTrip={nextTrip} destinations={destinations} />
       </div>
     </div>
   );
@@ -191,7 +205,19 @@ function Legend({ className, label }: { className: string; label: string }) {
   );
 }
 
-function DayPanel({ date, events, nextTrip }: { date: string; events: DayEvent[]; nextTrip?: Trip }) {
+function DayPanel({
+  date,
+  events,
+  nextTrip,
+  destinations,
+}: {
+  date: string;
+  events: DayEvent[];
+  nextTrip?: Trip;
+  destinations: Destination[];
+}) {
+  const navigate = useNavigate();
+  const isPast = date < todayIso();
   const heading = new Date(`${date}T00:00`).toLocaleDateString(undefined, {
     weekday: "long",
     day: "numeric",
@@ -216,15 +242,27 @@ function DayPanel({ date, events, nextTrip }: { date: string; events: DayEvent[]
       ) : (
         <div className="flex flex-col gap-4">
           {events.map((e) =>
-            e.kind === "trip" ? <TripOnDay key={e.key} trip={e.trip!} date={date} /> : <VisitOnDay key={e.key} event={e} />,
+            e.kind === "trip" ? (
+              <TripOnDay key={e.key} trip={e.trip!} date={date} destinations={destinations} />
+            ) : (
+              <VisitOnDay key={e.key} event={e} />
+            ),
           )}
         </div>
+      )}
+      {!isPast && (
+        <button
+          onClick={() => navigate(`/app/trips?start=${date}`)}
+          className="mt-4 w-full flex items-center justify-center gap-1.5 py-2 rounded-full border border-dashed border-ink/20 dark:border-white/20 text-xs font-semibold text-ink-soft hover:border-forest-400 hover:text-forest-600"
+        >
+          <Plus size={13} /> Plan a trip starting this day
+        </button>
       )}
     </aside>
   );
 }
 
-function TripOnDay({ trip, date }: { trip: Trip; date: string }) {
+function TripOnDay({ trip, date, destinations }: { trip: Trip; date: string; destinations: Destination[] }) {
   const dayNumber = Math.round(
     (new Date(`${date}T00:00`).getTime() - new Date(`${trip.startDate}T00:00`).getTime()) / 86_400_000,
   ) + 1;
@@ -257,6 +295,12 @@ function TripOnDay({ trip, date }: { trip: Trip; date: string }) {
           </span>
         </span>
       </Link>
+      <button
+        onClick={() => downloadIcs(`${trip.title.replace(/[^\w-]+/g, "-").toLowerCase()}.ics`, tripsToIcs([trip], destinations))}
+        className="ml-6 mt-1 flex items-center gap-1 text-[11px] font-semibold text-forest-600 dark:text-forest-400"
+      >
+        <CalendarPlus size={11} /> Add to my calendar
+      </button>
       <div className="mt-2 ml-6">
         {!current ? (
           <p className="text-xs text-ink-soft">Loading the day's plan…</p>
