@@ -30,6 +30,7 @@ class DestinationBase(BaseModel):
     notes: str | None = None
     hero_image_url: str | None = Field(default=None, max_length=500)
     google_maps_url: str | None = Field(default=None, max_length=500)
+    drive_folder_url: str | None = Field(default=None, max_length=500)
 
 
 class DestinationCreate(DestinationBase):
@@ -56,6 +57,7 @@ class DestinationUpdate(PatchModel):
     notes: str | None = None
     hero_image_url: str | None = Field(default=None, max_length=500)
     google_maps_url: str | None = Field(default=None, max_length=500)
+    drive_folder_url: str | None = Field(default=None, max_length=500)
 
 
 class DestinationOut(DestinationBase):

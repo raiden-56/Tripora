@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { Memory } from "../../types";
+import { formatDate } from "../../utils/dates";
 
 export function MemoryCard({
   memory,
@@ -38,11 +39,7 @@ export function MemoryCard({
           {memory.title}
         </p>
         <p className="text-white/70 text-xs">
-          {new Date(memory.date).toLocaleDateString(undefined, {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })}
+          {formatDate(memory.date)}
         </p>
       </div>
     </motion.button>

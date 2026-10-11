@@ -57,7 +57,7 @@ def seed() -> None:
                     name=entry["name"],
                     role=entry["role"],
                 )
-                user.profile = UserProfile(handle=entry["name"].lower().replace(" ", "-"))
+                user.profile = UserProfile(handle=entry["name"].lower().replace(" ", "-"), onboarding_completed=True)
                 db.add(user)
                 db.flush()
                 print(f"Created user {entry['email']} ({entry['role'].value})")

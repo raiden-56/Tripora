@@ -124,6 +124,11 @@ export interface Booking {
   durationHours: number;
   specialRequirements: string | null;
   status: BookingStatus;
+  guideName: string | null;
+  guideDestination: string | null;
+  travelerName: string | null;
+  /** The traveler already left a review for this booking. */
+  reviewed: boolean;
 }
 
 interface BackendBooking {
@@ -136,6 +141,10 @@ interface BackendBooking {
   duration_hours: number;
   special_requirements: string | null;
   status: BookingStatus;
+  guide_name: string | null;
+  guide_destination: string | null;
+  traveler_name: string | null;
+  reviewed: boolean;
 }
 
 function bookingToFrontend(b: BackendBooking): Booking {
@@ -149,6 +158,10 @@ function bookingToFrontend(b: BackendBooking): Booking {
     durationHours: b.duration_hours,
     specialRequirements: b.special_requirements,
     status: b.status,
+    guideName: b.guide_name ?? null,
+    guideDestination: b.guide_destination ?? null,
+    travelerName: b.traveler_name ?? null,
+    reviewed: b.reviewed ?? false,
   };
 }
 
@@ -201,16 +214,42 @@ export async function updateBookingStatus(
   return bookingToFrontend(result);
 }
 
+export interface GuideReview {
+  id: number;
+  guideId: number;
+  userId: number;
+  rating: number;
+  comment: string | null;
+}
+
+interface BackendGuideReview {
+  id: number;
+  guide_id: number;
+  user_id: number;
+  rating: number;
+  comment: string | null;
+}
+
 export async function reviewGuide(
   guideId: number,
   payload: { bookingId: number; rating: number; comment?: string },
-) {
-  return apiRequest(`/api/v1/guides/${guideId}/reviews`, {
-    method: "POST",
-    body: {
-      booking_id: payload.bookingId,
-      rating: payload.rating,
-      comment: payload.comment,
+): Promise<GuideReview> {
+  const r = await apiRequest<BackendGuideReview>(
+    `/api/v1/guides/${guideId}/reviews`,
+    {
+      method: "POST",
+      body: {
+        booking_id: payload.bookingId,
+        rating: payload.rating,
+        comment: payload.comment,
+      },
     },
-  });
+  );
+  return {
+    id: r.id,
+    guideId: r.guide_id,
+    userId: r.user_id,
+    rating: r.rating,
+    comment: r.comment,
+  };
 }

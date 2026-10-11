@@ -145,25 +145,45 @@ decisions; Phase 3 and 4 do.
 **Result:** 53 tests pass on SQLite **and** on Postgres 16
 (`TEST_DATABASE_URL=postgresql+psycopg://…/empty_db pytest`).
 
-### Phase 2 — Make every existing screen honest
-- [ ] 2.1 Mobile "More" menu (all pages + logout).
-- [ ] 2.2 Trip lifecycle: status (planned / visited), past trips list, fix Dashboard edit/delete,
-      keep multi-destination on edit, date validation.
-- [ ] 2.3 Favorite toggle (card + drawer).
-- [ ] 2.4 Store surfaces errors → correct toasts; confirm dialogs on destructive actions;
-      loading states.
-- [ ] 2.5 Clearable fields (send `null` for optional fields); Drive folder URL persisted.
-- [ ] 2.6 Public journey: settable handle, `GET /public/journeys/{handle}` honouring visibility,
-      remove hard-coded "ganesh"/"2026"; Recap & Upgrade reachable.
-- [ ] 2.7 Trip checklist + planned budget: models, API, UI.
-- [ ] 2.8 Notifications from the backend (unread count, mark read / all).
-- [ ] 2.9 Onboarding persists interests, visited places and wishlist.
-- [ ] 2.10 Guides: complete booking, leave review, show guide names, cancel booking.
-- [ ] 2.11 Planner: delete plan, "save as trip", null-safe display.
-- [ ] 2.12 Settings: real export (JSON), delete account, persisted notification preference;
-      hide not-yet-real integrations.
-- [ ] 2.13 API client: wrap network errors, timeouts; production `VITE_API_BASE_URL` build arg.
-- [ ] 2.14 Docs: update ARCHITECTURE/README to reality.
+### Phase 2 — Make every existing screen honest — ✅ done (branch `feat/phase-2-honest-ui`)
+Backend (migration `7a8e5c369d54`, 11 new tests in `test_phase2_api.py`):
+- [x] Trip checklist (`/trips/{id}/checklist`) and planned budget vs actual spend
+      (`/trips/{id}/budget`) — any member reads, owner/editors write.
+- [x] Public journeys `GET /public/journeys/{handle}` (only when visibility is public);
+      handles auto-generated at signup, editable and validated (reserved words, uniqueness).
+- [x] `PUT /users/me` (name), `GET /users/me/export`, `DELETE /users/me` (password-confirmed,
+      removes uploaded files too); profile stores notification + onboarding preferences.
+- [x] Notifications: unread count, mark-all-read, `created_at`, respects the user's preference.
+- [x] Planner get/delete; bookings carry guide/traveler names and a `reviewed` flag;
+      destinations store a Drive folder URL.
+- [x] Honest forgot-password message (no email is sent yet).
+
+Frontend:
+- [x] 2.1 Mobile "More" sheet with every page + log out; sidebar log out; Recap and Plans in nav.
+- [x] 2.2 Trips: planned/completed status, "back from this trip?" prompt, past trips,
+      multi-destination picker, date validation, owner-only edit/delete, deep links
+      (`?trip=`, `?plan=`), Dashboard actions fixed.
+- [x] 2.3 Favorite toggle on cards, drawer and "What's Next".
+- [x] 2.4 Store actions report success → no false success toasts; shared confirm dialog on every
+      destructive action; `fetchAllData` de-duplicated.
+- [x] 2.5 Optional fields can be cleared (`pickBody` sends null); Drive folder persisted.
+- [x] 2.6 Public journey page fetches by handle (works logged-out); recap year picker and real
+      share links; Plans page says "coming soon" instead of faking checkout.
+- [x] 2.7 Checklist and budget tabs backed by the API.
+- [x] 2.8 Notification bell uses backend notifications (polls unread count).
+- [x] 2.9 Onboarding saves visited states, wishlist picks and interests.
+- [x] 2.10 Guides: cancel, complete, review, names, extra search filters.
+- [x] 2.11 Planner: delete, save as trip, null-safe numbers; Canvas AI labelled as rule-based.
+- [x] 2.12 Settings: real export, account deletion, persisted notification preference,
+      fake Drive/"delete journey" actions removed; Google/Apple sign-in buttons removed.
+- [x] 2.13 API client wraps network errors/timeouts; single base URL + `mediaUrl()`;
+      `VITE_API_BASE_URL` build arg for the Docker image; tokens persisted per "Remember me"
+      and synced across tabs.
+- [x] 2.14 Docs updated.
+
+Known gaps carried forward: Discover's "Near you" still assumes Bangalore; "friends"
+visibility behaves like private (no friends graph); counters animate with
+requestAnimationFrame so they show 0 in a backgrounded tab until it's visible.
 
 ### Phase 3 — New features (needs your prioritisation)
 - Itinerary day editor on trips (convert a Planner plan into a trip itinerary).

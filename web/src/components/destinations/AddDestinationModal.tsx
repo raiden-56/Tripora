@@ -27,53 +27,50 @@ const emptyForm = {
   googleDriveUrl: "",
 };
 
+function formFor(editing: Destination | undefined) {
+  if (!editing) return emptyForm;
+  return {
+    name: editing.name,
+    country: editing.country,
+    state: editing.state ?? "",
+    city: editing.city ?? "",
+    latitude: String(editing.latitude),
+    longitude: String(editing.longitude),
+    status: editing.status,
+    visitedFrom: editing.visitedFrom ?? "",
+    visitedTo: editing.visitedTo ?? "",
+    rating: editing.rating ? String(editing.rating) : "",
+    notes: editing.notes ?? "",
+    googleMapsUrl: editing.googleMapsUrl ?? "",
+    googleDriveUrl: editing.googleDriveUrl ?? "",
+  };
+}
+
 export function AddDestinationModal() {
   const open = useAppStore((s) => s.addDestinationOpen);
   const editingId = useAppStore((s) => s.editingDestinationId);
-  const destinations = useAppStore((s) => s.destinations);
+  if (!open) return null;
+  // Keyed: the form initialises from the destination once per open and is never
+  // reset by unrelated store updates while the user is typing.
+  return <DestinationForm key={editingId ?? "new"} editingId={editingId} />;
+}
+
+function DestinationForm({ editingId }: { editingId: string | null }) {
   const closeAddDestination = useAppStore((s) => s.closeAddDestination);
   const addDestination = useAppStore((s) => s.addDestination);
   const updateDestination = useAppStore((s) => s.updateDestination);
   const pushToast = useAppStore((s) => s.pushToast);
+  const [editing] = useState(() =>
+    editingId ? useAppStore.getState().destinations.find((d) => d.id === editingId) : undefined,
+  );
 
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(() => formFor(editing));
   const [locationQuery, setLocationQuery] = useState("");
   const [results, setResults] = useState<GeoResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [coverFile, setCoverFile] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState("");
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState(editing?.heroImageUrl ?? "");
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    if (!open) return;
-    const editing = editingId
-      ? destinations.find((d) => d.id === editingId)
-      : null;
-    if (editing) {
-      setForm({
-        name: editing.name,
-        country: editing.country,
-        state: editing.state ?? "",
-        city: editing.city ?? "",
-        latitude: String(editing.latitude),
-        longitude: String(editing.longitude),
-        status: editing.status,
-        visitedFrom: editing.visitedFrom ?? "",
-        visitedTo: editing.visitedTo ?? "",
-        rating: editing.rating ? String(editing.rating) : "",
-        notes: editing.notes ?? "",
-        googleMapsUrl: editing.googleMapsUrl ?? "",
-        googleDriveUrl: editing.googleDriveUrl ?? "",
-      });
-      setCoverPreviewUrl(editing.heroImageUrl ?? "");
-    } else {
-      setForm(emptyForm);
-      setCoverPreviewUrl("");
-    }
-    setCoverFile(null);
-    setLocationQuery("");
-    setResults([]);
-  }, [open, editingId, destinations]);
 
   const handleCoverFileChange = (file: File | null) => {
     setCoverFile(file);
@@ -84,10 +81,7 @@ export function AddDestinationModal() {
   };
 
   useEffect(() => {
-    if (locationQuery.trim().length < 3) {
-      setResults([]);
-      return;
-    }
+    if (locationQuery.trim().length < 3) return;
     const timer = setTimeout(async () => {
       setSearching(true);
       try {
@@ -104,8 +98,6 @@ export function AddDestinationModal() {
     }, 500);
     return () => clearTimeout(timer);
   }, [locationQuery]);
-
-  if (!open) return null;
 
   const pickResult = (r: GeoResult) => {
     const parts = r.display_name.split(",").map((p) => p.trim());
@@ -151,7 +143,7 @@ export function AddDestinationModal() {
           const photo = await photosApi.uploadPhoto(coverFile, { destinationId: editingId });
           patch.heroImageUrl = photo.url;
         }
-        await updateDestination(editingId, patch);
+        if (!(await updateDestination(editingId, patch))) return;
         pushToast("Destination updated", "success");
       } else {
         const created = await addDestination({
@@ -159,13 +151,12 @@ export function AddDestinationModal() {
           isFavorite: false,
           heroImageUrl: `https://picsum.photos/seed/${encodeURIComponent(form.name)}/900/650`,
         });
-        if (created) {
-          if (coverFile) {
-            const photo = await photosApi.uploadPhoto(coverFile, { destinationId: created.id });
-            await updateDestination(created.id, { heroImageUrl: photo.url });
-          }
-          pushToast("Added to your journey", "success");
+        if (!created) return;
+        if (coverFile) {
+          const photo = await photosApi.uploadPhoto(coverFile, { destinationId: created.id });
+          await updateDestination(created.id, { heroImageUrl: photo.url });
         }
+        pushToast("Added to your journey", "success");
       }
       closeAddDestination();
     } catch (err) {
@@ -221,7 +212,10 @@ export function AddDestinationModal() {
                 />
                 <input
                   value={locationQuery}
-                  onChange={(e) => setLocationQuery(e.target.value)}
+                  onChange={(e) => {
+                    setLocationQuery(e.target.value);
+                    if (e.target.value.trim().length < 3) setResults([]);
+                  }}
                   placeholder="Search a place…"
                   className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-ink/12 dark:border-white/15 bg-transparent text-sm outline-none focus:border-forest-400"
                 />

@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, mediaUrl } from "./client";
 
 export type PostVisibility = "public" | "private";
 
@@ -56,13 +56,6 @@ interface Page<T> {
   meta: { page: number; page_size: number; total: number; total_pages: number };
 }
 
-const API_BASE_URL =
-  (import.meta as unknown as { env: Record<string, string | undefined> }).env
-    .VITE_API_BASE_URL ?? "http://localhost:8000";
-
-function resolveUrl(url: string): string {
-  return url.startsWith("http") ? url : `${API_BASE_URL}${url}`;
-}
 
 function toFrontend(p: BackendPost): CommunityPost {
   return {
@@ -72,8 +65,8 @@ function toFrontend(p: BackendPost): CommunityPost {
     createdAt: p.created_at,
     author: p.author,
     mediaType: p.media_type,
-    mediaUrl: p.media_url ? resolveUrl(p.media_url) : null,
-    photoUrls: p.photo_urls.map(resolveUrl),
+    mediaUrl: mediaUrl(p.media_url),
+    photoUrls: p.photo_urls.map((url) => mediaUrl(url)),
     likeCount: p.like_count,
     commentCount: p.comment_count,
     likedByMe: p.liked_by_me,

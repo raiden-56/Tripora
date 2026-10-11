@@ -48,21 +48,31 @@ class ReferenceGuard:
         if memory is None or memory.user_id != user_id:
             raise NotFoundError("Memory not found.", code="MEMORY_NOT_FOUND")
 
-    def trip_editable(self, trip_id: int | None, user_id: int) -> None:
-        """The caller owns the trip or is an accepted editor on it."""
-        if trip_id is None:
-            return
+    def trip_role(self, trip_id: int, user_id: int) -> str | None:
+        """'owner', 'editor', 'viewer', or None when the caller has no access."""
         trip = self.db.get(Trip, trip_id)
         if trip is None:
-            raise NotFoundError("Trip not found.", code="TRIP_NOT_FOUND")
+            return None
         if trip.user_id == user_id:
-            return
+            return "owner"
         collaborator = self.db.scalar(
             select(TripCollaborator).where(
                 TripCollaborator.trip_id == trip_id, TripCollaborator.user_id == user_id
             )
         )
         if collaborator is None or collaborator.status != CollaboratorStatus.ACCEPTED:
+            return None
+        return collaborator.role.value
+
+    def trip_readable(self, trip_id: int, user_id: int) -> str:
+        role = self.trip_role(trip_id, user_id)
+        if role is None:
             raise NotFoundError("Trip not found.", code="TRIP_NOT_FOUND")
-        if collaborator.role != CollaboratorRole.EDITOR:
-            raise PermissionDeniedError("Viewers can't add content to this trip.")
+        return role
+
+    def trip_editable(self, trip_id: int | None, user_id: int) -> None:
+        """The caller owns the trip or is an accepted editor on it."""
+        if trip_id is None:
+            return
+        if self.trip_readable(trip_id, user_id) == CollaboratorRole.VIEWER.value:
+            raise PermissionDeniedError("Viewers can't change this trip.")

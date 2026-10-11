@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, pickBody } from "./client";
 import type { DestinationStatus, Trip } from "../types";
 
 interface BackendTrip {
@@ -36,16 +36,19 @@ function toFrontend(t: BackendTrip): Trip {
 }
 
 function toBackend(payload: Partial<Trip>) {
-  return {
-    title: payload.title,
-    start_date: payload.startDate,
-    end_date: payload.endDate,
-    status: payload.status,
-    cover_image_url: payload.coverImageUrl,
-    notes: payload.notes,
-    drive_folder_url: payload.driveFolderUrl,
-    destination_ids: payload.destinationIds?.map(Number),
-  };
+  const body = pickBody(payload, {
+    title: "title",
+    startDate: "start_date",
+    endDate: "end_date",
+    status: "status",
+    coverImageUrl: "cover_image_url",
+    notes: "notes",
+    driveFolderUrl: "drive_folder_url",
+  });
+  if (payload.destinationIds) {
+    body.destination_ids = payload.destinationIds.filter(Boolean).map(Number);
+  }
+  return body;
 }
 
 export async function listTrips(): Promise<Trip[]> {

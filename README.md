@@ -156,11 +156,12 @@ pytest tests/backend      # backend test suite
 
 ## Status
 
-Travel Diaries is now a full-stack application. Authentication, destinations, trip planning,
-guide bookings, photo sharing, AI travel stories, and pricing are wired end-to-end to a real
-FastAPI + PostgreSQL backend — no hardcoded credentials or fake data in those flows. A few
-secondary pages (trips/memories UI, statistics, achievements) still read from the frontend's
-local store while their equivalent backend APIs are already implemented and tested; wiring them
-follows the same pattern already used for destinations and pricing. See
-[ARCHITECTURE.md](ARCHITECTURE.md#4-whats-intentionally-still-on-the-frontends-local-zustand-mock-store)
+Travel Diaries is a working full-stack application: every screen in the signed-in app reads
+and writes real data through the FastAPI backend (destinations, trips with shared checklists,
+planned budgets, expenses and collaborators, memories, photos and animations, community feed,
+guide bookings and reviews, notifications, public journey pages, data export and account
+deletion). Features that still need an outside service — AI, email password reset, payments,
+Google Drive sync — are clearly marked as not available yet rather than faked. See
+[docs/AUDIT_AND_PLAN.md](docs/AUDIT_AND_PLAN.md) for the audit, what's done and what's next, and
+[ARCHITECTURE.md](ARCHITECTURE.md#4-whats-computed-on-the-client-and-what-isnt-built-yet)
 for the exact current state.

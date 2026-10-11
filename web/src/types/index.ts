@@ -1,20 +1,6 @@
 export type DestinationStatus = "visited" | "planned" | "wishlist";
 export type Priority = "high" | "medium" | "low";
 
-export interface DriveFolder {
-  id: string;
-  name: string;
-  url: string;
-  fileCount: number;
-}
-
-export interface Place {
-  id: string;
-  name: string;
-  description?: string;
-  imageUrl?: string;
-}
-
 export interface Memory {
   id: string;
   destinationId: string;
@@ -41,24 +27,30 @@ export interface Destination {
   description?: string;
   heroImageUrl: string;
   googleMapsUrl?: string;
+  /** Link to a Google Drive folder with this place's photos/files. */
   googleDriveUrl?: string;
-  driveFolder?: DriveFolder;
-  places: Place[];
   notes?: string;
   priority?: Priority;
-  createdAt: string;
+  category?: string;
 }
 
 export interface ChecklistItem {
   id: string;
-  label: string;
-  done: boolean;
+  text: string;
+  isDone: boolean;
+}
+
+export interface BudgetLine {
+  category: string;
+  planned: number;
+  /** Summed from the trip's recorded expenses in this category. */
+  spent: number;
 }
 
 export interface TripBudget {
-  category: string;
-  planned: number;
-  actual: number;
+  lines: BudgetLine[];
+  totalPlanned: number;
+  totalSpent: number;
 }
 
 export type TripRole = "owner" | "editor" | "viewer";
@@ -73,8 +65,6 @@ export interface Trip {
   coverImageUrl: string;
   notes?: string;
   driveFolderUrl?: string;
-  checklist?: ChecklistItem[];
-  budget?: TripBudget[];
   /** The current user's access level on this trip — "owner" unless it's a shared trip. */
   role: TripRole;
 }
@@ -94,11 +84,16 @@ export type JourneyVisibility = "private" | "friends" | "public";
 export interface User {
   id: number | null;
   name: string;
+  email: string;
   bio: string;
   avatarUrl: string;
+  homeLocation: string;
   visibility: JourneyVisibility;
   handle: string;
+  /** Travel interests picked during onboarding (stored as profile.favorite_activities). */
   interests: string[];
+  travelStyle: string;
+  notificationsEnabled: boolean;
 }
 
 export interface AuthUser {

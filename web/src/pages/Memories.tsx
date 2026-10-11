@@ -6,17 +6,24 @@ import { MemoryViewer } from "../components/memories/MemoryViewer";
 import { AddMemoryModal } from "../components/memories/AddMemoryModal";
 import { EmptyState } from "../components/common/EmptyState";
 import { useAppStore } from "../store/useAppStore";
+import type { Memory } from "../types";
 
 type Filter = "all" | "india" | "international";
+
+/** null = closed; "new" = add; a Memory = edit that memory. */
+type EditorState = "new" | Memory | null;
 
 export default function Memories() {
   const memories = useAppStore((s) => s.memories);
   const destinations = useAppStore((s) => s.destinations);
   const deleteMemory = useAppStore((s) => s.deleteMemory);
+  const pushToast = useAppStore((s) => s.pushToast);
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
-  const [viewerIndex, setViewerIndex] = useState<number | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  // Track the open memory by id so edits (which can re-sort) and deletes
+  // never leave the viewer pointing at the wrong memory.
+  const [viewerId, setViewerId] = useState<string | null>(null);
+  const [editor, setEditor] = useState<EditorState>(null);
 
   const destById = useMemo(
     () => Object.fromEntries(destinations.map((d) => [d.id, d])),
@@ -46,6 +53,14 @@ export default function Memories() {
     return list;
   }, [memories, filter, query, destById]);
 
+  const viewerIndex =
+    viewerId === null ? -1 : filtered.findIndex((m) => m.id === viewerId);
+
+  const handleDelete = async (id: string) => {
+    const ok = await deleteMemory(id);
+    if (ok) pushToast("Memory deleted", "success");
+  };
+
   return (
     <div>
       <TopBar
@@ -67,7 +82,7 @@ export default function Memories() {
             />
           </div>
           <button
-            onClick={() => setModalOpen(true)}
+            onClick={() => setEditor("new")}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-forest-500 text-white text-sm font-semibold hover:bg-forest-600 transition shrink-0"
           >
             <Plus size={15} /> Add Memory
@@ -96,7 +111,7 @@ export default function Memories() {
             title="No memories here yet"
             description="Add Memory to start building your travel archive."
             actionLabel="Add Memory"
-            onAction={() => setModalOpen(true)}
+            onAction={() => setEditor("new")}
           />
         ) : (
           <div className="columns-2 md:columns-3 lg:columns-4 gap-3">
@@ -105,24 +120,29 @@ export default function Memories() {
                 key={m.id}
                 memory={m}
                 index={i}
-                onClick={() => setViewerIndex(i)}
+                onClick={() => setViewerId(m.id)}
               />
             ))}
           </div>
         )}
       </div>
 
-      {viewerIndex !== null && (
+      {viewerIndex !== -1 && (
         <MemoryViewer
           memories={filtered}
           index={viewerIndex}
-          onClose={() => setViewerIndex(null)}
-          onIndexChange={setViewerIndex}
-          onDelete={deleteMemory}
+          onClose={() => setViewerId(null)}
+          onIndexChange={(i) => setViewerId(filtered[i]?.id ?? null)}
+          onDelete={handleDelete}
+          onEdit={(m) => setEditor(m)}
           destinationName={(id) => destById[id]?.name ?? ""}
         />
       )}
-      <AddMemoryModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddMemoryModal
+        open={editor !== null}
+        memory={editor === "new" ? null : editor}
+        onClose={() => setEditor(null)}
+      />
     </div>
   );
 }

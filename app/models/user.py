@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, UniqueConstraint, true
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.constants import UserRole
@@ -44,6 +44,10 @@ class UserProfile(Base, TimestampMixin):
 
     visibility: Mapped[str] = mapped_column(String(20), default="private")  # private | friends | public
     handle: Mapped[str | None] = mapped_column(String(60), unique=True, nullable=True, index=True)
+
+    # App preferences. Accounts that predate onboarding count as already onboarded.
+    notifications_enabled: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    onboarding_completed: Mapped[bool] = mapped_column(Boolean, default=False, server_default=true())
 
     user: Mapped["User"] = relationship(back_populates="profile")
 

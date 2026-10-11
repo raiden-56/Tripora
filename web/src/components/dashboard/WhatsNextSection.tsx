@@ -7,8 +7,7 @@ import { getWhatsNext } from "../../utils/recommendations";
 
 export function WhatsNextSection() {
   const destinations = useAppStore((s) => s.destinations);
-  const moveToPlanned = useAppStore((s) => s.moveToPlanned);
-  const pushToast = useAppStore((s) => s.pushToast);
+  const toggleFavorite = useAppStore((s) => s.toggleFavorite);
   const openAddDestination = useAppStore((s) => s.openAddDestination);
   const navigate = useNavigate();
 
@@ -89,21 +88,18 @@ export function WhatsNextSection() {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() =>
-                        pushToast(
-                          `${destination.name} added to wishlist`,
-                          "success",
-                        )
-                      }
+                      onClick={() => toggleFavorite(destination.id)}
+                      aria-pressed={destination.isFavorite}
                       className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-full border border-ink/15 dark:border-white/20 text-xs font-semibold hover:bg-ink/5 dark:hover:bg-white/5"
                     >
-                      <Heart size={11} /> Wishlist
+                      <Heart
+                        size={11}
+                        className={destination.isFavorite ? "text-coral-500 fill-coral-500" : ""}
+                      />{" "}
+                      {destination.isFavorite ? "Favorited" : "Favorite"}
                     </button>
                     <button
-                      onClick={() => {
-                        moveToPlanned(destination.id);
-                        navigate("/app/trips");
-                      }}
+                      onClick={() => navigate(`/app/trips?plan=${destination.id}`)}
                       className="flex-1 py-1.5 rounded-full bg-forest-500 text-white text-xs font-semibold hover:bg-forest-600"
                     >
                       Plan Trip

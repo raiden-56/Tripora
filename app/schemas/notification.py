@@ -1,5 +1,7 @@
 """Notification schemas."""
 
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -10,3 +12,4 @@ class NotificationOut(BaseModel):
     message: str
     type: str
     is_read: bool
+    created_at: datetime

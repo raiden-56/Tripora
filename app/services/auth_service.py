@@ -70,8 +70,12 @@ class AuthService:
             self.repo.revoke_refresh_token(stored)
 
     def request_password_reset(self, email: str) -> str:
-        # Intentionally generic response — never reveal whether an email exists.
-        return "If this email exists, a password reset link has been sent."
+        # No email provider is configured yet, so no link is actually sent — say so
+        # rather than pretending. Still never reveals whether the email exists.
+        return (
+            "Password reset by email isn't available yet. If you can't sign in, "
+            "please contact the Travel Diaries team to recover your account."
+        )
 
     def _issue_tokens(self, user: User) -> tuple[str, str]:
         access_token = create_token(str(user.id), TokenType.ACCESS, {"role": user.role.value})

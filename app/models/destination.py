@@ -42,6 +42,7 @@ class Destination(Base, TimestampMixin):
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     hero_image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     google_maps_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    drive_folder_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     memories: Mapped[list["Memory"]] = relationship(back_populates="destination", cascade="all, delete-orphan")
     photos: Mapped[list["Photo"]] = relationship(back_populates="destination", cascade="all, delete-orphan")

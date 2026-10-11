@@ -144,11 +144,7 @@ export function generateItinerary(params: {
   style: string;
   destination?: Destination;
 }): GeneratedItinerary {
-  const places = params.destination?.places.map((p) => p.name) ?? [
-    "City center",
-    "Local viewpoint",
-    "Heritage site",
-  ];
+  const places = ["City center", "Local viewpoint", "Heritage site"];
   const days: ItineraryDay[] = Array.from({
     length: Math.max(1, params.days),
   }).map((_, i) => ({

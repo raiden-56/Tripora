@@ -3,19 +3,25 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
+  Pencil,
   Trash2,
   X,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import type { Memory } from "../../types";
+import { confirmAction } from "../../store/useConfirmStore";
+import { formatDate } from "../../utils/dates";
 
 interface MemoryViewerProps {
   memories: Memory[];
   index: number;
   onClose: () => void;
   onIndexChange: (i: number) => void;
-  onDelete: (id: string) => void;
+  /** Called after the user confirms; the viewer closes first. */
+  onDelete: (id: string) => void | Promise<unknown>;
+  /** Opens an editor for the memory; the Edit button is hidden when omitted. */
+  onEdit?: (memory: Memory) => void;
   destinationName?: (id: string) => string;
 }
 
@@ -25,6 +31,7 @@ export function MemoryViewer({
   onClose,
   onIndexChange,
   onDelete,
+  onEdit,
   destinationName,
 }: MemoryViewerProps) {
   const [zoomed, setZoomed] = useState(false);
@@ -37,10 +44,22 @@ export function MemoryViewer({
     onIndexChange(next);
   };
 
+  const handleDelete = async () => {
+    const ok = await confirmAction({
+      title: "Delete this memory?",
+      message: `"${memory.title}" will be permanently removed.`,
+      confirmLabel: "Delete",
+      danger: true,
+    });
+    if (!ok) return;
+    onClose();
+    await onDelete(memory.id);
+  };
+
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[1300] bg-black/90 flex flex-col"
+        className="fixed inset-0 z-[1250] bg-black/90 flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -49,32 +68,37 @@ export function MemoryViewer({
           <div>
             <p className="font-semibold text-sm">{memory.title}</p>
             <p className="text-xs text-white/60">
-              {new Date(memory.date).toLocaleDateString(undefined, {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })}
+              {formatDate(memory.date)}
               {destinationName && ` · ${destinationName(memory.destinationId)}`}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setZoomed((z) => !z)}
+              aria-label={zoomed ? "Zoom out" : "Zoom in"}
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
             >
               {zoomed ? <ZoomOut size={16} /> : <ZoomIn size={16} />}
             </button>
+            {onEdit && (
+              <button
+                onClick={() => onEdit(memory)}
+                aria-label="Edit memory"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+              >
+                <Pencil size={15} />
+              </button>
+            )}
             <button
-              onClick={() => {
-                onDelete(memory.id);
-                onClose();
-              }}
+              onClick={handleDelete}
+              aria-label="Delete memory"
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-coral-500/40 flex items-center justify-center"
             >
               <Trash2 size={16} />
             </button>
             <button
               onClick={onClose}
+              aria-label="Close"
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
             >
               <X size={16} />

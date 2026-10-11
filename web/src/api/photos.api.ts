@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, mediaUrl } from "./client";
 
 export interface Photo {
   id: number;
@@ -20,9 +20,21 @@ interface BackendPhoto {
   taken_at: string | null;
 }
 
-const API_BASE_URL =
-  (import.meta as unknown as { env: Record<string, string | undefined> }).env
-    .VITE_API_BASE_URL ?? "http://localhost:8000";
+/** A shareable album created from selected photos (POST /photos/share). */
+export interface PhotoShare {
+  id: number;
+  shareToken: string;
+  title: string;
+  description: string | null;
+}
+
+interface BackendPhotoShare {
+  id: number;
+  share_token: string;
+  title: string;
+  description: string | null;
+  is_public: boolean;
+}
 
 function toFrontend(p: BackendPhoto): Photo {
   return {
@@ -30,7 +42,7 @@ function toFrontend(p: BackendPhoto): Photo {
     destinationId: p.destination_id ? String(p.destination_id) : null,
     memoryId: p.memory_id ? String(p.memory_id) : null,
     tripId: p.trip_id ? String(p.trip_id) : null,
-    url: p.url.startsWith("http") ? p.url : `${API_BASE_URL}${p.url}`,
+    url: mediaUrl(p.url),
     caption: p.caption,
     takenAt: p.taken_at,
   };
@@ -81,8 +93,8 @@ export async function sharePhotos(payload: {
   title: string;
   description?: string;
   photoIds: number[];
-}): Promise<{ shareToken: string }> {
-  const result = await apiRequest<{ share_token: string }>(
+}): Promise<PhotoShare> {
+  const result = await apiRequest<BackendPhotoShare>(
     "/api/v1/photos/share",
     {
       method: "POST",
@@ -94,5 +106,10 @@ export async function sharePhotos(payload: {
       },
     },
   );
-  return { shareToken: result.share_token };
+  return {
+    id: result.id,
+    shareToken: result.share_token,
+    title: result.title,
+    description: result.description,
+  };
 }

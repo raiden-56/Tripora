@@ -1,9 +1,15 @@
-import type { Achievement, Destination, Memory, Trip, User } from "../types";
+import type { Destination, Memory } from "../types";
+
+/** Showcase data for the marketing site and onboarding suggestions only — a signed-in
+ * user's journey always comes from the API. */
+export interface ShowcaseDestination extends Destination {
+  places: { id: string; name: string; description?: string; imageUrl?: string }[];
+}
 
 const img = (seed: string, w = 900, h = 650) =>
   `https://picsum.photos/seed/${seed}/${w}/${h}`;
 
-export const destinations: Destination[] = [
+export const destinations: ShowcaseDestination[] = [
   {
     id: "coorg",
     name: "Coorg",
@@ -22,12 +28,6 @@ export const destinations: Destination[] = [
     heroImageUrl: img("coorg"),
     googleMapsUrl: "https://maps.google.com/?q=Coorg,Karnataka",
     googleDriveUrl: "https://drive.google.com/drive/folders/coorg-trip",
-    driveFolder: {
-      id: "d-coorg",
-      name: "Coorg Trip Photos",
-      url: "https://drive.google.com/drive/folders/coorg-trip",
-      fileCount: 126,
-    },
     places: [
       {
         id: "p1",
@@ -43,7 +43,6 @@ export const destinations: Destination[] = [
     ],
     notes:
       "Go during monsoon retreat for the waterfalls, carry a light jacket.",
-    createdAt: "2026-09-01",
   },
   {
     id: "hampi",
@@ -62,18 +61,11 @@ export const destinations: Destination[] = [
       "Boulder-strewn ruins of the Vijayanagara empire, frozen in golden stone.",
     heroImageUrl: img("hampi"),
     googleMapsUrl: "https://maps.google.com/?q=Hampi,Karnataka",
-    driveFolder: {
-      id: "d-hampi",
-      name: "Hampi Ruins",
-      url: "https://drive.google.com/drive/folders/hampi-trip",
-      fileCount: 84,
-    },
     places: [
       { id: "p1", name: "Virupaksha Temple" },
       { id: "p2", name: "Vittala Temple - Stone Chariot" },
       { id: "p3", name: "Matanga Hill Sunrise" },
     ],
-    createdAt: "2026-08-15",
   },
   {
     id: "gokarna",
@@ -95,7 +87,6 @@ export const destinations: Destination[] = [
       { id: "p1", name: "Om Beach" },
       { id: "p2", name: "Kudle Beach" },
     ],
-    createdAt: "2025-12-05",
   },
   {
     id: "mysore",
@@ -115,7 +106,6 @@ export const destinations: Destination[] = [
       { id: "p1", name: "Mysore Palace" },
       { id: "p2", name: "Chamundi Hills" },
     ],
-    createdAt: "2025-10-28",
   },
   {
     id: "bangalore",
@@ -132,7 +122,6 @@ export const destinations: Destination[] = [
     rating: 4.0,
     heroImageUrl: img("bangalore"),
     places: [{ id: "p1", name: "Lalbagh Botanical Garden" }],
-    createdAt: "2025-05-30",
   },
   {
     id: "munnar",
@@ -150,17 +139,10 @@ export const destinations: Destination[] = [
     description:
       "Rolling tea gardens and cool mountain air in the Western Ghats.",
     heroImageUrl: img("munnar"),
-    driveFolder: {
-      id: "d-munnar",
-      name: "Munnar Tea Trails",
-      url: "https://drive.google.com/drive/folders/munnar-trip",
-      fileCount: 210,
-    },
     places: [
       { id: "p1", name: "Eravikulam National Park" },
       { id: "p2", name: "Tea Museum" },
     ],
-    createdAt: "2025-04-10",
   },
   {
     id: "alleppey",
@@ -177,7 +159,6 @@ export const destinations: Destination[] = [
     rating: 4.7,
     heroImageUrl: img("alleppey"),
     places: [{ id: "p1", name: "Backwater Houseboat Cruise" }],
-    createdAt: "2025-04-12",
   },
   {
     id: "varkala",
@@ -192,7 +173,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("varkala"),
     places: [],
-    createdAt: "2026-02-01",
   },
   {
     id: "north-goa",
@@ -211,7 +191,6 @@ export const destinations: Destination[] = [
       { id: "p1", name: "Anjuna Flea Market" },
       { id: "p2", name: "Fort Aguada" },
     ],
-    createdAt: "2026-06-01",
   },
   {
     id: "south-goa",
@@ -226,7 +205,6 @@ export const destinations: Destination[] = [
     priority: "low",
     heroImageUrl: img("south-goa"),
     places: [],
-    createdAt: "2026-03-01",
   },
   {
     id: "ooty",
@@ -243,7 +221,6 @@ export const destinations: Destination[] = [
     rating: 4.2,
     heroImageUrl: img("ooty"),
     places: [{ id: "p1", name: "Doddabetta Peak" }],
-    createdAt: "2024-12-15",
   },
   {
     id: "kodaikanal",
@@ -258,7 +235,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("kodaikanal"),
     places: [],
-    createdAt: "2026-01-10",
   },
   {
     id: "chennai",
@@ -275,7 +251,6 @@ export const destinations: Destination[] = [
     rating: 3.9,
     heroImageUrl: img("chennai"),
     places: [{ id: "p1", name: "Marina Beach" }],
-    createdAt: "2024-08-01",
   },
   {
     id: "mumbai",
@@ -295,7 +270,6 @@ export const destinations: Destination[] = [
       { id: "p1", name: "Gateway of India" },
       { id: "p2", name: "Marine Drive" },
     ],
-    createdAt: "2024-03-05",
   },
   {
     id: "lonavala",
@@ -312,7 +286,6 @@ export const destinations: Destination[] = [
     rating: 4.0,
     heroImageUrl: img("lonavala"),
     places: [{ id: "p1", name: "Tiger Point" }],
-    createdAt: "2024-07-10",
   },
   {
     id: "jaipur",
@@ -331,7 +304,6 @@ export const destinations: Destination[] = [
       { id: "p1", name: "Amber Fort" },
       { id: "p2", name: "Hawa Mahal" },
     ],
-    createdAt: "2026-07-01",
   },
   {
     id: "udaipur",
@@ -346,7 +318,6 @@ export const destinations: Destination[] = [
     priority: "high",
     heroImageUrl: img("udaipur"),
     places: [],
-    createdAt: "2026-05-01",
   },
   {
     id: "jaisalmer",
@@ -361,7 +332,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("jaisalmer"),
     places: [],
-    createdAt: "2026-05-02",
   },
   {
     id: "ladakh",
@@ -376,7 +346,6 @@ export const destinations: Destination[] = [
     priority: "high",
     heroImageUrl: img("ladakh"),
     places: [],
-    createdAt: "2026-04-01",
   },
   {
     id: "meghalaya",
@@ -391,7 +360,6 @@ export const destinations: Destination[] = [
     priority: "high",
     heroImageUrl: img("meghalaya"),
     places: [],
-    createdAt: "2026-04-05",
   },
   {
     id: "andaman",
@@ -406,7 +374,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("andaman"),
     places: [],
-    createdAt: "2026-04-06",
   },
   {
     id: "spiti",
@@ -421,7 +388,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("spiti"),
     places: [],
-    createdAt: "2026-04-07",
   },
   {
     id: "manali",
@@ -437,7 +403,6 @@ export const destinations: Destination[] = [
     visitedTo: "2026-12-23",
     heroImageUrl: img("manali"),
     places: [],
-    createdAt: "2026-06-10",
   },
   {
     id: "kerala-backwaters",
@@ -453,7 +418,6 @@ export const destinations: Destination[] = [
     visitedTo: "2027-01-16",
     heroImageUrl: img("kerala2"),
     places: [],
-    createdAt: "2026-07-15",
   },
   {
     id: "bali",
@@ -466,7 +430,6 @@ export const destinations: Destination[] = [
     priority: "high",
     heroImageUrl: img("bali"),
     places: [],
-    createdAt: "2026-02-20",
   },
   {
     id: "singapore",
@@ -481,7 +444,6 @@ export const destinations: Destination[] = [
     rating: 4.5,
     heroImageUrl: img("singapore"),
     places: [{ id: "p1", name: "Gardens by the Bay" }],
-    createdAt: "2023-11-01",
   },
   {
     id: "dubai",
@@ -496,7 +458,6 @@ export const destinations: Destination[] = [
     rating: 4.3,
     heroImageUrl: img("dubai"),
     places: [{ id: "p1", name: "Burj Khalifa" }],
-    createdAt: "2023-01-10",
   },
   {
     id: "japan",
@@ -510,7 +471,6 @@ export const destinations: Destination[] = [
     priority: "high",
     heroImageUrl: img("japan"),
     places: [],
-    createdAt: "2026-01-05",
   },
   {
     id: "switzerland",
@@ -523,7 +483,6 @@ export const destinations: Destination[] = [
     priority: "medium",
     heroImageUrl: img("switzerland"),
     places: [],
-    createdAt: "2026-01-06",
   },
 ];
 
@@ -674,242 +633,6 @@ export const memories: Memory[] = [
   },
 ];
 
-export const trips: Trip[] = [
-  {
-    id: "t1",
-    title: "Goa Getaway",
-    destinationIds: ["north-goa"],
-    startDate: "2026-09-15",
-    endDate: "2026-09-19",
-    status: "planned",
-    coverImageUrl: img("north-goa"),
-    notes: "Beach hopping and seafood trail.",
-    driveFolderUrl: "https://drive.google.com/drive/folders/goa-trip",
-    checklist: [
-      { id: "c1", label: "Transport booked", done: true },
-      { id: "c2", label: "Hotel booked", done: true },
-      { id: "c3", label: "Places selected", done: true },
-      { id: "c4", label: "Budget prepared", done: false },
-      { id: "c5", label: "Documents ready", done: false },
-      { id: "c6", label: "Google Drive folder created", done: true },
-      { id: "c7", label: "Emergency contacts saved", done: false },
-    ],
-    budget: [
-      { category: "Transport", planned: 6000, actual: 5400 },
-      { category: "Accommodation", planned: 5000, actual: 5000 },
-      { category: "Food", planned: 2500, actual: 2100 },
-      { category: "Activities", planned: 1500, actual: 0 },
-    ],
-    role: "owner",
-  },
-  {
-    id: "t2",
-    title: "Himalayan Winter",
-    destinationIds: ["manali"],
-    startDate: "2026-12-18",
-    endDate: "2026-12-23",
-    status: "planned",
-    coverImageUrl: img("manali"),
-    role: "owner",
-  },
-  {
-    id: "t3",
-    title: "Backwater Bliss",
-    destinationIds: ["kerala-backwaters"],
-    startDate: "2027-01-10",
-    endDate: "2027-01-16",
-    status: "planned",
-    coverImageUrl: img("kerala2"),
-    role: "owner",
-  },
-  {
-    id: "t4",
-    title: "Pink City Weekend",
-    destinationIds: ["jaipur"],
-    startDate: "2026-12-05",
-    endDate: "2026-12-08",
-    status: "planned",
-    coverImageUrl: img("jaipur"),
-    role: "owner",
-  },
-  {
-    id: "t5",
-    title: "Ladakh Ride",
-    destinationIds: ["ladakh"],
-    startDate: "2027-05-02",
-    endDate: "2027-05-12",
-    status: "planned",
-    coverImageUrl: img("ladakh"),
-    role: "owner",
-  },
-  {
-    id: "t6",
-    title: "Coorg Weekend",
-    destinationIds: ["coorg"],
-    startDate: "2026-09-04",
-    endDate: "2026-09-06",
-    status: "visited",
-    coverImageUrl: img("coorg"),
-    role: "owner",
-  },
-];
-
-export const achievements: Achievement[] = [
-  {
-    id: "a1",
-    title: "First Destination",
-    description: "Visit your first destination",
-    icon: "trophy",
-    unlocked: true,
-    progress: 1,
-    target: 1,
-  },
-  {
-    id: "a1b",
-    title: "5 Destinations",
-    description: "Visit 5 destinations",
-    icon: "trophy",
-    unlocked: true,
-    progress: 8,
-    target: 5,
-  },
-  {
-    id: "a1c",
-    title: "10 Destinations",
-    description: "Visit 10 destinations",
-    icon: "trophy",
-    unlocked: false,
-    progress: 8,
-    target: 10,
-  },
-  {
-    id: "a1d",
-    title: "25 Destinations",
-    description: "Add 25 destinations",
-    icon: "map",
-    unlocked: true,
-    progress: 29,
-    target: 25,
-  },
-  {
-    id: "a2",
-    title: "Explorer",
-    description: "Visit 5 countries",
-    icon: "globe",
-    unlocked: false,
-    progress: 4,
-    target: 5,
-  },
-  {
-    id: "a2b",
-    title: "International Explorer",
-    description: "Visit 3 countries outside India",
-    icon: "globe",
-    unlocked: true,
-    progress: 3,
-    target: 3,
-  },
-  {
-    id: "a3",
-    title: "5 States",
-    description: "Visit 5 Indian states",
-    icon: "flag",
-    unlocked: true,
-    progress: 8,
-    target: 5,
-  },
-  {
-    id: "a3b",
-    title: "10 States",
-    description: "Visit 10 Indian states",
-    icon: "flag",
-    unlocked: false,
-    progress: 8,
-    target: 10,
-  },
-  {
-    id: "a3c",
-    title: "20 States",
-    description: "Visit 20 Indian states",
-    icon: "flag",
-    unlocked: false,
-    progress: 8,
-    target: 20,
-  },
-  {
-    id: "a4",
-    title: "Memory Keeper",
-    description: "Upload 100 memories",
-    icon: "camera",
-    unlocked: false,
-    progress: 16,
-    target: 100,
-  },
-  {
-    id: "a4b",
-    title: "500 Memories",
-    description: "Upload 500 memories",
-    icon: "camera",
-    unlocked: false,
-    progress: 16,
-    target: 500,
-  },
-  {
-    id: "a6",
-    title: "Wanderer",
-    description: "Complete 10 trips",
-    icon: "flame",
-    unlocked: false,
-    progress: 6,
-    target: 10,
-  },
-  {
-    id: "a7",
-    title: "Road Tripper",
-    description: "Complete 3 road trips",
-    icon: "flame",
-    unlocked: true,
-    progress: 4,
-    target: 3,
-  },
-  {
-    id: "a8",
-    title: "Weekend Explorer",
-    description: "Complete 5 weekend trips",
-    icon: "flame",
-    unlocked: true,
-    progress: 6,
-    target: 5,
-  },
-  {
-    id: "a9",
-    title: "Mountain Lover",
-    description: "Visit 5 mountain destinations",
-    icon: "map",
-    unlocked: false,
-    progress: 3,
-    target: 5,
-  },
-  {
-    id: "a10",
-    title: "Beach Lover",
-    description: "Visit 5 beach destinations",
-    icon: "map",
-    unlocked: false,
-    progress: 4,
-    target: 5,
-  },
-  {
-    id: "a11",
-    title: "Nature Explorer",
-    description: "Visit 8 nature destinations",
-    icon: "map",
-    unlocked: false,
-    progress: 6,
-    target: 8,
-  },
-];
-
 export const TRAVEL_INTERESTS = [
   "Adventure",
   "Mountains",
@@ -927,13 +650,3 @@ export const TRAVEL_INTERESTS = [
   "Solo Travel",
   "Group Travel",
 ];
-
-export const currentUser: User = {
-  id: null,
-  name: "Ganesh",
-  bio: "Collecting places, not things.",
-  avatarUrl: img("avatar", 200, 200),
-  visibility: "private",
-  handle: "ganesh",
-  interests: ["Nature", "Road Trips", "Photography", "Mountains"],
-};

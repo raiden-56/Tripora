@@ -118,3 +118,12 @@ export async function listPlans(): Promise<TripPlan[]> {
   const result = await apiRequest<BackendTripPlan[]>("/api/v1/planner");
   return result.map(toFrontend);
 }
+
+export async function getPlan(id: string): Promise<TripPlan> {
+  const result = await apiRequest<BackendTripPlan>(`/api/v1/planner/${encodeURIComponent(id)}`);
+  return toFrontend(result);
+}
+
+export async function deletePlan(id: string): Promise<void> {
+  await apiRequest<void>(`/api/v1/planner/${encodeURIComponent(id)}`, { method: "DELETE" });
+}

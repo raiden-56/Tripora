@@ -6,6 +6,7 @@ from sqlalchemy import select
 
 from app.models.user import RefreshToken, User, UserProfile
 from app.repositories.base import BaseRepository
+from app.utils.handles import generate_handle
 
 
 class UserRepository(BaseRepository[User]):
@@ -17,7 +18,7 @@ class UserRepository(BaseRepository[User]):
 
     def create(self, *, email: str, hashed_password: str, name: str, role) -> User:
         user = User(email=email.lower(), hashed_password=hashed_password, name=name, role=role)
-        user.profile = UserProfile()
+        user.profile = UserProfile(handle=generate_handle(self.db, name))
         return self.add(user)
 
     def store_refresh_token(self, *, user_id: int, token_hash: str, expires_at: datetime) -> RefreshToken:

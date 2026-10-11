@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Logo } from "../components/common/Logo";
-import { apiRequest } from "../api/client";
+import { apiRequest, mediaUrl } from "../api/client";
 
 interface SharedPhoto {
   id: number;
@@ -16,9 +16,6 @@ interface PublicShare {
   photos: SharedPhoto[];
 }
 
-const API_BASE_URL =
-  (import.meta as unknown as { env: Record<string, string | undefined> }).env
-    .VITE_API_BASE_URL ?? "http://localhost:8000";
 
 export default function PublicPhotoShare() {
   const { token } = useParams();
@@ -39,7 +36,7 @@ export default function PublicPhotoShare() {
           description: res.description,
           photos: res.photos.map((p) => ({
             ...p,
-            url: p.url.startsWith("http") ? p.url : `${API_BASE_URL}${p.url}`,
+            url: mediaUrl(p.url),
           })),
         }),
       )
