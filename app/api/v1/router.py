@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
     admin,
+    assistant,
     auth,
     blogs,
     community,
@@ -11,6 +12,7 @@ from app.api.v1.endpoints import (
     drive_links,
     expenses,
     guides,
+    itinerary,
     memories,
     notifications,
     payments,
@@ -35,6 +37,7 @@ api_router.include_router(trip_collaborators.router)
 api_router.include_router(trip_collaborators.me_router)
 api_router.include_router(expenses.router)
 api_router.include_router(trip_planning.router)
+api_router.include_router(itinerary.router)
 api_router.include_router(memories.router)
 api_router.include_router(photos.router)
 api_router.include_router(photo_animations.router)
@@ -42,6 +45,7 @@ api_router.include_router(community.router)
 api_router.include_router(drive_links.router)
 api_router.include_router(guides.router)
 api_router.include_router(planner.router)
+api_router.include_router(assistant.router)
 api_router.include_router(blogs.router)
 api_router.include_router(pricing.router)
 api_router.include_router(payments.router)

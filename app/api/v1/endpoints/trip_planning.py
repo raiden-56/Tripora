@@ -15,6 +15,7 @@ from app.schemas.trip_planning import (
     BudgetLineOut,
     BudgetOut,
     BudgetUpdate,
+    ChecklistBulkCreate,
     ChecklistItemCreate,
     ChecklistItemOut,
     ChecklistItemUpdate,
@@ -61,6 +62,29 @@ def add_checklist_item(trip_id: int, payload: ChecklistItemCreate, user: Current
     db.commit()
     db.refresh(item)
     return ChecklistItemOut.model_validate(item)
+
+
+@router.post("/checklist/bulk", response_model=list[ChecklistItemOut], status_code=201)
+def add_checklist_items(
+    trip_id: int, payload: ChecklistBulkCreate, user: CurrentUser, db: DbSession
+) -> list[ChecklistItemOut]:
+    """Adds several items at once (e.g. packing suggestions), skipping ones already on
+    the list (case-insensitive). Returns the whole checklist."""
+    ReferenceGuard(db).trip_editable(trip_id, user.id)
+    existing = _checklist(db, trip_id)
+    seen = {i.text.lower() for i in existing}
+    fresh = []
+    for text in payload.texts:
+        if text.lower() not in seen:
+            seen.add(text.lower())
+            fresh.append(text)
+    if len(existing) + len(fresh) > MAX_CHECKLIST_ITEMS:
+        raise AppError(f"A checklist can hold up to {MAX_CHECKLIST_ITEMS} items.", code="CHECKLIST_FULL", status_code=422)
+    position = max((i.position for i in existing), default=0)
+    for offset, text in enumerate(fresh, start=1):
+        db.add(TripChecklistItem(trip_id=trip_id, text=text, position=position + offset))
+    db.commit()
+    return [ChecklistItemOut.model_validate(i) for i in _checklist(db, trip_id)]
 
 
 @router.patch("/checklist/{item_id}", response_model=ChecklistItemOut)

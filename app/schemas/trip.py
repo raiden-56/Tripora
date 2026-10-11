@@ -88,4 +88,5 @@ class TripPlanOut(BaseModel):
     distance_km: float | None
     route_description: str | None
     status: GenerationStatus
+    generated_by: str = "rules"
     days_detail: list[TripPlanDayOut]

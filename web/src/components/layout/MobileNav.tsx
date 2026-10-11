@@ -3,17 +3,19 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import { LogOut, Menu, X } from "lucide-react";
-import { MOBILE_PINNED, NAV_ITEMS } from "./navItems";
+import { MOBILE_PINNED, NAV_ITEMS, navItemsFor } from "./navItems";
+import { useAppStore } from "../../store/useAppStore";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const PINNED = NAV_ITEMS.filter((item) => MOBILE_PINNED.includes(item.to));
-const MORE = NAV_ITEMS.filter((item) => !MOBILE_PINNED.includes(item.to));
 
 export function MobileNav() {
   const [moreOpen, setMoreOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const logout = useAuthStore((s) => s.logout);
+  const role = useAppStore((s) => s.user.role);
+  const MORE = navItemsFor(role).filter((item) => !MOBILE_PINNED.includes(item.to));
   const inMore = MORE.some((item) => pathname.startsWith(item.to));
 
   // Close the sheet whenever navigation happens.

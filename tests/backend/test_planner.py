@@ -11,7 +11,8 @@ def test_generate_trip_plan(client, auth_headers):
     body = response.json()
     assert len(body["days_detail"]) == 3
     assert body["destination_name"] == "Coorg"
-    assert body["estimated_budget_max"] == 15000
+    assert body["generated_by"] == "rules"
+    assert body["estimated_budget_max"] is None  # the rule-based fallback never invents costs
 
 
 def test_list_plans_returns_saved_generation(client, auth_headers):

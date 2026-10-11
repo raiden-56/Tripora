@@ -2,9 +2,13 @@
 
 from app.core.constants import GenerationStatus
 from app.core.exceptions import NotFoundError, PermissionDeniedError
-from app.integrations.ai.template_provider import get_ai_provider
+from app.core.logging import get_logger
+from app.integrations.ai import AIUnavailableError, get_ai_provider
+from app.integrations.ai.template_provider import TemplateAIProvider
 from app.models.blog import Blog, BlogSection
 from app.repositories.blog_repository import BlogRepository
+
+logger = get_logger(__name__)
 
 
 class BlogService:
@@ -30,7 +34,7 @@ class BlogService:
         self.repo.delete(self.get_owned(blog_id, user_id))
 
     def process_generation(self, blog_id: int, facts: dict) -> None:
-        """Runs the (mock or real) AI provider and stores the result. Called from the
+        """Runs the AI provider (template writer as fallback) and stores the result. Called from the
         Celery task — kept synchronous/pure here so it's independently testable."""
         blog = self.repo.get(blog_id)
         if not blog:
@@ -39,8 +43,12 @@ class BlogService:
         self.repo.db.commit()
 
         try:
-            provider = get_ai_provider()
-            sections = provider.generate_blog_sections(title=blog.title, facts=facts)
+            try:
+                sections = get_ai_provider().generate_blog_sections(title=blog.title, facts=facts)
+            except AIUnavailableError as exc:
+                # A story is still better than an error: use the template writer.
+                logger.info("AI story unavailable (%s); using the template writer.", exc)
+                sections = TemplateAIProvider().generate_blog_sections(title=blog.title, facts=facts)
             blog.sections = [
                 BlogSection(order_index=i, heading=s["heading"], content=s["content"])
                 for i, s in enumerate(sections)

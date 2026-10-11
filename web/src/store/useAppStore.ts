@@ -26,6 +26,7 @@ const emptyUser: User = {
   id: null,
   name: "",
   email: "",
+  role: "USER",
   bio: "",
   avatarUrl: "",
   homeLocation: "",
@@ -234,6 +235,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             id: me?.id ?? state.user.id,
             name: me?.name ?? state.user.name,
             email: me?.email ?? state.user.email,
+            role: (me?.role as User["role"]) ?? state.user.role,
             ...(profile
               ? {
                   bio: profile.bio ?? "",

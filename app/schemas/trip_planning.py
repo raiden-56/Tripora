@@ -1,4 +1,7 @@
-"""Trip checklist + planned-budget schemas."""
+"""Trip checklist, planned-budget and itinerary schemas."""
+
+from datetime import date
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -7,6 +10,18 @@ from app.schemas.common import PatchModel
 
 class ChecklistItemCreate(BaseModel):
     text: str = Field(min_length=1, max_length=200)
+
+
+class ChecklistBulkCreate(BaseModel):
+    texts: list[str] = Field(min_length=1, max_length=60)
+
+    @field_validator("texts")
+    @classmethod
+    def _clean(cls, texts: list[str]) -> list[str]:
+        cleaned = [t.strip() for t in texts if t.strip()]
+        if any(len(t) > 200 for t in cleaned):
+            raise ValueError("Checklist items can be at most 200 characters.")
+        return cleaned
 
 
 class ChecklistItemUpdate(PatchModel):
@@ -55,3 +70,71 @@ class BudgetOut(BaseModel):
     lines: list[BudgetLineOut]
     total_planned: float
     total_spent: float
+
+
+ItineraryKind = Literal["place", "activity", "food", "transport", "stay"]
+TIME_PATTERN = r"^([01]\d|2[0-3]):[0-5]\d$"
+MAX_ITINERARY_DAYS = 60
+
+
+class ItineraryItemCreate(BaseModel):
+    day_number: int = Field(ge=1, le=MAX_ITINERARY_DAYS)
+    title: str = Field(min_length=1, max_length=200)
+    kind: ItineraryKind = "activity"
+    start_time: str | None = Field(default=None, pattern=TIME_PATTERN)
+    notes: str | None = Field(default=None, max_length=2000)
+    cost: float | None = Field(default=None, ge=0, le=100_000_000)
+
+
+class ItineraryItemUpdate(PatchModel):
+    required_fields = frozenset({"day_number", "title", "kind"})
+
+    day_number: int | None = Field(default=None, ge=1, le=MAX_ITINERARY_DAYS)
+    title: str | None = Field(default=None, min_length=1, max_length=200)
+    kind: ItineraryKind | None = None
+    start_time: str | None = Field(default=None, pattern=TIME_PATTERN)
+    notes: str | None = Field(default=None, max_length=2000)
+    cost: float | None = Field(default=None, ge=0, le=100_000_000)
+
+
+class ItineraryItemOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    day_number: int
+    position: int
+    start_time: str | None
+    title: str
+    kind: str
+    notes: str | None
+    cost: float | None
+
+
+class ItineraryDayOut(BaseModel):
+    day_number: int
+    date: date
+    title: str | None
+    items: list[ItineraryItemOut]
+
+
+class ItineraryOut(BaseModel):
+    days: list[ItineraryDayOut]
+    total_cost: float
+
+
+class DayTitleUpdate(BaseModel):
+    title: str = Field(max_length=200)  # empty clears it
+
+
+class DayOrder(BaseModel):
+    day_number: int = Field(ge=1, le=MAX_ITINERARY_DAYS)
+    item_ids: list[int] = Field(max_length=200)
+
+
+class ItineraryOrderUpdate(BaseModel):
+    days: list[DayOrder] = Field(max_length=MAX_ITINERARY_DAYS)
+
+
+class ImportPlanRequest(BaseModel):
+    plan_id: int
+    mode: Literal["replace", "append"] = "replace"

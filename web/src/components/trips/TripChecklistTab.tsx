@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
-import { Check, ListChecks, Plus, Trash2 } from "lucide-react";
+import { Check, ListChecks, Plus, Sparkles, Trash2 } from "lucide-react";
 import * as planningApi from "../../api/tripPlanning.api";
+import * as itineraryApi from "../../api/itinerary.api";
+import { getTripWeather, summarize, type WeatherSummary } from "../../api/weather.api";
 import { useAppStore } from "../../store/useAppStore";
-import type { ChecklistItem, TripRole } from "../../types";
+import type { ChecklistItem, Destination, Trip } from "../../types";
 import { EmptyState } from "../common/EmptyState";
+import { suggestPacking, type PackingSuggestion } from "../../utils/packing";
+import { daysUntil } from "../../utils/dates";
 
-const STARTER_ITEMS = ["Tickets & bookings", "ID / passport", "Phone charger", "Medicines", "Cash & cards"];
+const STARTER_ITEMS = ["Tickets & booking confirmations", "ID / passport", "Phone charger & power bank", "Medicines & first-aid kit", "Cash & cards"];
 
-export function TripChecklistTab({ tripId, role }: { tripId: string; role: TripRole }) {
+export function TripChecklistTab({ trip, destinations }: { trip: Trip; destinations: Destination[] }) {
+  const tripId = trip.id;
   const pushToast = useAppStore((s) => s.pushToast);
   const [items, setItems] = useState<ChecklistItem[] | null>(null);
   const [draft, setDraft] = useState("");
   const [saving, setSaving] = useState(false);
-  const canEdit = role !== "viewer";
+  const [suggesting, setSuggesting] = useState(false);
+  const canEdit = trip.role !== "viewer";
 
   useEffect(() => {
     let cancelled = false;
@@ -73,6 +79,26 @@ export function TripChecklistTab({ tripId, role }: { tripId: string; role: TripR
 
   return (
     <div>
+      {canEdit && !suggesting && (
+        <button
+          onClick={() => setSuggesting(true)}
+          className="mb-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-ink/12 dark:border-white/15 hover:bg-ink/5 dark:hover:bg-white/5"
+        >
+          <Sparkles size={12} /> Suggest what to pack
+        </button>
+      )}
+      {suggesting && (
+        <PackingSuggestions
+          trip={trip}
+          destinations={destinations}
+          existing={items}
+          onClose={() => setSuggesting(false)}
+          onAdded={(list) => {
+            setItems(list);
+            setSuggesting(false);
+          }}
+        />
+      )}
       {canEdit && (
         <form
           onSubmit={(e) => {
@@ -167,6 +193,113 @@ export function TripChecklistTab({ tripId, role }: { tripId: string; role: TripR
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+function PackingSuggestions({
+  trip,
+  destinations,
+  existing,
+  onClose,
+  onAdded,
+}: {
+  trip: Trip;
+  destinations: Destination[];
+  existing: ChecklistItem[];
+  onClose: () => void;
+  onAdded: (items: ChecklistItem[]) => void;
+}) {
+  const pushToast = useAppStore((s) => s.pushToast);
+  const [suggestions, setSuggestions] = useState<PackingSuggestion[] | null>(null);
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [adding, setAdding] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      // Weather and itinerary make the list better, but it still works without them.
+      const weather = await Promise.all(
+        destinations.slice(0, 3).map((d) =>
+          getTripWeather(d.latitude, d.longitude, trip.startDate, trip.endDate)
+            .then((w) => (w ? summarize(w) : null))
+            .catch(() => null),
+        ),
+      );
+      const itinerary = await itineraryApi.getItinerary(trip.id).catch(() => null);
+      const have = new Set(existing.map((i) => i.text.toLowerCase()));
+      const list = suggestPacking({
+        days: Math.max(1, daysUntil(trip.endDate) - daysUntil(trip.startDate) + 1),
+        destinations,
+        weather: weather.filter((w): w is WeatherSummary => w !== null),
+        activities: itinerary?.days.flatMap((d) => d.items.map((i) => i.title)) ?? [],
+      }).filter((s) => !have.has(s.text.toLowerCase()));
+      if (!cancelled) {
+        setSuggestions(list);
+        setPicked(new Set(list.map((s) => s.text)));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [trip, destinations, existing]);
+
+  const add = async () => {
+    setAdding(true);
+    try {
+      onAdded(await planningApi.addChecklistItems(trip.id, [...picked]));
+      pushToast(`Added ${picked.size} item${picked.size === 1 ? "" : "s"} to the checklist`, "success");
+    } catch (err) {
+      pushToast((err as Error).message, "error");
+      setAdding(false);
+    }
+  };
+
+  return (
+    <div className="mb-4 p-3 rounded-xl bg-ink/[0.03] dark:bg-white/5">
+      {suggestions === null ? (
+        <p className="text-xs text-ink-soft">Checking the weather and your itinerary…</p>
+      ) : suggestions.length === 0 ? (
+        <p className="text-xs text-ink-soft">Your checklist already covers everything we'd suggest.</p>
+      ) : (
+        <div className="flex flex-col gap-1.5 max-h-72 overflow-y-auto">
+          {suggestions.map((s) => (
+            <label key={s.text} className="flex items-start gap-2.5 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={picked.has(s.text)}
+                onChange={() =>
+                  setPicked((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(s.text)) next.delete(s.text);
+                    else next.add(s.text);
+                    return next;
+                  })
+                }
+                className="mt-1 accent-forest-500"
+              />
+              <span className="flex-1">
+                {s.text}
+                <span className="block text-[11px] text-ink-soft dark:text-white/40">{s.reason}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      )}
+      <div className="flex gap-2 justify-end mt-3">
+        <button onClick={onClose} className="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-ink/15 dark:border-white/20">
+          Close
+        </button>
+        {suggestions && suggestions.length > 0 && (
+          <button
+            onClick={add}
+            disabled={adding || picked.size === 0}
+            className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-forest-500 text-white hover:bg-forest-600 disabled:opacity-40"
+          >
+            {adding ? "Adding…" : `Add ${picked.size} item${picked.size === 1 ? "" : "s"}`}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

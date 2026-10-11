@@ -2,11 +2,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { LogOut } from "lucide-react";
 import { Logo } from "../common/Logo";
-import { NAV_ITEMS } from "./navItems";
+import { navItemsFor } from "./navItems";
+import { useAppStore } from "../../store/useAppStore";
 import { useAuthStore } from "../../store/useAuthStore";
 
 export function Sidebar() {
   const logout = useAuthStore((s) => s.logout);
+  const role = useAppStore((s) => s.user.role);
   const navigate = useNavigate();
 
   return (
@@ -15,7 +17,7 @@ export function Sidebar() {
         <Logo />
       </div>
       <nav className="flex-1 flex flex-col gap-1 overflow-y-auto">
-        {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+        {navItemsFor(role).map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
             to={to}

@@ -1,6 +1,7 @@
 import {
   BarChart3,
   Calendar,
+  CalendarDays,
   CalendarHeart,
   Camera,
   Compass,
@@ -11,6 +12,7 @@ import {
   Plane,
   Route,
   Settings,
+  ShieldCheck,
   Sparkles,
   Telescope,
   User,
@@ -24,6 +26,8 @@ export interface NavItem {
   label: string;
   icon: LucideIcon;
   end?: boolean;
+  /** Only shown to accounts with the ADMIN role. */
+  adminOnly?: boolean;
 }
 
 /** Every page of the signed-in app, in sidebar order (the mobile "More" sheet uses it too). */
@@ -37,6 +41,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/app/photos", label: "Photo Hub", icon: Camera },
   { to: "/app/community", label: "Community", icon: Users },
   { to: "/app/trips", label: "Trips", icon: Calendar },
+  { to: "/app/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/app/planner", label: "Trip Planner", icon: Route },
   { to: "/app/guides", label: "Hire a Guide", icon: UserPlus },
   { to: "/app/ai", label: "Canvas AI", icon: Sparkles },
@@ -45,7 +50,10 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/app/profile", label: "Profile", icon: User },
   { to: "/app/settings", label: "Settings", icon: Settings },
   { to: "/app/upgrade", label: "Plans", icon: Crown },
+  { to: "/app/admin", label: "Admin", icon: ShieldCheck, adminOnly: true },
 ];
 
 /** The handful pinned to the mobile bottom bar; everything else lives under "More". */
 export const MOBILE_PINNED = ["/app", "/app/map", "/app/trips", "/app/memories"];
+
+export const navItemsFor = (role: string) => NAV_ITEMS.filter((item) => !item.adminOnly || role === "ADMIN");

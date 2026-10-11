@@ -253,3 +253,7 @@ export async function reviewGuide(
     comment: r.comment,
   };
 }
+
+// Shared with the admin dashboard (api/admin.api.ts), which reads the same shapes.
+export { toFrontend as toGuide, bookingToFrontend as toBooking };
+export type { BackendGuide, BackendBooking };

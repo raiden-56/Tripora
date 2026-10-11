@@ -64,6 +64,8 @@ class TripPlan(Base, TimestampMixin):
     distance_km: Mapped[float | None] = mapped_column(Float, nullable=True)
     route_description: Mapped[str | None] = mapped_column(String(300), nullable=True)
     status: Mapped[GenerationStatus] = mapped_column(Enum(GenerationStatus), default=GenerationStatus.COMPLETED)
+    # "claude" when an AI model wrote the plan, "rules" for the built-in fallback.
+    generated_by: Mapped[str] = mapped_column(String(20), default="rules", server_default="rules")
 
     days_detail: Mapped[list["TripPlanDay"]] = relationship(back_populates="plan", cascade="all, delete-orphan")
 
